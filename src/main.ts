@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import eleInstall from './lib/elementUI'
 import 'element-plus/lib/theme-chalk/index.css';
+import './assets/iconfont/iconfont.css'
 const app = createApp(App)
 eleInstall(app)
 app.use(store).use(router).mount('#app')

@@ -1,20 +1,32 @@
 <template>
     <div class='main'>
         <div class='edit-head'></div>
-        <div class='module-area'></div>
-        <div class='canvas-area'></div>
+        <div class='module-area'>
+            <module></module>
+        </div>
+        <div class='canvas-area'>
+            <zoom></zoom>
+            <editCom></editCom>
+        </div>
         <div class='edit-area'></div>
     </div>
 </template>
 
 <script lang="ts">
+
 import { defineComponent } from 'vue'
+import editCom from './panel/editCom.vue'
+import module from './module/module.vue'
+import zoom from './edit/zoom.vue'
 
 export default defineComponent({
     setup () {
-        
-
         return {}
+    },
+    components:{
+        module,
+        zoom,
+        editCom
     }
 })
 </script>
@@ -27,7 +39,7 @@ export default defineComponent({
     top: 0;
     left: 50%;
     transform: translateX(-50%) ;
-    background-color: aqua;
+    overflow: hidden;
 }
 .edit-head{
    width: 100%;
@@ -41,7 +53,7 @@ export default defineComponent({
     bottom: 0px;
     left: 0px;
     width: 65px;
-    background-color: brown;
+    border-right: 1px solid rgb(223, 223, 223);
 }
 .edit-area{
     position: absolute;
@@ -57,7 +69,7 @@ export default defineComponent({
     bottom: 0px;
     right: 240px;
     left: 65px;
-    background-color: rgb(42, 165, 89);
 }
+
 
 </style>
