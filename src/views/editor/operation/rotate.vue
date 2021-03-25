@@ -1,0 +1,78 @@
+<template>
+   <i class='el-icon-refresh swing-button'
+   @mousedown.stop='rotate'
+   :style="{
+       transform: `translateX(-50%) scale(${moveScale})`
+     }"
+   ></i>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent } from 'vue'
+
+export default defineComponent({
+    props:{
+        module:{
+            type:Object,
+            default:new Object()
+        }
+    },
+    setup (props) {
+        const module:any = computed(()=>{
+            return props.module
+        })
+        let moveScale = 1
+        let  rotatePositonX = computed(()=>{
+            return  Math.sin(module.value.rotate * (Math.PI / 180)) *  (module.value.height/2+40)
+        })
+        let rotatePositonY = computed(()=>{
+            return  - Math.cos(module.value.rotate * (Math.PI / 180)) * (module.value.height/2+40)
+        })
+       
+        const  rotate  = (event:MouseEvent) => {
+             let oriX = event.clientX
+            let oriY = event.clientY
+            let orileft = rotatePositonX.value
+            let oritop = rotatePositonY.value
+            window.onmousemove = (event:MouseEvent)=>{
+                let X = event.clientX
+                let Y = event.clientY
+                let width =  (X-oriX)*moveScale-orileft 
+                let height =  (Y-oriY)*moveScale-oritop
+                let deg = 0
+                if(width<0&&height>0){
+                   deg = -Math.atan(width/height)/Math.PI*180
+                }else if(width<0&&height<0){
+                   deg = 180-Math.atan(width/height)/Math.PI*180
+                }else if(width>0&&height<0){
+                   deg = 180-Math.atan(width/height)/Math.PI*180
+                }else{
+                   deg = 360-Math.atan(width/height)/Math.PI*180
+                }
+                module.value.rotate = deg
+            }
+           window.onmouseup = (event:MouseEvent)=>{
+                window.onmousemove = null
+                window.onmouseup=null
+                
+                
+            }
+       },
+        return {moveScale,rotate}
+    }
+})
+</script>
+
+<style lang="scss" scoped>
+.swing-button{
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  background-color: white;
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+</style>

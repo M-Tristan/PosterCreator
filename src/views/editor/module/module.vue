@@ -1,6 +1,6 @@
 <template>
     <div class='module'>
-       <div class='module-item active'>
+       <div :class='["module-item" ,{"active":moduleId==1}]' @click="moduleId=1">
            <i class='iconfont icon-background modelu-icon'></i>
            <span class='module-name'>背景</span>
        </div>
@@ -8,7 +8,7 @@
             <i class='iconfont icon-wenben modelu-icon'></i>
             <span class='module-name'>文字</span>
        </div>
-       <div class='module-item '>
+       <div :class='["module-item" ,{"active":moduleId==2}]' @click="moduleId=2">
             <i class='iconfont icon-tupian modelu-icon'></i>
             <span class='module-name'>图片</span>
        </div>
@@ -17,22 +17,24 @@
             <span class='module-name'>二维码</span>
         </div>
         <div class='module-material'>
-            <background-list></background-list>
+            <background-list v-if="moduleId==1"></background-list>
+            <image-list v-if="moduleId==2"></image-list>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import backgroundList from './backgroundList.vue'
+import imageList from './imageList.vue'
 export default defineComponent({
     components:{
-        backgroundList
+        backgroundList,
+        imageList
     },  
     setup () {
-        
-
-        return {}
+        let moduleId = ref(1)
+        return {moduleId}
     }
 })
 </script>
@@ -43,14 +45,15 @@ export default defineComponent({
         height: 100%;
     }
     .module-material{
-        z-index: 1000;
+        z-index: 2000;
         width: 280px;
         height: 100%;
         position: absolute;
         top: 0;
         left: 100%;
         border-right: 1px solid rgb(235, 235, 235);
-        // background-color: aqua;
+
+        background-color: rgb(255, 255, 255);
     }
 .module-item{
     position: relative;

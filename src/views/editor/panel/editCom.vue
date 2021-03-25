@@ -8,19 +8,25 @@
                                   ,'height':480+'px'
                                   ,'left':`40%`
                                   ,'top':`10`}">
-        
+        <d-image v-for="(image,index) in images" :key="index" :image="image"></d-image>
         
     </div>
 </template>
 
 <script lang="ts">
+import { useStore } from 'vuex'
 import { defineComponent } from 'vue'
-
+import dImage from '../operation/dImage.vue'
 export default defineComponent({
+  components:{
+    dImage
+  },
   setup () {
-    
+    const store = useStore()
 
-    return {}
+    return {
+      images:store.state.postInfo.images
+    }
   }
 })
 </script>
