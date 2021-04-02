@@ -8,12 +8,13 @@
     <img draggable="false" :src='module.src' :style="{  width: module.width + 'px'
                                         ,height: module.height+'px'
                                               }"/>
-    <regulator :module='module'></regulator>
-    <rotate :module='module'></rotate>                                      
+    <regulator :module='module' v-if="editModule.id == image.id" ></regulator>
+    <rotate :module='module' v-if="editModule.id == image.id"></rotate>                                      
   </div>
 </template>
 
 <script lang="ts">
+import { useStore } from 'vuex'
 import { computed, defineComponent } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
@@ -29,6 +30,10 @@ export default defineComponent({
     rotate
   },
   setup (props) {
+    const store = useStore()
+    const editModule:any= computed(()=>{
+      return store.state.editModule
+    })
     let moveScale = 1
     const module:any= computed(()=>{
       return props.image
@@ -55,7 +60,7 @@ export default defineComponent({
           
       }
     }
-    return {module,moduleMove}
+    return {module,moduleMove,editModule}
   }
 })
 </script>
