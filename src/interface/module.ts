@@ -18,6 +18,8 @@ export interface image extends operItem{
     rotateY:Boolean,
     rotateX:Boolean
 }
+
+
 export interface postInfo {
    image:image[],
    layer:operItem[]
