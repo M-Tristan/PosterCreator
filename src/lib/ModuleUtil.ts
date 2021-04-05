@@ -15,7 +15,12 @@ class ModuleUtil{
                     top:10,
                     left:10,
                     src:src,
-                    rotate:0
+                    rotate:0,
+                    blur:0,
+                    opacity:1,
+                    borderRadius:0,
+                    rotateY:false,
+                    rotateX:false
                 })
             }
         })

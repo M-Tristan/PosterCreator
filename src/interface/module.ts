@@ -1,12 +1,24 @@
-export interface image {
-    id:String,
-    width:Number,
-    height:Number,
-    top:Number,
-    left:Number,
+
+export interface operItem{
+  id:String,
+  type:String,
+  zindex:Number,
+  width:Number,
+  height:Number,
+  top:Number,
+  left:Number,
+  rotate:Number,
+  opacity:Number
+}
+
+export interface image extends operItem{
     src:String,
-    rotate:Number
+    blur:Number,
+    borderRadius:Number,
+    rotateY:Boolean,
+    rotateX:Boolean
 }
 export interface postInfo {
-   image:image[]
+   image:image[],
+   layer:operItem[]
 }

@@ -8,7 +8,9 @@
             <zoom></zoom>
             <editCom></editCom>
         </div>
-        <div class='edit-area'></div>
+        <div class='edit-area'>
+          <image-edit></image-edit>
+        </div>
     </div>
 </template>
 
@@ -18,7 +20,7 @@ import { defineComponent } from 'vue'
 import editCom from './panel/editCom.vue'
 import module from './module/module.vue'
 import zoom from './edit/zoom.vue'
-
+import imageEdit from './edit/imageEdit.vue'
 export default defineComponent({
     setup () {
         return {}
@@ -26,7 +28,8 @@ export default defineComponent({
     components:{
         module,
         zoom,
-        editCom
+        editCom,
+        imageEdit
     }
 })
 </script>
@@ -61,7 +64,7 @@ export default defineComponent({
     bottom: 0px;
     right: 0px;
     width: 240px;
-    background-color: brown;
+    border-left: 1px solid rgb(223, 223, 223);
 }
 .canvas-area{
     position: absolute;

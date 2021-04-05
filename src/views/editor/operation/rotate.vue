@@ -49,7 +49,7 @@ export default defineComponent({
                 }else{
                    deg = 360-Math.atan(width/height)/Math.PI*180
                 }
-                module.value.rotate = deg
+                module.value.rotate = Math.round(deg)
             }
            window.onmouseup = (event:MouseEvent)=>{
                 window.onmousemove = null
@@ -57,7 +57,7 @@ export default defineComponent({
                 
                 
             }
-       },
+       }
         return {moveScale,rotate}
     }
 })

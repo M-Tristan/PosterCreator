@@ -1,5 +1,5 @@
 <template>
-  <div class='img-content' @mousedown="moduleMove" :style="{  width: module.width + 'px'
+  <div class='img-content' @click='selectModel'   @mousedown="moduleMove" :style="{  width: module.width + 'px'
                                         ,height: module.height+'px'
                                         ,left:module.left+'px'
                                         ,top:module.top+'px',
@@ -7,13 +7,18 @@
                                               }" >
     <img draggable="false" :src='module.src' :style="{  width: module.width + 'px'
                                         ,height: module.height+'px'
+                                        ,filter: `blur(${module.blur}px)`
+                                        ,opacity:module.opacity
+                                        ,borderRadius:`${module.borderRadius}px`
+                                        ,transform:`rotateY(${module.rotateY?180:0}deg) rotateX(${module.rotateX?180:0}deg)`
                                               }"/>
-    <regulator :module='module'></regulator>
-    <rotate :module='module'></rotate>                                      
+    <regulator :module='module' v-if="editModule.id == image.id" ></regulator>
+    <rotate :module='module' v-if="editModule.id == image.id"></rotate>                                      
   </div>
 </template>
 
 <script lang="ts">
+import { useStore } from 'vuex'
 import { computed, defineComponent } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
@@ -29,6 +34,10 @@ export default defineComponent({
     rotate
   },
   setup (props) {
+    const store = useStore()
+    const editModule:any= computed(()=>{
+      return store.state.editModule
+    })
     let moveScale = 1
     const module:any= computed(()=>{
       return props.image
@@ -55,7 +64,10 @@ export default defineComponent({
           
       }
     }
-    return {module,moduleMove}
+    const selectModel = () =>{
+      store.commit('setEditModule',module.value.id)
+    }
+    return {module,moduleMove,editModule,selectModel}
   }
 })
 </script>

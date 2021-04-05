@@ -12,6 +12,7 @@
 import { defineComponent, reactive } from 'vue'
 import ModuleUtil from '@/lib/ModuleUtil'
 import { useStore } from 'vuex'
+import { operItem } from '@/interface/module'
 export default defineComponent({
     setup () {
         const store = useStore()
@@ -28,10 +29,12 @@ export default defineComponent({
                 "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=108276212,3144377336&fm=11&gp=0.jpg"
             ])
         const selectImage = async (url:string)=>{
-            let imageInfo = await ModuleUtil.getAddImageInfo(url)
+            let imageInfo = <operItem> await ModuleUtil.getAddImageInfo(url)
             console.log(imageInfo)
             store.commit('addImage',imageInfo)
+            store.commit('setEditModule',imageInfo.id)
         }
+       
         return {imageList,selectImage}
     }
 })
