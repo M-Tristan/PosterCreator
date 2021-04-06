@@ -20,7 +20,13 @@ class ModuleUtil{
                     opacity:1,
                     borderRadius:0,
                     rotateY:false,
-                    rotateX:false
+                    rotateX:false,
+                    dropshadowX:0,
+                    dropshadowY:0,
+                    dropshadowBlur:0,
+                    dropshadowColor:'rgba(0,0,0,0)',
+                    // borderWidth:0,
+                    // borderColor:'rgba(0,0,0,0)',
                 })
             }
         })

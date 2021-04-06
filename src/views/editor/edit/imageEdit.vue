@@ -1,5 +1,5 @@
 <template>
-<div style="padding-left:10px">
+<div class='image-area'>
   <el-collapse v-model="activeNames">
   <el-collapse-item title="图片" name="1">
     <div class='oper-item'>
@@ -47,8 +47,9 @@
       <div class='oper-name'>
          投影颜色
       </div>
+     
       <div class='oper-input'>
-         <el-color-picker v-model="color" size="mini"></el-color-picker>
+         <el-color-picker v-model="editModule.dropshadowColor" size="mini" show-alpha ></el-color-picker>
       </div>
     </div>
      <div class='oper-item'>
@@ -56,7 +57,7 @@
         横向距离  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value" ></el-input-number>
+        <el-input-number size="mini" v-model="editModule.dropshadowX" ></el-input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -64,7 +65,7 @@
         纵向距离  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
+        <el-input-number size="mini" v-model="editModule.dropshadowY"></el-input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -72,25 +73,17 @@
         模糊  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
-      </div>
-    </div>
-     <div class='oper-item'>
-      <div class='oper-name'>
-        透明度  
-      </div>
-      <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
+        <el-input-number size="mini" v-model="editModule.dropshadowBlur"></el-input-number>
       </div>
     </div>
   </el-collapse-item>
-  <el-collapse-item title="边框" name="3">
+  <!-- <el-collapse-item title="边框" name="3">
    <div class='oper-item'>
       <div class='oper-name'>
          颜色
       </div>
       <div class='oper-input'>
-         <el-color-picker v-model="color" size="mini"></el-color-picker>
+         <el-color-picker v-model="editModule.borderColor" size="mini" show-alpha></el-color-picker>
       </div>
     </div>
    <div class='oper-item'>
@@ -98,25 +91,17 @@
         大小  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
+        <el-input-number size="mini" v-model="editModule.borderWidth"></el-input-number>
       </div>
     </div>
-  </el-collapse-item>
-  <el-collapse-item title="位置" name="4">
-    <div class='oper-item'>
-      <div class='oper-name'>
-        大小  
-      </div>
-      <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
-      </div>
-    </div>
+  </el-collapse-item> -->
+  <el-collapse-item title="位置" name="3">
     <div class='oper-item'>
       <div class='oper-name'>
         旋转角度  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
+        <el-input-number size="mini" :min='0' :max='360' v-model="editModule.rotate"></el-input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -124,7 +109,7 @@
         左边距  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
+        <el-input-number size="mini" v-model="editModule.left"></el-input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -132,7 +117,7 @@
         上边距  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
+        <el-input-number size="mini" v-model="editModule.top"></el-input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -140,7 +125,7 @@
         宽  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
+        <el-input-number size="mini" v-model="editModule.width"></el-input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -148,9 +133,12 @@
         高 
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="value"></el-input-number>
+        <el-input-number size="mini" v-model="editModule.height"></el-input-number>
       </div>
     </div>
+  </el-collapse-item>
+  <el-collapse-item title="操作" name="4">
+    <el-button type="info" plain size="mini">裁剪</el-button>
   </el-collapse-item>
 </el-collapse>
 </div>
@@ -218,4 +206,13 @@ export default defineComponent({
   color: rgb(5, 142, 255);
   background-color: rgb(0, 36, 112);
 }
+.image-area{
+  padding-left:10px;
+  height: 100%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar{
+    width: 0;
+  }
+}
+
 </style>

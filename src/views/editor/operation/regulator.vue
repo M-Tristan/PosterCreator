@@ -276,6 +276,7 @@ export default defineComponent({
     height: 10px;
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(129, 129, 129);
 }
 .item-Horizontal{
     position: absolute;
@@ -283,6 +284,7 @@ export default defineComponent({
     height: 5px;
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(129, 129, 129);
 }
 .item-vertical{
     position: absolute;
@@ -290,5 +292,6 @@ export default defineComponent({
     height: 30px;
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(129, 129, 129);
 }
 </style>

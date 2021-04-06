@@ -16,7 +16,13 @@ export interface image extends operItem{
     blur:Number,
     borderRadius:Number,
     rotateY:Boolean,
-    rotateX:Boolean
+    rotateX:Boolean,
+    dropshadowX:Number,
+    dropshadowY:Number,
+    dropshadowBlur:Number,
+    dropshadowColor:String,
+    // borderWidth:Number,
+    // borderColor:String
 }
 
 

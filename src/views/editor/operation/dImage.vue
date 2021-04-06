@@ -4,14 +4,27 @@
                                         ,left:module.left+'px'
                                         ,top:module.top+'px',
                                         transform:  `rotate(${module.rotate?image.rotate:0}deg)`,
+                                       
+                                       
                                               }" >
-    <img draggable="false" :src='module.src' :style="{  width: module.width + 'px'
+                    
+
+                <div class='image-border' :style="{
+                  borderRadius:`${module.borderRadius}px`,
+                  border:`solid ${module.borderWidth}px ${module.borderColor}`
+                }">
+                  <img draggable="false" :src='module.src' :style="{  width: module.width + 'px'
                                         ,height: module.height+'px'
-                                        ,filter: `blur(${module.blur}px)`
+                                        ,filter: `blur(${module.blur}px) drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px ${module.dropshadowColor})`
                                         ,opacity:module.opacity
-                                        ,borderRadius:`${module.borderRadius}px`
+                                       
                                         ,transform:`rotateY(${module.rotateY?180:0}deg) rotateX(${module.rotateX?180:0}deg)`
+                                        
                                               }"/>
+                </div>
+
+   
+                                            
     <regulator :module='module' v-if="editModule.id == image.id" ></regulator>
     <rotate :module='module' v-if="editModule.id == image.id"></rotate>                                      
   </div>
@@ -78,5 +91,14 @@ export default defineComponent({
     display:inline-block; 
     cursor: move;
     user-select:none
+}
+.image-border{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: content-box;
 }
 </style>

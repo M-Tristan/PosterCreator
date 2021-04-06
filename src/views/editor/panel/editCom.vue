@@ -9,7 +9,7 @@
                                   ,'left':`40%`
                                   ,'top':`10`}">
         <d-image v-for="(image,index) in images" :key="index" :image="image"></d-image>
-        
+        <clipper></clipper>
     </div>
 </template>
 
@@ -17,9 +17,11 @@
 import { useStore } from 'vuex'
 import { defineComponent } from 'vue'
 import dImage from '../operation/dImage.vue'
+import clipper from '../operation/clipper.vue'
 export default defineComponent({
   components:{
-    dImage
+    dImage,
+    clipper
   },
   setup () {
     const store = useStore()
