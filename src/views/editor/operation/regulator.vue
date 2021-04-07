@@ -6,7 +6,7 @@
                                         ,top:0+'px'
                                         ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                        }"></div>
-            <div class='item-vertical' @mousedown.stop="controlshape('left-middle')" :style="{ 
+            <div class='item-vertical'  @mousedown.stop="controlshape('left-middle')" :style="{ 
                                         cursor: cursor.leftMiddle,
                                         left:0+'px'
                                     ,top:module.height/2+'px'
@@ -66,7 +66,7 @@ export default defineComponent({
         const module:any = computed(()=>{
             return props.module
         })
-        module.value.rotate = 0
+        // module.value.rotate = 0
         let cursor = computed(()=>{
             let result:any = {}
           if((module.value.rotate < 25 && module.value.rotate >= 0)||(module.value.rotate < 360 && module.value.rotate >=340)){
@@ -276,6 +276,7 @@ export default defineComponent({
     height: 10px;
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(129, 129, 129);
 }
 .item-Horizontal{
     position: absolute;
@@ -283,6 +284,7 @@ export default defineComponent({
     height: 5px;
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(129, 129, 129);
 }
 .item-vertical{
     position: absolute;
@@ -290,5 +292,6 @@ export default defineComponent({
     height: 30px;
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(129, 129, 129);
 }
 </style>

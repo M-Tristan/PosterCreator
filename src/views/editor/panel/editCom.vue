@@ -9,23 +9,30 @@
                                   ,'left':`40%`
                                   ,'top':`10`}">
         <d-image v-for="(image,index) in images" :key="index" :image="image"></d-image>
-        
+        <d-text  v-for="(text,index) in texts" :key="index" :text="text"></d-text>
+        <clipper v-if="clipOper"></clipper>
     </div>
 </template>
 
 <script lang="ts">
 import { useStore } from 'vuex'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import dImage from '../operation/dImage.vue'
+import dText from '../operation/dText.vue'
+import clipper from '../operation/clipper.vue'
 export default defineComponent({
   components:{
-    dImage
+    dImage,
+    clipper,
+    dText
   },
   setup () {
     const store = useStore()
-
+    let clipOper = computed(()=>store.state.clipOper)
     return {
-      images:store.state.postInfo.images
+      images:store.state.postInfo.images,
+      texts:store.state.postInfo.texts,
+      clipOper
     }
   }
 })
@@ -33,6 +40,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
   .canvas-area{
+     -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
           position:absolute;
           transform-origin: left top;
           margin-bottom: 30px;

@@ -1,21 +1,40 @@
-interface css{
-  width:Number,
-  height:Number,
-  top:Number,
-  left:Number,
-  rotate:Number,
-}
+
 export interface operItem{
-  id:String,
-  type:String,
-  zindex:Number,
-  css:css
+  id:string,
+  type:string,
+  zindex:number,
+  width:number,
+  height:number,
+  top:number,
+  left:number,
+  rotate:number,
+  opacity:number
 }
 
 export interface image extends operItem{
-    src:String
+    src:string,
+    blur:number,
+    borderRadius:number,
+    rotateY:boolean,
+    rotateX:boolean,
+    dropshadowX:number,
+    dropshadowY:number,
+    dropshadowBlur:number,
+    dropshadowColor:string,
+    // borderWidth:number,
+    // borderColor:string
 }
+
+export interface text extends operItem{
+  text:string,
+  fontSize:number,
+  color:string,
+  rotate:number
+}
+
+
 export interface postInfo {
-   image:image[],
-   layer:operItem[]
+   images:image[],
+   texts:text[],
+   layers:operItem[]
 }

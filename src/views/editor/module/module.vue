@@ -1,10 +1,6 @@
 <template>
     <div class='module'>
        <div :class='["module-item" ,{"active":moduleId==1}]' @click="moduleId=1">
-           <i class='iconfont icon-background modelu-icon'></i>
-           <span class='module-name'>背景</span>
-       </div>
-       <div class='module-item '>
             <i class='iconfont icon-wenben modelu-icon'></i>
             <span class='module-name'>文字</span>
        </div>
@@ -17,9 +13,14 @@
             <span class='module-name'>二维码</span>
         </div>
         <div class='module-material'>
-            <background-list v-if="moduleId==1"></background-list>
+            <background-list v-if="moduleId==4"></background-list>
             <image-list v-if="moduleId==2"></image-list>
+            <text-list v-if="moduleId==1"></text-list>
         </div>
+         <div :class='["module-item" ,{"active":moduleId==4}]' @click="moduleId=4">
+           <i class='iconfont icon-background modelu-icon'></i>
+           <span class='module-name'>背景</span>
+       </div>
     </div>
 </template>
 
@@ -27,10 +28,12 @@
 import { defineComponent, ref } from 'vue'
 import backgroundList from './backgroundList.vue'
 import imageList from './imageList.vue'
+import textList from './textList.vue'
 export default defineComponent({
     components:{
         backgroundList,
-        imageList
+        imageList,
+        textList
     },  
     setup () {
         let moduleId = ref(1)
