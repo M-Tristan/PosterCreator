@@ -4,9 +4,9 @@
         <div class='module-area'>
             <module></module>
         </div>
-        <div class='canvas-area'>
-            <zoom></zoom>
-            <editCom></editCom>
+        <div @click="selectModel" class='canvas-area'>
+            <zoom @click.stop></zoom>
+            <editCom  @click.stop></editCom>
         </div>
         <div class='edit-area'>
           <image-edit></image-edit>
@@ -16,14 +16,24 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import editCom from './panel/editCom.vue'
 import module from './module/module.vue'
 import zoom from './edit/zoom.vue'
 import imageEdit from './edit/imageEdit.vue'
+import { useStore } from 'vuex'
+import ModuleUtil from '@/lib/ModuleUtil'
 export default defineComponent({
     setup () {
-        return {}
+        const store = useStore()
+        onMounted(async()=>{
+          let backInfo = await ModuleUtil.getAddBackInfo()
+          store.commit('addBack', backInfo);
+        })
+        const selectModel = () =>{
+          store.commit('setEditModuleToBack')
+        }
+        return {selectModel}
     },
     components:{
         module,

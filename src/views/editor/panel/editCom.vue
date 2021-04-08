@@ -8,8 +8,10 @@
                                   ,'height':480+'px'
                                   ,'left':`40%`
                                   ,'top':`10`}">
+        <background :background='background'></background>
         <d-image v-for="(image,index) in images" :key="index" :image="image"></d-image>
         <d-text  v-for="(text,index) in texts" :key="index" :text="text"></d-text>
+        <d-code  v-for="(code,index) in codes" :key="index" :code="code"></d-code>
         <clipper v-if="clipOper"></clipper>
     </div>
 </template>
@@ -20,18 +22,36 @@ import { computed, defineComponent } from 'vue'
 import dImage from '../operation/dImage.vue'
 import dText from '../operation/dText.vue'
 import clipper from '../operation/clipper.vue'
+import DCode from '../operation/dCode.vue'
+import Background from '../operation/background.vue'
 export default defineComponent({
   components:{
     dImage,
     clipper,
-    dText
+    dText,
+    DCode,
+    Background
   },
   setup () {
     const store = useStore()
     let clipOper = computed(()=>store.state.clipOper)
+    let background = computed(()=>{
+      return store.state.postInfo.background
+    })
+    let codes = computed(()=>{
+      return store.state.postInfo.codes
+    })
+    let texts = computed(()=>{
+      return store.state.postInfo.texts
+    })
+    let images = computed(()=>{
+      return store.state.postInfo.images
+    })
     return {
-      images:store.state.postInfo.images,
-      texts:store.state.postInfo.texts,
+      images:images,
+      texts:texts,
+      codes:codes,
+      background:background,
       clipOper
     }
   }

@@ -1,14 +1,16 @@
 
-export interface operItem{
+export interface itemBase{
   id:string,
   type:string,
+  opacity:number
+}
+export interface operItem extends itemBase{
   zindex:number,
   width:number,
   height:number,
   top:number,
   left:number,
-  rotate:number,
-  opacity:number
+  rotate:number
 }
 
 export interface image extends operItem{
@@ -28,13 +30,23 @@ export interface image extends operItem{
 export interface text extends operItem{
   text:string,
   fontSize:number,
-  color:string,
-  rotate:number
+  color:string
 }
 
+export interface code extends operItem{
+  text:string,
+  colorDark:string,
+  colorLight:string
+}
+export interface background extends operItem{
+  imageUrl:string,
+  color:string
+}
 
 export interface postInfo {
    images:image[],
    texts:text[],
-   layers:operItem[]
+   layers:operItem[],
+   codes:code[],
+   background:background
 }

@@ -6,7 +6,7 @@
                                         ,top:0+'px'
                                         ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                        }"></div>
-            <div class='item-vertical'  @mousedown.stop="controlshape('left-middle')" :style="{ 
+            <div class='item-vertical' v-if="module.type != 'code'"  @mousedown.stop="controlshape('left-middle')" :style="{ 
                                         cursor: cursor.leftMiddle,
                                         left:0+'px'
                                     ,top:module.height/2+'px'
@@ -18,13 +18,13 @@
                                     ,top:module.height+'px'
                                      ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                     }"></div>
-             <div class='item-Horizontal' @mousedown.stop="controlshape('middle-top')" :style="{ 
+             <div class='item-Horizontal' v-if="module.type != 'text' && module.type != 'code'" @mousedown.stop="controlshape('middle-top')" :style="{ 
                                          cursor: cursor.middleTop,
                                          left:module.width/2+'px'
                                         ,top:0+'px'
                                          ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                        }"></div>
-                <div class='item-Horizontal' @mousedown.stop="controlshape('middle-down')" :style="{ 
+                <div class='item-Horizontal' v-if="module.type != 'text' && module.type != 'code'" @mousedown.stop="controlshape('middle-down')" :style="{ 
                                          cursor: cursor.middleDown,
                                          left:module.width/2+'px'
                                         ,top:module.height+'px'
@@ -36,7 +36,7 @@
                                         ,top:'0px'
                                          ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                        }"></div>
-             <div class='item-vertical' @mousedown.stop="controlshape('right-middle')" :style="{ 
+             <div class='item-vertical' v-if="module.type != 'code'" @mousedown.stop="controlshape('right-middle')" :style="{ 
                                          cursor: cursor.rightMiddle,
                                          left:module.width+'px'
                                         ,top:module.height/2+'px'
@@ -61,7 +61,7 @@ export default defineComponent({
             default:new Object()
         }
     },
-    setup (props) {
+    setup (props,{emit}) {
         let moveScale = 1
         const module:any = computed(()=>{
             return props.module
@@ -163,8 +163,8 @@ export default defineComponent({
             let cos = Math.cos(module.value.rotate/180*Math.PI)
             let sin = Math.sin(module.value.rotate/180*Math.PI)
             let oldR = Math.sqrt(Math.pow(width,2)+Math.pow(height,2))
+            let orgFontSize = module.value.fontSize
             if(direction == 'right-down'){
-
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
@@ -175,6 +175,12 @@ export default defineComponent({
                         module.value.height = module.value.width/rate
                         module.value.left = module.value.left - (module.value.height-height)*sin/2
                         module.value.top =  module.value.top - (module.value.height-height)*(1-cos)/2 
+                        if(module.value.type == 'text'){
+
+                          module.value.fontSize = orgFontSize * module.value.height/height
+                        }
+                       
+                       
                      }
             }else if(direction == 'right-middle'){
                     window.onmousemove = (event:MouseEvent)=>{
@@ -184,6 +190,9 @@ export default defineComponent({
                         module.value.width = newWidth>20?newWidth:20
                         module.value.left = oriLeft - (module.value.width-width)*(1-cos)/2
                         module.value.top = oriTop + (module.value.width-width)*sin/2
+                         if(module.value.type == 'text'){
+                           emit('changeHeight')
+                        }
                      }
             }else if(direction == 'right-top'){
               
@@ -197,6 +206,9 @@ export default defineComponent({
                         module.value.height = module.value.width/rate
                         module.value.left = module.value.left + (module.value.height-height)*sin/2
                         module.value.top = module.value.top - (module.value.height-height)*(1+cos)/2 
+                        if(module.value.type == 'text'){
+                          module.value.fontSize = orgFontSize * module.value.height/height
+                        }
                      }
             }else if(direction == 'middle-down'){
                     window.onmousemove = (event:MouseEvent)=>{
@@ -227,6 +239,9 @@ export default defineComponent({
                         module.value.height = module.value.width/rate
                         module.value.left = module.value.left + (module.value.height-height)*sin/2
                         module.value.top = module.value.top - (module.value.height-height)*(1+cos)/2 
+                        if(module.value.type == 'text'){
+                          module.value.fontSize = orgFontSize * module.value.height/height
+                        }
                      }
             }else if(direction == 'left-middle'){
                     window.onmousemove = (event:MouseEvent)=>{
@@ -237,6 +252,9 @@ export default defineComponent({
                         module.value.width = newWidth>20?newWidth:20
                         module.value.left = oriLeft - (module.value.width-width)*(cos+1)/2
                         module.value.top = oriTop - (module.value.width-width)*sin/2
+                         if(module.value.type == 'text'){
+                           emit('changeHeight')
+                        }
                      }
             }else if(direction == 'left-down'){
                     window.onmousemove = (event:MouseEvent)=>{
@@ -249,6 +267,9 @@ export default defineComponent({
                         module.value.height = module.value.width/rate
                         module.value.left = module.value.left - (module.value.height-height)*sin/2
                         module.value.top = module.value.top - (module.value.height-height)*(1-cos)/2 
+                        if(module.value.type == 'text'){
+                          module.value.fontSize = orgFontSize * module.value.height/height
+                        }
                      }
             }
   

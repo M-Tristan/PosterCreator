@@ -8,7 +8,7 @@
             <i class='iconfont icon-tupian modelu-icon'></i>
             <span class='module-name'>图片</span>
        </div>
-       <div class='module-item '>
+       <div :class='["module-item" ,{"active":moduleId==3}]' @click="moduleId=3">
             <i class='iconfont icon-erweima modelu-icon'></i>
             <span class='module-name'>二维码</span>
         </div>
@@ -16,6 +16,7 @@
             <background-list v-if="moduleId==4"></background-list>
             <image-list v-if="moduleId==2"></image-list>
             <text-list v-if="moduleId==1"></text-list>
+            <qr-code-list v-if="moduleId==3"></qr-code-list>
         </div>
          <div :class='["module-item" ,{"active":moduleId==4}]' @click="moduleId=4">
            <i class='iconfont icon-background modelu-icon'></i>
@@ -28,12 +29,14 @@
 import { defineComponent, ref } from 'vue'
 import backgroundList from './backgroundList.vue'
 import imageList from './imageList.vue'
+import QrCodeList from './qrCodeList.vue'
 import textList from './textList.vue'
 export default defineComponent({
     components:{
         backgroundList,
         imageList,
-        textList
+        textList,
+        QrCodeList
     },  
     setup () {
         let moduleId = ref(1)

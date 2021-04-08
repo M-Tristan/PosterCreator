@@ -1,13 +1,15 @@
 import { createStore } from 'vuex'
-import {image,operItem,text} from '../interface/module'
+import {background, code, image,itemBase,operItem,text} from '../interface/module'
 export default createStore({
   state: {
     postInfo:{
       images:new Array<image>(),
       texts:new Array<text>(),
-      layers:new Array<operItem>()
+      codes:new Array<code>(),
+      layers:new Array<operItem>(),
+      background:<background>new Object()
     },
-    editModule:<operItem>new Object(),//当前编辑模块
+    editModule:<itemBase>new Object(),//当前编辑模块
     clipOper:false
   },
   mutations: {
@@ -23,8 +25,24 @@ export default createStore({
       state.postInfo.texts.push(text)
       state.postInfo.layers.push(text)
     },
+    addCode(state,code:code){
+      code.type='code'
+      code.zindex = state.postInfo.layers.length
+      state.postInfo.codes.push(code)
+      state.postInfo.layers.push(code)
+    },
+    addBack(state,back:background){
+      state.postInfo.background = back
+    },
+    setBackground(state,url:string){
+      state.postInfo.background.color = 'rgba(0,0,0,0)'
+      state.postInfo.background.imageUrl = url
+    },
     setEditModule(state,moduleId:string){
       state.editModule = <operItem>state.postInfo.layers.find(item=>item.id == moduleId )
+    },
+    setEditModuleToBack(state){
+      state.editModule = state.postInfo.background
     },
     setClipOper(state,val:boolean){
       state.clipOper = val

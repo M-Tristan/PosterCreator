@@ -2,19 +2,22 @@
   <div class='text-content'  @click='selectModel'   @mousedown="moduleMove(module)" :style="{  width: module.width + 'px'
                                         ,left:module.left+'px'
                                         ,top:module.top+'px',
-                                        transform:  `rotate(${module.rotate?module.rotate:0}deg)`,
+                                        transform:  `rotate(${module.rotate?module.rotate:0}deg)`
+                                         ,zIndex:module.zindex
                                    }" >
-    <div class='content' :contenteditable='true' @input="changeText" ref='contentInput'>
+    <div class='content' :contenteditable='true' @input="changeHeight" ref='contentInput' :style="{
+      fontSize:`${module.fontSize}px`
+    }">
       {{module.text}}
     </div>
-    <regulator :module='module' v-if="editModule.id == module.id" ></regulator>
+    <regulator :module='module' v-if="editModule.id == module.id" @changeHeight='changeHeight' ></regulator>
     <rotate :module='module' v-if="editModule.id == module.id"></rotate> 
   </div>
 </template>
 
 <script lang="ts">
 import { useStore } from 'vuex'
-import { computed, ComputedRef, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
@@ -42,7 +45,7 @@ export default defineComponent({
       store.commit('setEditModule',module.value.id)
     }
     const contentInput = ref(null as unknown as HTMLElement)
-    const changeText = () => {
+    const changeHeight = () => {
           module.value.height = contentInput.value.clientHeight
         }
     return {
@@ -50,7 +53,7 @@ export default defineComponent({
       moduleMove,
       editModule,
       selectModel,
-      changeText,
+      changeHeight,
       contentInput
     }
   }

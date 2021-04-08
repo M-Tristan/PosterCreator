@@ -30,7 +30,7 @@ export default defineComponent({
             ])
         const selectImage = async (url:string)=>{
             let imageInfo = <operItem> await ModuleUtil.getAddImageInfo(url)
-            console.log(imageInfo)
+           
             store.commit('addImage',imageInfo)
             store.commit('setEditModule',imageInfo.id)
         }

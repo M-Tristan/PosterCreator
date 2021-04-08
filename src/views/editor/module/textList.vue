@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import ModuleUtil from '@/lib/ModuleUtil'
 export default {

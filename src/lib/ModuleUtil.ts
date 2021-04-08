@@ -1,3 +1,8 @@
+interface codeBaseInfo{
+  text:string,
+  colorDark:string,
+  colorLight:string
+}
 import { v4 as uuidv4 } from 'uuid';
 class ModuleUtil{
     constructor(){
@@ -39,7 +44,7 @@ class ModuleUtil{
           resolve({
               id:uuidv4(),
               width:80,
-              height:20,
+              height:26,
               top:10,
               left:10,
               rotate:0,
@@ -48,9 +53,28 @@ class ModuleUtil{
               text:text
           })
       })
-      
-      
-
-  }
+    }
+    static  getAddCodeInfo(code:codeBaseInfo){
+      return new Promise((resolve,reject)=>{
+          resolve({
+            id:uuidv4(),
+            width:200,
+            height:200,
+            top:10,
+            left:10,
+            rotate:0,
+              ...code
+          })
+      })
+    }
+    static  getAddBackInfo(){
+      return new Promise((resolve,reject)=>{
+          resolve({
+            id:uuidv4(),
+            imageUrl:'',
+            color:'rgba(0,0,0,0)'
+          })
+      })
+    }
 }
 export default ModuleUtil
