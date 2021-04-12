@@ -61,7 +61,7 @@ export default defineComponent({
         showImage.showTop = 0
         showImage.showLeft = 0
         const buttonInfo = computed(()=>{
-          return PositionUtil.getPosition(showImage.left,showImage.top,showImage.width,showImage.height,showImage.rotate)
+          return PositionUtil.getPosition(showImage.left+showImage.width/2,showImage.top+showImage.height/2,showImage.width,showImage.height,showImage.rotate)
         })
         return {editModule,showImage,buttonInfo}
     },
