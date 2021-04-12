@@ -138,7 +138,7 @@
     </div>
   </el-collapse-item>
   <el-collapse-item title="操作" name="4">
-    <!-- <el-button type="info" plain size="mini" @click="clipImage">裁剪</el-button> -->
+    <el-button type="info" plain size="mini" @click="clipImage">裁剪</el-button>
   </el-collapse-item>
 </el-collapse>
 </div>

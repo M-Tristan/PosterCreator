@@ -4,8 +4,8 @@
                                   backgroundSize: `16px 16px`,
                                   backgroundPosition: `0 0,8px 8px`,
                                   backgroundImage: `linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc),linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc)`
-                                  ,'width': 420+'px'
-                                  ,'height':480+'px'
+                                  ,'width': canvas.width+'px'
+                                  ,'height':canvas.height+'px'
                                   ,'left':`40%`
                                   ,'top':`10`}">
         <background :background='background'></background>
@@ -47,12 +47,16 @@ export default defineComponent({
     let images = computed(()=>{
       return store.state.postInfo.images
     })
+    let canvas = computed(()=>{
+      return store.state.postInfo.canvas
+    })
     return {
       images:images,
       texts:texts,
       codes:codes,
       background:background,
-      clipOper
+      clipOper,
+      canvas
     }
   }
 })

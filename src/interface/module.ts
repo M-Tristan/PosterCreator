@@ -38,12 +38,24 @@ export interface code extends operItem{
   colorDark:string,
   colorLight:string
 }
-export interface background extends operItem{
-  imageUrl:string,
+export interface background extends itemBase{
+  image:{
+    width:number,
+    height:number,
+    top:number,
+    left:number,
+    src:string,
+    blur:number
+  },
   color:string
 }
 
+export interface canvas{
+  width:number,
+  height:number
+}
 export interface postInfo {
+   canvas:canvas,
    images:image[],
    texts:text[],
    layers:operItem[],

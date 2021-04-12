@@ -4,6 +4,7 @@ interface codeBaseInfo{
   colorLight:string
 }
 import { v4 as uuidv4 } from 'uuid';
+import store from './../store/index';
 class ModuleUtil{
     constructor(){
 
@@ -67,13 +68,27 @@ class ModuleUtil{
           })
       })
     }
-    static  getAddBackInfo(){
+    static  getBackImageInfo(url:string){
       return new Promise((resolve,reject)=>{
-          resolve({
-            id:uuidv4(),
-            imageUrl:'',
-            color:'rgba(0,0,0,0)'
-          })
+        let img = new Image()
+           img.src = url
+           img.onload = function(){
+             let canvas = store.state.postInfo.canvas
+             let naturalWidth = img.naturalWidth
+             let naturalHeight = img.naturalHeight
+             let widthrate = canvas.width/naturalWidth
+             let heightrate = canvas.height/naturalHeight
+             let useRate = widthrate>heightrate?widthrate:heightrate
+             let imageInfo = {
+                width:useRate*img.naturalWidth,
+                height:useRate*img.naturalHeight,
+                top:(useRate*img.naturalHeight-canvas.height)/2,
+                left:(useRate*img.naturalWidth-canvas.width)/2,
+                src:url,
+                blur:0
+             }
+             resolve(imageInfo)
+          }
       })
     }
 }

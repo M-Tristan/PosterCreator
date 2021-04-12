@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
-import {background, code, image,itemBase,operItem,text} from '../interface/module'
+import {background, canvas, code, image,itemBase,operItem,text} from '../interface/module'
+import { v4 as uuids4 } from 'uuid';
 export default createStore({
   state: {
     postInfo:{
@@ -7,7 +8,8 @@ export default createStore({
       texts:new Array<text>(),
       codes:new Array<code>(),
       layers:new Array<operItem>(),
-      background:<background>new Object()
+      background:<background>new Object(),
+      canvas:<canvas>new Object()
     },
     editModule:<itemBase>new Object(),//当前编辑模块
     clipOper:false
@@ -32,11 +34,11 @@ export default createStore({
       state.postInfo.layers.push(code)
     },
     addBack(state,back:background){
+      back.type='back'
       state.postInfo.background = back
     },
-    setBackground(state,url:string){
-      state.postInfo.background.color = 'rgba(0,0,0,0)'
-      state.postInfo.background.imageUrl = url
+    addCanvas(state,canvas:canvas){
+      state.postInfo.canvas = canvas
     },
     setEditModule(state,moduleId:string){
       state.editModule = <operItem>state.postInfo.layers.find(item=>item.id == moduleId )
@@ -46,6 +48,25 @@ export default createStore({
     },
     setClipOper(state,val:boolean){
       state.clipOper = val
+    },
+    initBack(state){
+      state.postInfo.background = {
+        id:uuids4(),
+        type:'back',
+        color:`rgba(0,0,0,0)`,
+        opacity:1,
+        image:{
+              width:0,
+              height:0,
+              top:0,
+              left:0,
+              src:'',
+              blur:0
+        }
+      }
+    },
+    addBackImage(state,image){
+      state.postInfo.background.image = image
     }
   },
   actions: {

@@ -2,7 +2,12 @@
   <div class='background' :style="{
       backgroundColor:background.color
     }">
-    <img v-if="background.imageUrl" :src='background.imageUrl' />
+    <img class='backImage' :style="{
+      width:`${background.image.width}px`,
+      height:`${background.image.height}px`,
+      left:`-${background.image.left}px`,
+      top:`-${background.image.top}px`,
+    }" draggable="false" v-if="background.image.src" :src='background.image.src' />
   </div>
 </template>
 
@@ -33,5 +38,8 @@ export default defineComponent({
   left: 0;
   top: 0;
   pointer-events: none;
+}
+.backImage{
+  position: absolute;
 }
 </style>

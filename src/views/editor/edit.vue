@@ -26,9 +26,14 @@ import ModuleUtil from '@/lib/ModuleUtil'
 export default defineComponent({
     setup () {
         const store = useStore()
+      
+          store.commit('initBack');
         onMounted(async()=>{
-          let backInfo = await ModuleUtil.getAddBackInfo()
-          store.commit('addBack', backInfo);
+          let canvas = {
+            width:400,
+            height:400,
+          }
+          store.commit('addCanvas', canvas);
         })
         const selectModel = () =>{
           store.commit('setEditModuleToBack')

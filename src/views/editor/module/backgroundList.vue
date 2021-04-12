@@ -11,9 +11,11 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
+import ModuleUtil from '@/lib/ModuleUtil'
 export default defineComponent({
     setup () {
         const store = useStore()
+        
         const imageList = reactive(["https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1886815664,3042078165&fm=26&gp=0.jpg",
               "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3197198635,147065671&fm=26&gp=0.jpg",
               "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2223646626,3318155102&fm=26&gp=0.jpg",
@@ -27,8 +29,9 @@ export default defineComponent({
               "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2346550673,3354440050&fm=26&gp=0.jpg",
               "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1428225030,2228787498&fm=26&gp=0.jpg"
           ])
-        const selectBack = (url:string) => {
-           store.commit('setBackground', url);
+        const selectBack = async (url:string) => {
+             let imageInfo = await ModuleUtil.getBackImageInfo(url)
+             store.commit('addBackImage', imageInfo); 
         }
 
         return {imageList,selectBack}
