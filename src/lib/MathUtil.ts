@@ -6,6 +6,9 @@ class MathUtil{
   static sin(angle:number):number{
     return Math.sin(angle/180*Math.PI)
   }
+  static asin(sinValue:number):number{
+    return Math.asin(sinValue)/Math.PI*180
+  }
   static cos(angle:number):number{
     return Math.cos(angle/180*Math.PI)
   }

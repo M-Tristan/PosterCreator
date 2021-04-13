@@ -31,6 +31,12 @@ class ModuleUtil{
                     dropshadowY:0,
                     dropshadowBlur:0,
                     dropshadowColor:'rgba(0,0,0,0)',
+                    crop:{
+                      width: image.naturalWidth,
+                      height: image.naturalHeight,
+                      left: 0,
+                      top: 0
+                    }
                     // borderWidth:0,
                     // borderColor:'rgba(0,0,0,0)',
                 })

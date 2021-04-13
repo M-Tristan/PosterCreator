@@ -23,6 +23,12 @@ export interface image extends operItem{
     dropshadowY:number,
     dropshadowBlur:number,
     dropshadowColor:string,
+    crop:{
+      height: number,
+      left: number,
+      top: number,
+      width: number
+    }
     // borderWidth:number,
     // borderColor:string
 }

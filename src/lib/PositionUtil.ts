@@ -17,12 +17,10 @@ class PositionUtil{
      * @returns 
      */
     static getPosition(x:number,y:number,w:number,h:number,angle:number){
-      console.log({x,y,w,h,angle})
         let leftTop = {
             left:h/2*MathUtil.sin(angle)+x-w/2*MathUtil.cos(angle),
             top:h/2*MathUtil.cos(angle)+y-w/2*MathUtil.sin(angle)
         }
-        console.log(w/2*MathUtil.cos(angle))
         let rightTop = {
             left:h/2*MathUtil.sin(angle)+x+w/2*MathUtil.cos(angle),
             top:h/2*MathUtil.cos(angle)+y+w/2*MathUtil.sin(angle)
