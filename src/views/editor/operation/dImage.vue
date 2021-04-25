@@ -11,17 +11,24 @@
 
                 <div class='image-border' :style="{
                   borderRadius:`${module.borderRadius}px`,
-                  border:`solid ${module.borderWidth}px ${module.borderColor}`
+                  border:`solid ${module.borderWidth}px ${module.borderColor}`,
+                  filter: `blur(${module.blur}px) drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px ${module.dropshadowColor})`,
+                  width: module.width + 'px'
+                  ,height: module.height+'px'
+                   ,opacity:module.opacity
+                   ,transform:`rotateY(${module.rotateY?180:0}deg) rotateX(${module.rotateX?180:0}deg)`
                 }">
-                  <img draggable="false" class='image' :src='module.src' :style="{  width: nature.naturalWidth*imageScale + 'px'
-                                        ,height: nature.naturalHeight*imageScale+'px'
-                                        ,filter: `blur(${module.blur}px) drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px ${module.dropshadowColor})`
-                                        ,opacity:module.opacity
+                  <canvas :style="{ 
+                    width: module.width + 'px'
+                  ,height: module.height+'px'
+                  }" ref='imageCanvas'></canvas>
+                  <!-- <img draggable="false" class='image' :src='module.src' :style="{  
+                                        
+                                       
                                         ,left:`-${module.crop.left*imageScale}px`
                                         ,top:`-${module.crop.top*imageScale}px`
-                                        ,transform:`rotateY(${module.rotateY?180:0}deg) rotateX(${module.rotateX?180:0}deg)`
                                         
-                                              }"/>
+                   }"/> -->
                 </div>
 
    
@@ -33,7 +40,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex'
-import { computed, defineComponent, reactive } from 'vue'
+import { computed, defineComponent,  ref, watch } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
@@ -49,19 +56,7 @@ export default defineComponent({
     rotate
   },
   setup (props) {
-      const store = useStore()
-      let image = new Image()
-      image.src = store.state.editModule.src
-      const nature = reactive({
-        naturalWidth:0,
-        naturalHeight:0
-      })
-      image.onload = () => {
-        nature.naturalWidth = image.naturalWidth
-        nature.naturalHeight = image.naturalHeight
-      }
-      
-      const editModule:any= computed(()=>{
+     const editModule:any= computed(()=>{
         return store.state.editModule
       })
       let imageScale = computed(()=>{
@@ -70,11 +65,46 @@ export default defineComponent({
       const module:any= computed(()=>{
         return props.image
       })
+      const store = useStore()
+      let image = new Image()
+      image.src = store.state.editModule.src
+      const nature = {
+        naturalWidth:0,
+        naturalHeight:0
+      }
+      image.onload = () => {
+        nature.naturalWidth = image.naturalWidth
+        nature.naturalHeight = image.naturalHeight
+        draw()
+      }
+      let imageCanvas = ref(null as unknown as HTMLCanvasElement)
+      const draw = () => {
+        let crop = module.value.crop
+        imageCanvas.value.setAttribute('width', String(crop.width))
+        imageCanvas.value.setAttribute('height',String(crop.height))
+        let ctx = imageCanvas.value.getContext('2d') as CanvasRenderingContext2D
+        ctx.clearRect(0,0,crop.width,crop.height)
+        ctx.drawImage(image,-crop.left,-crop.top)
+        console.log(imageCanvas)
+      }
+     watch(
+        () => module.value.crop,
+        (nv, ov) => {
+         draw()
+        },
+        {
+            immediate: false,
+            deep: true,
+        }
+      )
+      
+     
       const { moduleMove } = operation()
       const selectModel = () =>{
         store.commit('setEditModule',module.value.id)
       }
-    return {module,moduleMove,editModule,selectModel,imageScale,nature}
+      
+    return {module,moduleMove,editModule,selectModel,imageScale,imageCanvas}
   }
 })
 </script>

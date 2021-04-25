@@ -122,11 +122,12 @@ export default defineComponent({
       let image = new Image()
       image.src = showImage.src
       image.onload = () => {
+         let imageEdit = store.state.editModule
         let naturalWidth = image.naturalWidth
         let naturalHeight = image.naturalHeight
-        let rateW = naturalWidth/editModule.width
-        let rateY = naturalHeight/editModule.height
-        let imageEdit = store.state.editModule
+        let rateW = imageEdit.crop.width/editModule.width
+        let rateY = imageEdit.crop.height/editModule.height
+       
         imageEdit.crop = {
                             width: showImage.width*rateW,
                             height: showImage.height*rateY,

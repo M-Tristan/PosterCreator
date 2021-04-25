@@ -1,5 +1,4 @@
 import { operItem } from "@/interface/module"
-import { computed, ComputedRef } from "vue"
 
 const operation = () =>{
   let moveScale = 1

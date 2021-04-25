@@ -1,4 +1,7 @@
-
+interface Size{
+ width:number,
+ height:number
+}
 class MathUtil{
   constructor(){
 
@@ -20,6 +23,18 @@ class MathUtil{
   }
   static getHypotenuse(width:number,height:number):number{
     return Math.sqrt(Math.pow(width,2)+Math.pow(height,2))
+  }
+  static getFullSize(width:number,height:number,rate:number):Size{
+    if(width/height>rate){
+      return{
+        width:width,
+        height:width*rate
+      }
+    }
+    return{
+      width:height*rate,
+      height:height
+    }
   }
 
 }
