@@ -28,7 +28,7 @@ class MathUtil{
     if(width/height>rate){
       return{
         width:width,
-        height:width*rate
+        height:width/rate
       }
     }
     return{

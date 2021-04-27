@@ -18,9 +18,9 @@
                    ,opacity:module.opacity
                    ,transform:`rotateY(${module.rotateY?180:0}deg) rotateX(${module.rotateX?180:0}deg)`
                 }">
-                  <canvas :style="{ 
-                    width: module.width + 'px'
-                  ,height: module.height+'px'
+                  <canvas class='image' :style="{ 
+                    width: imageSize.width + 'px'
+                  ,height: imageSize.height+'px'
                   }" ref='imageCanvas'></canvas>
                   <!-- <img draggable="false" class='image' :src='module.src' :style="{  
                                         
@@ -44,6 +44,7 @@ import { computed, defineComponent,  ref, watch } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
+import MathUtil from '@/lib/MathUtil'
 export default defineComponent({
   props:{
     image:{
@@ -87,6 +88,10 @@ export default defineComponent({
         ctx.drawImage(image,-crop.left,-crop.top)
         console.log(imageCanvas)
       }
+      const imageSize = computed(() => {
+         let crop = module.value.crop 
+        return MathUtil.getFullSize(module.value.width,module.value.height,crop.width/crop.height)
+        })
      watch(
         () => module.value.crop,
         (nv, ov) => {
@@ -104,7 +109,7 @@ export default defineComponent({
         store.commit('setEditModule',module.value.id)
       }
       
-    return {module,moduleMove,editModule,selectModel,imageScale,imageCanvas}
+    return {module,moduleMove,editModule,selectModel,imageScale,imageCanvas,imageSize}
   }
 })
 </script>
@@ -127,5 +132,9 @@ export default defineComponent({
 }
 .image{
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
+
 </style>
