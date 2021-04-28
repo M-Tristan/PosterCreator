@@ -188,6 +188,9 @@ export default defineComponent({
                         let Y = event.clientY
                         let newWidth = width+(X-oriX)*moveScale*cos +(Y-oriY)*moveScale*sin
                         module.value.width = newWidth>20?newWidth:20
+                        if(module.value.type == 'text'){
+                          module.value.width = newWidth>module.value.fontSize?newWidth:module.value.fontSize
+                        }
                         module.value.left = oriLeft - (module.value.width-width)*(1-cos)/2
                         module.value.top = oriTop + (module.value.width-width)*sin/2
                          if(module.value.type == 'text'){
@@ -250,6 +253,9 @@ export default defineComponent({
                         let Y = event.clientY
                         let newWidth = width-(X-oriX)*moveScale*cos -(Y-oriY)*moveScale*sin
                         module.value.width = newWidth>20?newWidth:20
+                        if(module.value.type == 'text'){
+                          module.value.width = newWidth>module.value.fontSize?newWidth:module.value.fontSize
+                        }
                         module.value.left = oriLeft - (module.value.width-width)*(cos+1)/2
                         module.value.top = oriTop - (module.value.width-width)*sin/2
                          if(module.value.type == 'text'){
@@ -314,5 +320,13 @@ export default defineComponent({
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(129, 129, 129);
+}
+.item-list{
+  border: 1px solid rgb(0, 140, 255);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position:absolute;
 }
 </style>

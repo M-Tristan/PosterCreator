@@ -6,7 +6,9 @@
                                          ,zIndex:module.zindex
                                    }" >
     <div class='content' :contenteditable='true' @input="changeHeight" ref='contentInput' :style="{
-      fontSize:`${module.fontSize}px`
+      fontSize:`${module.fontSize}px`,
+      transform: `scale(${fontScale})`,
+      color:`${module.color}`
     }">
       {{module.text}}
     </div>
@@ -17,7 +19,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex'
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
@@ -48,13 +50,27 @@ export default defineComponent({
     const changeHeight = () => {
           module.value.height = contentInput.value.clientHeight
         }
+    const fontSize = computed(()=>{
+      return module.value.fontSize
+    })
+    const fontScale = computed(()=>{
+      let fontSize = module.value.fontSize
+      if(fontSize<12){
+        return fontSize/12
+      }
+      return 1
+    })
+    watch(fontSize, (nv, ov) => {
+      changeHeight()
+      })
     return {
       module,
       moduleMove,
       editModule,
       selectModel,
       changeHeight,
-      contentInput
+      contentInput,
+      fontScale
     }
   }
 })

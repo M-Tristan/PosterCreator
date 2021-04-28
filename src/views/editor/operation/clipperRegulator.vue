@@ -15,7 +15,7 @@
             <div class='item' @mousedown.stop="controlshape('left-down')" :style="{ 
                                         cursor: cursor.leftDown,
                                         left:0+'px'
-                                    ,top:module.height+'px'
+                                        ,top:module.height+'px'
                                      ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                     }"></div>
              <div class='item-Horizontal'  @mousedown.stop="controlshape('middle-top')" :style="{ 
@@ -309,12 +309,11 @@ export default defineComponent({
            
             window.onmouseup = ()=>{
                 window.onmousemove = null
-                 window.onmouseup=null
-                 console.log(JSON.stringify(module.value))
-                   module.value.left = Math.round(module.value.left)
-                   module.value.height = Math.round(module.value.height)
-                   module.value.width = Math.round(module.value.width)
-                   module.value.top = Math.round(module.value.top)
+                window.onmouseup=null
+                module.value.left = Math.round(module.value.left)
+                module.value.height = Math.round(module.value.height)
+                module.value.width = Math.round(module.value.width)
+                module.value.top = Math.round(module.value.top)
                
             }
            

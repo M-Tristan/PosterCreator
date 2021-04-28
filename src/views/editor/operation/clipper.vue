@@ -78,11 +78,12 @@ export default defineComponent({
     const store = useStore()
     const editModule: any = reactive(_.cloneDeep(store.state.editModule))
     const showImage = reactive({ ...editModule })
-    let imageScale = editModule.width/editModule.crop.width
+    let crop = PositionUtil.getClipInfo(editModule.width,editModule.height,editModule.crop)
+    let imageScale = editModule.width/crop.width
     showImage.oriTop = showImage.top 
     showImage.oriLeft = showImage.left 
-    showImage.showTop = editModule.crop.top * imageScale
-    showImage.showLeft = editModule.crop.left * imageScale
+    showImage.showTop = crop.top * imageScale
+    showImage.showLeft = crop.left * imageScale
 
     let image = new Image()
     image.src = store.state.editModule.src
@@ -94,14 +95,14 @@ export default defineComponent({
         showImage.showWidth = image.naturalWidth * imageScale
         showImage.showHeigth = image.naturalHeight * imageScale
         let innerCenter = PositionUtil.getCenterPosition(showImage.showLeft,showImage.showTop,showImage.width,showImage.height)
-       let hypotenuse = MathUtil.getHypotenuse(innerCenter.left - showImage.showWidth/2 , showImage.showHeigth/2 - innerCenter.top )
+        let hypotenuse = MathUtil.getHypotenuse(innerCenter.left - showImage.showWidth/2 , showImage.showHeigth/2 - innerCenter.top )
         let innerAngle = 0
         if(showImage.showHeigth/2 - innerCenter.top != 0){
           innerAngle = MathUtil.atan(( showImage.showHeigth/2 - innerCenter.top)/(innerCenter.left - showImage.showWidth/2))
         }
         if(innerCenter.left - showImage.showWidth/2 < 0){
           innerAngle+=180
-        }
+        }        
         let showCenter =  PositionUtil.getCenterPosition(showImage.left,showImage.top,showImage.width,showImage.height)
         let centerPosition = PositionUtil.getPositionbyOther(innerAngle-showImage.rotate,hypotenuse,showCenter)
         let realPosition = PositionUtil.getPositionByCenter(centerPosition.left,centerPosition.top, showImage.showWidth,showImage.showHeigth)
@@ -125,8 +126,8 @@ export default defineComponent({
          let imageEdit = store.state.editModule
         let naturalWidth = image.naturalWidth
         let naturalHeight = image.naturalHeight
-        let rateW = imageEdit.crop.width/editModule.width
-        let rateY = imageEdit.crop.height/editModule.height
+        let rateW = crop.width/editModule.width
+        let rateY = crop.height/editModule.height
        
         imageEdit.crop = {
                             width: showImage.width*rateW,

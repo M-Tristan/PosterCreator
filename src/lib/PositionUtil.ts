@@ -3,6 +3,12 @@ interface position{
   left:number,
   top:number
 }
+ interface clip{
+  left:number,
+  top:number,
+  width:number,
+  height:number,
+}
 class PositionUtil{
     constructor(){
 
@@ -105,6 +111,18 @@ class PositionUtil{
       left:x-w/2,
       top:y-h/2
     }
+  }
+
+  static getClipInfo(width:number,height:number,clip:clip):clip{
+    let fullSize = MathUtil.getFullSize(width,height,clip.width/clip.height)
+    let scale = fullSize.width/clip.width
+    return{
+      left:clip.left+(fullSize.width-width)/2/scale,
+      top:clip.top+(fullSize.height-height)/2/scale,
+      width:width/scale,
+      height:height/scale,
+    }
+
   }
 }
 

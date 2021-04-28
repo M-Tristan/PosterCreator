@@ -1,5 +1,5 @@
 <template>
-<div class='image-area'>
+<div class='image-area' v-if="editModule.type=='image'">
   <el-collapse v-model="activeNames">
   <el-collapse-item title="图片" name="1">
     <div class='oper-item'>
@@ -26,7 +26,7 @@
         <el-input-number size="mini" :min="0" :max="borderRadiusMax" v-model="editModule.borderRadius"></el-input-number>
       </div>
     </div>
-   <div class='oper-item'>
+   <!-- <div class='oper-item'>
       <div class='oper-name'>
         翻转  
       </div>
@@ -40,7 +40,7 @@
         
       
       </div>
-    </div>
+    </div> -->
   </el-collapse-item>
   <el-collapse-item title="投影" name="2">
      <div class='oper-item'>

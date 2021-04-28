@@ -1,17 +1,129 @@
 <template>
-<div class='image-area'>
+<div class='image-area' v-if="editModule.type=='text'">
   <el-collapse v-model="activeNames">
-  <el-collapse-item title="图片" name="1">
+  <el-collapse-item title="文本" name="1">
     <div class='oper-item'>
       <div class='oper-name'>
         字号  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" :min="0" :max="50" v-model="editModule.fontSize"></el-input-number>
+        <el-input-number size="mini" :min="6" :max="1000" v-model="editModule.fontSize"></el-input-number>
+      </div>
+    </div>
+     <div class='oper-item'>
+      <div class='oper-name'>
+         颜色
+      </div>
+      <div class='oper-input'>
+         <el-color-picker v-model="editModule.color" size="mini" show-alpha ></el-color-picker>
+      </div>
+    </div>
+    <div class='oper-item'>
+       <div class='oper-name'>
+         装饰
+      </div>
+      <div class='decoration'>
+           <div :class='["flip",{active:editModule.rotateX}]' >
+            <i class='icon iconfont icon-bold'></i>
+          </div>
+          <div :class='["flip",{active:editModule.rotateX}]' >
+            <i class='icon iconfont icon-zitixieti'></i>
+          </div>
+          <div :class='["flip",{active:editModule.rotateX}]' >
+            <i class='icon iconfont icon-zitixiahuaxian'></i>
+          </div>
+          <div :class='["flip",{active:editModule.rotateX}]' >
+            <i class='icon iconfont icon-strikethrough'></i>
+          </div>
+      </div>
+    </div>
+    <div class='oper-item'>
+       <div class='oper-name'>
+         对齐
+      </div>
+      <div class='decoration'>
+           <div :class='["flip",{active:editModule.rotateX}]' >
+            <i class='icon iconfont icon-zuoduiqi'></i>
+          </div>
+          <div :class='["flip",{active:editModule.rotateX}]' >
+            <i class='icon iconfont icon-juzhongduiqi'></i>
+          </div>
+          <div :class='["flip",{active:editModule.rotateX}]' >
+            <i class='icon iconfont icon-youduiqi'></i>
+          </div>
+          <div :class='["flip",{active:editModule.rotateX}]' >
+            <i class='icon iconfont icon-zuoyouduiqi'></i>
+          </div>
+      </div>
+     
+    </div>
+     <div class='oper-item'>
+        <div class='oper-name'>
+          行间距  
+        </div>
+        <div class='oper-input'>
+          <el-input-number size="mini" :min="1" :max="10" ></el-input-number>
+        </div>
+      </div>
+      <div class='oper-item'>
+        <div class='oper-name'>
+          字间距  
+        </div>
+        <div class='oper-input'>
+          <el-input-number size="mini" :min="1" :max="10" ></el-input-number>
+        </div>
+      </div>
+       <div class='oper-item'>
+        <div class='oper-name'>
+          不透明度  
+        </div>
+        <div class='oper-input'>
+          <el-input-number size="mini" :min="1" :max="10" ></el-input-number>
+        </div>
+      </div>
+  </el-collapse-item>
+<el-collapse-item title="位置" name="2">
+    <div class='oper-item'>
+      <div class='oper-name'>
+        旋转角度  
+      </div>
+      <div class='oper-input'>
+        <el-input-number size="mini" :min='0' :max='360' v-model="editModule.rotate"></el-input-number>
+      </div>
+    </div>
+    <div class='oper-item'>
+      <div class='oper-name'>
+        左边距  
+      </div>
+      <div class='oper-input'>
+        <el-input-number size="mini" v-model="editModule.left"></el-input-number>
+      </div>
+    </div>
+    <div class='oper-item'>
+      <div class='oper-name'>
+        上边距  
+      </div>
+      <div class='oper-input'>
+        <el-input-number size="mini" v-model="editModule.top"></el-input-number>
+      </div>
+    </div>
+    <div class='oper-item'>
+      <div class='oper-name'>
+        宽  
+      </div>
+      <div class='oper-input'>
+        <el-input-number size="mini" v-model="editModule.width"></el-input-number>
+      </div>
+    </div>
+    <div class='oper-item'>
+      <div class='oper-name'>
+        高 
+      </div>
+      <div class='oper-input'>
+        <el-input-number size="mini" v-model="editModule.height"></el-input-number>
       </div>
     </div>
   </el-collapse-item>
-
 </el-collapse>
 </div>
 
@@ -62,6 +174,12 @@ export default defineComponent({
  justify-content: center;
  align-items: center;
 }
+.decoration{
+   width: 70%;
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+}
 .transverse{
   transform: rotate(90deg);
 }
@@ -81,7 +199,7 @@ export default defineComponent({
 .active{
   color: rgb(5, 142, 255);
   background-color: rgb(0, 36, 112);
+ 
 }
-
 
 </style>

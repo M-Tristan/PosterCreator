@@ -10,6 +10,8 @@
         </div>
         <div class='edit-area'>
           <image-edit></image-edit>
+          <text-edit></text-edit>
+          <back-edit></back-edit>
         </div>
     </div>
 </template>
@@ -22,12 +24,13 @@ import module from './module/module.vue'
 import zoom from './edit/zoom.vue'
 import imageEdit from './edit/imageEdit.vue'
 import { useStore } from 'vuex'
-import ModuleUtil from '@/lib/ModuleUtil'
+import TextEdit from './edit/textEdit.vue'
+import backEdit from './edit/backEdit.vue'
 export default defineComponent({
     setup () {
         const store = useStore()
       
-          store.commit('initBack');
+        store.commit('initBack');
         onMounted(async()=>{
           let canvas = {
             width:400,
@@ -44,7 +47,9 @@ export default defineComponent({
         module,
         zoom,
         editCom,
-        imageEdit
+        imageEdit,
+        TextEdit,
+        backEdit
     }
 })
 </script>
