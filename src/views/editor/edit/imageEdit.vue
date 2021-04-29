@@ -7,7 +7,8 @@
         模糊  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" :min="0" :max="50" v-model="editModule.blur"></el-input-number>
+        <input-number v-model="editModule.blur"></input-number>
+        <!-- <el-input-number size="mini" :min="0" :max="50" v-model="editModule.blur"></el-input-number> -->
       </div>
     </div>
     <div class='oper-item'>
@@ -148,13 +149,14 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
-
 export default defineComponent({
+  components:{
+  },
   setup () {
     const store = useStore()
     let activeNames = ref(['1'])
     let value = ref(1)
-    let color = ref('rgab(100,100,100,100)')
+    let color = ref('rgab(100,100,100,1)')
     const editModule:any= computed(()=>{
       return store.state.editModule
     })

@@ -1,5 +1,5 @@
 <template>
-  <div class='img-content' @click='selectModel'   @mousedown="moduleMove(module)" :style="{  width: module.width + 'px'
+  <div v-show="showImage" class='img-content' @click='selectModel'   @mousedown="moduleMove(module)" :style="{  width: module.width + 'px'
                                         ,height: module.height+'px'
                                         ,left:module.left+'px'
                                         ,top:module.top+'px',
@@ -57,6 +57,9 @@ export default defineComponent({
     rotate
   },
   setup (props) {
+    let showImage = computed(()=>{
+      return !(store.state.clipOper && editModule.value.id == module.value.id)
+    })
      const editModule:any= computed(()=>{
         return store.state.editModule
       })
@@ -109,7 +112,7 @@ export default defineComponent({
         store.commit('setEditModule',module.value.id)
       }
       
-    return {module,moduleMove,editModule,selectModel,imageScale,imageCanvas,imageSize}
+    return {module,moduleMove,editModule,selectModel,imageScale,imageCanvas,imageSize,showImage}
   }
 })
 </script>

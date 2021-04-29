@@ -1,14 +1,17 @@
 <template>
   <div class='text-content'  @click='selectModel'   @mousedown="moduleMove(module)" :style="{  width: module.width + 'px'
+                                        , height:`${fontScale!=1?module.height*fontScale+'px':'auto'}`
                                         ,left:module.left+'px'
                                         ,top:module.top+'px',
                                         transform:  `rotate(${module.rotate?module.rotate:0}deg)`
-                                         ,zIndex:module.zindex
+                                         ,zIndex:module.zindex,
+
                                    }" >
     <div class='content' :contenteditable='true' @input="changeHeight" ref='contentInput' :style="{
       fontSize:`${module.fontSize}px`,
       transform: `scale(${fontScale})`,
-      color:`${module.color}`
+      color:`${module.color}`,
+      width: `${module.width/fontScale}px`
     }">
       {{module.text}}
     </div>
@@ -84,6 +87,9 @@ export default defineComponent({
 .content{
     word-break:break-word;
     white-space:normal;
+    position: relative;
+    left: 0;
+    transform-origin: 0px 0px;
      &:focus{
           outline: none
         }

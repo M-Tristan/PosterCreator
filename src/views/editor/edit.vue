@@ -28,6 +28,34 @@ import TextEdit from './edit/textEdit.vue'
 import backEdit from './edit/backEdit.vue'
 export default defineComponent({
     setup () {
+        document.addEventListener ( 'paste' , (e)  =>  {
+       
+          e.preventDefault();
+         
+          var text = e.clipboardData ? e.clipboardData.getData('text/plain') : prompt('请在这里粘贴文本', '');
+          if (e.clipboardData) { // 支持直接 clipboardData，则直接 OK
+            document.execCommand('insertText', false, text as string);
+          } else { // 不支持则取用户在 prompt 提示输入框粘贴的内容（自动去格式的）
+            var sel, textRange;
+            try {
+              document.execCommand("ms-beginUndoUnit", false, undefined); // 开始给 IE 增加撤回功能
+            } catch (e) { }
+          
+              sel = window.getSelection() as Selection;
+              var range = sel.getRangeAt(0);
+              range.deleteContents(); // 删除 range 的内容
+              var textNode = document.createTextNode(text as string);
+              range.insertNode(textNode); // 向 range 插入 text 节点
+              range.selectNodeContents(textNode); // 选中 text 节点
+              sel.removeAllRanges(); // 删除选区中所有的 range
+              sel.addRange(range); // 向选区增加刚才处理后的 range（只含 text 节点）
+            
+
+            try {
+              document.execCommand("ms-endUndoUnit", false, undefined); // 结束给 IE 增加撤回功能
+            } catch (e) { }
+          }
+      });
         const store = useStore()
       
         store.commit('initBack');
