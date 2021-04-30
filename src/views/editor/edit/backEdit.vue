@@ -6,11 +6,11 @@
     <el-divider content-position="left">画布</el-divider>
     <div class='size-area'>
       <div class='size-item'>
-      <el-input-number  size="mini" v-model="widht" controls-position="right" @change="handleChange" :min="100" :max="10000"></el-input-number>
+         <input-number  :min="100" :max="10000"></input-number>
         <span>宽</span>
       </div>
       <div class='size-item'>
-         <el-input-number  size="mini" v-model="height" controls-position="right" @change="handleChange" :min="100" :max="10000"></el-input-number>
+        <input-number  :min="100" :max="10000"></input-number>
         <span>高</span>
       </div>
     

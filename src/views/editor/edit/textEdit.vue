@@ -7,7 +7,7 @@
         字号  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" :min="6" :max="1000" v-model="editModule.fontSize"></el-input-number>
+         <input-number v-model="editModule.fontSize" :min="6" :max="1000"></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -62,7 +62,7 @@
           行间距  
         </div>
         <div class='oper-input'>
-          <el-input-number size="mini" :min="1" :max="10" ></el-input-number>
+          <input-number  :min="1" :max="10"></input-number>
         </div>
       </div>
       <div class='oper-item'>
@@ -78,7 +78,7 @@
           不透明度  
         </div>
         <div class='oper-input'>
-          <el-input-number size="mini" :min="1" :max="10" ></el-input-number>
+          <input-number  :min="1" :max="10"></input-number>
         </div>
       </div>
   </el-collapse-item>
@@ -88,7 +88,7 @@
         旋转角度  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" :min='0' :max='360' v-model="editModule.rotate"></el-input-number>
+        <input-number  :min='0' :max='360' v-model="editModule.rotate"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -96,7 +96,7 @@
         左边距  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.left"></el-input-number>
+        <input-number  v-model="editModule.left"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -104,7 +104,7 @@
         上边距  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.top"></el-input-number>
+        <input-number  v-model="editModule.top"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -112,7 +112,7 @@
         宽  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.width"></el-input-number>
+        <input-number  v-model="editModule.width"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -120,7 +120,7 @@
         高 
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.height"></el-input-number>
+         <input-number  v-model="editModule.height"></input-number>
       </div>
     </div>
   </el-collapse-item>

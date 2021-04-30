@@ -1,6 +1,6 @@
 <template>
 <div class='inputNumber'>
-  <input ref='input' onkeyup = "value=value.replace(/[^\d]/g,'')" :value="value" @blur="changeValue" class='input' />
+  <input ref='input' @keyup = "upperCase" :value="value"   @change="handleChange" class='input' />
   <div class='button-area'>
     <div class='up button-item' @mouseup="closeInter" @mousedown="add">
       <i class='el-icon-caret-top'></i>
@@ -14,41 +14,80 @@
 </template>
 
 <script lang="ts">
- import { defineComponent, ref } from 'vue';
+ import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
   name: 'input-number',
   props: {
-    value: {
-      type:Number,
+    modelValue: {
+      type:[Number,String],
       default:0
     },
+    min:{
+       type:Number,
+      default:Number.MIN_VALUE
+    },
+     max:{
+       type:Number,
+      default:Number.MAX_VALUE
+    },
+    step:{
+      type:Number,
+      default:1
+    }
+    
   },
- 
-  setup(props){
+  setup(props,{emit}){
      let t: NodeJS.Timeout 
-    let value = ref(props.value)
+    let value = ref(Number(props.modelValue))
     const add = () => {
       t = setInterval(()=>{
-        value.value++
-      },50)
+        if(value.value >= props.max){
+          return
+        }
+        value.value=Number((value.value+props.step).toFixed(2))
+         emit('update:modelValue', value.value)
+      },40)
       
     }
     let input = ref(null as unknown as HTMLInputElement)
     const reduce = () => {
+
        t = setInterval(()=>{
-        value.value--
-      },50)
+          if(value.value <= props.min){
+            return
+          }
+         value.value=Number((value.value-props.step).toFixed(2))
+         
+         emit('update:modelValue', value.value)
+      },40)
     }
     const closeInter = () => {
       clearInterval(t)
     }
-    const changeValue = ( ) => {
-      // let inputValue = input.value.value
-      // value.value = Number(inputValue.replace(/[^\d]/g,''))
-      // //  console.log(input.value.value)
+    const handleChange = ( ) => {
+       let inputValue = input.value.value
+       value.value = Number(inputValue)
+        emit('update:modelValue', value.value)
+     
     }
-    return {value,add,closeInter,reduce,changeValue,input}
+    const upperCase = () =>{//用户只能输入正负数与小数
+        let obj = input.value
+        var t = obj.value.charAt(0); 
+        obj.value = obj.value.replace(".", "$#$")//把第一个字符'.'替换成'$#$'
+                      .replace(/\./g, "")//把其余的字符'.'替换为空
+                      .replace("$#$", ".")//把字符'$#$'替换回原来的'.'
+                      .replace(/[^\d.]/g, "")//只能输入数字和'.'
+                      .replace(/^\./g, "")//不能以'.'开头
+                      .replace( /([0-9]+\.[0-9]{2})[0-9]*/,"$1")//只保留2位小数  
+        if (t == '-') {
+          obj.value = '-' + obj.value;
+        } 
+    }
+    watch(()=>props.modelValue,val=>{
+      value.value = Number(val)
+    })
+    return {value,add,closeInter,reduce,handleChange,input,upperCase}
 
   }
 });
@@ -86,4 +125,6 @@ export default defineComponent({
     cursor: pointer;
   }
 }
+
+
 </style>

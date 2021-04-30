@@ -89,7 +89,6 @@ export default defineComponent({
         let ctx = imageCanvas.value.getContext('2d') as CanvasRenderingContext2D
         ctx.clearRect(0,0,crop.width,crop.height)
         ctx.drawImage(image,-crop.left,-crop.top)
-        console.log(imageCanvas)
       }
       const imageSize = computed(() => {
          let crop = module.value.crop 

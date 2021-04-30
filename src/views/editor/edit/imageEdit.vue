@@ -7,7 +7,7 @@
         模糊  
       </div>
       <div class='oper-input'>
-        <input-number v-model="editModule.blur"></input-number>
+        <input-number v-model="editModule.blur" :min="0" :max="50"></input-number>
         <!-- <el-input-number size="mini" :min="0" :max="50" v-model="editModule.blur"></el-input-number> -->
       </div>
     </div>
@@ -16,7 +16,8 @@
         透明度  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" :min="0" :max="1" :step="0.01"  v-model="editModule.opacity"></el-input-number>
+         <input-number v-model="editModule.opacity" :min="0" :max="1" :step="0.01"></input-number>
+        <!-- <el-input-number size="mini" :min="0" :max="1" :step="0.01"  v-model="editModule.opacity"></el-input-number> -->
       </div>
     </div>
     <div class='oper-item'>
@@ -24,7 +25,7 @@
         圆角
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" :min="0" :max="borderRadiusMax" v-model="editModule.borderRadius"></el-input-number>
+         <input-number v-model="editModule.borderRadius" :min="0" :max="borderRadiusMax"></input-number>
       </div>
     </div>
    <!-- <div class='oper-item'>
@@ -58,7 +59,7 @@
         横向距离  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.dropshadowX" ></el-input-number>
+         <input-number v-model="editModule.dropshadowX" ></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -66,7 +67,7 @@
         纵向距离  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.dropshadowY"></el-input-number>
+        <input-number v-model="editModule.dropshadowY" ></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -74,7 +75,7 @@
         模糊  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.dropshadowBlur"></el-input-number>
+         <input-number v-model="editModule.dropshadowBlur" ></input-number>
       </div>
     </div>
   </el-collapse-item>
@@ -102,7 +103,7 @@
         旋转角度  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" :min='0' :max='360' v-model="editModule.rotate"></el-input-number>
+        <input-number v-model="editModule.rotate" :min='0' :max='360' ></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -110,7 +111,8 @@
         左边距  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.left"></el-input-number>
+        <input-number v-model="editModule.left"  ></input-number>
+       
       </div>
     </div>
     <div class='oper-item'>
@@ -118,7 +120,7 @@
         上边距  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.top"></el-input-number>
+        <input-number v-model="editModule.top"  ></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -126,7 +128,7 @@
         宽  
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.width"></el-input-number>
+        <input-number v-model="editModule.width"  ></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -134,7 +136,7 @@
         高 
       </div>
       <div class='oper-input'>
-        <el-input-number size="mini" v-model="editModule.height"></el-input-number>
+        <input-number v-model="editModule.height"  ></input-number>
       </div>
     </div>
   </el-collapse-item>
