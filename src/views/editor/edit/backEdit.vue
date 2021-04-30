@@ -2,15 +2,15 @@
 
 <template>
  <!-- -->
-  <div class='back-area'  v-if="editModule.type=='back'">
+  <div class='back-area'  >
     <el-divider content-position="left">画布</el-divider>
     <div class='size-area'>
       <div class='size-item'>
-         <input-number  :min="100" :max="10000"></input-number>
+         <input-number v-model="canvas.width"  :min="100" :max="10000"></input-number>
         <span>宽</span>
       </div>
       <div class='size-item'>
-        <input-number  :min="100" :max="10000"></input-number>
+        <input-number v-model="canvas.height"   :min="100" :max="10000"></input-number>
         <span>高</span>
       </div>
     
@@ -44,10 +44,14 @@ export default defineComponent({
     const editModule:any= computed(()=>{
       return store.state.editModule
     })
+    const canvas:any= computed(()=>{
+      return store.state.postInfo.canvas
+    })
     return {
       width,
       height,
-      editModule
+      editModule,
+      canvas
     }
   }
 })

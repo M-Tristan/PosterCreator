@@ -154,6 +154,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .clipper {
   position: absolute;
+  z-index: 999;
 }
 .org-image-area {
   position: absolute;
@@ -169,7 +170,7 @@ export default defineComponent({
 }
 .showImage {
   position: absolute;
-  z-index: 99;
+  z-index: 1000;
   .image-content {
     width: 100%;
     height: 100%;
@@ -192,6 +193,6 @@ export default defineComponent({
 }
 .button-area {
   position: absolute;
-  z-index: 99;
+  z-index: 1000;
 }
 </style>

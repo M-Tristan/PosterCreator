@@ -1,7 +1,8 @@
 interface codeBaseInfo{
   text:string,
   colorDark:string,
-  colorLight:string
+  colorLight:string,
+  backImage?:string
 }
 import { v4 as uuidv4 } from 'uuid';
 import store from './../store/index';
@@ -57,7 +58,14 @@ class ModuleUtil{
               rotate:0,
               fontSize:20,
               color:'rgba(0,0,0,1)',
-              text:text
+              text:text,
+              bold:false,
+              italic:false,
+              textDecoration:'none',
+              lineHeight:1,
+              textAlign:'left',
+              letterSpacing:0,
+              opacity:1,
           })
       })
     }

@@ -36,13 +36,21 @@ export interface image extends operItem{
 export interface text extends operItem{
   text:string,
   fontSize:number,
-  color:string
+  color:string,
+  bold:boolean,
+  italic:boolean,
+  textDecoration:string,
+  textAlign:string,
+  lineHeight:number,
+  letterSpacing:number,
+  opacity:number
 }
 
 export interface code extends operItem{
   text:string,
   colorDark:string,
-  colorLight:string
+  colorLight:string,
+  backImage?:string
 }
 export interface background extends itemBase{
   image:{

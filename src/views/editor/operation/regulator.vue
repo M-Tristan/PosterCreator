@@ -164,6 +164,7 @@ export default defineComponent({
             let sin = Math.sin(module.value.rotate/180*Math.PI)
             let oldR = Math.sqrt(Math.pow(width,2)+Math.pow(height,2))
             let orgFontSize = module.value.fontSize
+            let letterSpacing =  module.value.letterSpacing
             if(direction == 'right-down'){
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
@@ -178,6 +179,7 @@ export default defineComponent({
                         if(module.value.type == 'text'){
 
                           module.value.fontSize = orgFontSize * module.value.height/height
+                           module.value.letterSpacing = letterSpacing * module.value.height/height
                         }
                        
                        
@@ -211,6 +213,7 @@ export default defineComponent({
                         module.value.top = module.value.top - (module.value.height-height)*(1+cos)/2 
                         if(module.value.type == 'text'){
                           module.value.fontSize = orgFontSize * module.value.height/height
+                           module.value.letterSpacing = letterSpacing * module.value.height/height
                         }
                      }
             }else if(direction == 'middle-down'){
@@ -244,6 +247,7 @@ export default defineComponent({
                         module.value.top = module.value.top - (module.value.height-height)*(1+cos)/2 
                         if(module.value.type == 'text'){
                           module.value.fontSize = orgFontSize * module.value.height/height
+                           module.value.letterSpacing = letterSpacing * module.value.height/height
                         }
                      }
             }else if(direction == 'left-middle'){
@@ -275,6 +279,7 @@ export default defineComponent({
                         module.value.top = module.value.top - (module.value.height-height)*(1-cos)/2 
                         if(module.value.type == 'text'){
                           module.value.fontSize = orgFontSize * module.value.height/height
+                           module.value.letterSpacing = letterSpacing * module.value.height/height
                         }
                      }
             }

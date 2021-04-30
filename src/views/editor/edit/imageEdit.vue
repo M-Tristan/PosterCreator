@@ -1,5 +1,5 @@
 <template>
-<div class='image-area' v-if="editModule.type=='image'">
+<div class='image-area' >
   <el-collapse v-model="activeNames">
   <el-collapse-item title="图片" name="1">
     <div class='oper-item'>

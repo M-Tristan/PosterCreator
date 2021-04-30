@@ -9,16 +9,17 @@
             <editCom  @click.stop></editCom>
         </div>
         <div class='edit-area'>
-          <image-edit></image-edit>
-          <text-edit></text-edit>
-          <back-edit></back-edit>
+          <image-edit v-if="editModule.type=='image'"></image-edit>
+          <text-edit v-if="editModule.type=='text'"></text-edit>
+          <back-edit v-if="editModule.type=='back'"></back-edit>
+         <code-edit v-if="editModule.type=='code'"></code-edit>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 
-import { defineComponent, onMounted } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import editCom from './panel/editCom.vue'
 import module from './module/module.vue'
 import zoom from './edit/zoom.vue'
@@ -26,6 +27,7 @@ import imageEdit from './edit/imageEdit.vue'
 import { useStore } from 'vuex'
 import TextEdit from './edit/textEdit.vue'
 import backEdit from './edit/backEdit.vue'
+import CodeEdit from './edit/codeEdit.vue'
 export default defineComponent({
     setup () {
         document.addEventListener ( 'paste' , (e)  =>  {
@@ -57,7 +59,9 @@ export default defineComponent({
           }
       });
         const store = useStore()
-      
+      const editModule:any= computed(()=>{
+          return store.state.editModule
+        })
         store.commit('initBack');
         onMounted(async()=>{
           let canvas = {
@@ -69,7 +73,7 @@ export default defineComponent({
         const selectModel = () =>{
           store.commit('setEditModuleToBack')
         }
-        return {selectModel}
+        return {selectModel,editModule}
     },
     components:{
         module,
@@ -77,7 +81,8 @@ export default defineComponent({
         editCom,
         imageEdit,
         TextEdit,
-        backEdit
+        backEdit,
+        CodeEdit
     }
 })
 </script>
@@ -113,6 +118,7 @@ export default defineComponent({
     right: 0px;
     width: 240px;
     border-left: 1px solid rgb(223, 223, 223);
+    background-color: white;
 }
 .canvas-area{
     position: absolute;

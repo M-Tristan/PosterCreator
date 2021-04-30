@@ -1,6 +1,6 @@
 <template>
   <div ref='code' class='code' @click='addCode'>
-
+    <img v-if='options.backImage' class='backImage' :src='options.backImage' />
   </div>
 </template>
 
@@ -30,7 +30,8 @@ export default defineComponent({
       let codeInfo = <operItem> await ModuleUtil.getAddCodeInfo({
             text:'二维码编辑',
             colorDark:props.options.color.dark,
-            colorLight:props.options.color.light
+            colorLight:props.options.color.light,
+            backImage:props.options.backImage
       })
       store.commit('addCode',codeInfo)
       store.commit('setEditModule',codeInfo.id)
@@ -44,5 +45,14 @@ export default defineComponent({
 .code{
   float: left;
   cursor: pointer;
+   position: relative;
+}
+.backImage{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 130px;
+  height: 130px;
+  z-index: -1;
 }
 </style>

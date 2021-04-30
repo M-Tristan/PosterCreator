@@ -5,13 +5,19 @@
                                         ,top:module.top+'px',
                                         transform:  `rotate(${module.rotate?module.rotate:0}deg)`
                                          ,zIndex:module.zindex,
-
+                                         textAlign:`${module.textAlign}`
                                    }" >
     <div class='content' :contenteditable='true' @input="changeHeight" ref='contentInput' :style="{
       fontSize:`${module.fontSize}px`,
       transform: `scale(${fontScale})`,
       color:`${module.color}`,
-      width: `${module.width/fontScale}px`
+      width: `${module.width/fontScale}px`,
+      fontWeight:`${module.bold?900:400}`,
+      textDecoration:`${module.textDecoration}`,
+      fontStyle:`${module.italic?'italic':'normal'}`,
+      lineHeight:`${module.lineHeight}`,
+      letterSpacing:`${module.letterSpacing}px`,
+      opacity:module.opacity
     }">
       {{module.text}}
     </div>
@@ -22,7 +28,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex'
-import { computed, defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, nextTick, ref, watch } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
@@ -56,6 +62,12 @@ export default defineComponent({
     const fontSize = computed(()=>{
       return module.value.fontSize
     })
+    const lineHeight = computed(()=>{
+      return module.value.lineHeight
+    })
+     const letterSpacing = computed(()=>{
+      return module.value.letterSpacing
+    })
     const fontScale = computed(()=>{
       let fontSize = module.value.fontSize
       if(fontSize<12){
@@ -63,9 +75,10 @@ export default defineComponent({
       }
       return 1
     })
-    watch(fontSize, (nv, ov) => {
-      changeHeight()
-      })
+    watch([fontSize,lineHeight,letterSpacing], (nv, ov) => {
+     nextTick(()=>{changeHeight()})
+    })
+     
     return {
       module,
       moduleMove,
@@ -83,6 +96,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .text-content{
   position: absolute;
+ 
 }
 .content{
     word-break:break-word;
@@ -93,5 +107,6 @@ export default defineComponent({
      &:focus{
           outline: none
         }
+  
 }
 </style>

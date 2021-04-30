@@ -1,5 +1,5 @@
 <template>
-<div class='image-area' v-if="editModule.type=='text'">
+<div class='image-area' >
   <el-collapse v-model="activeNames">
   <el-collapse-item title="文本" name="1">
     <div class='oper-item'>
@@ -23,16 +23,16 @@
          装饰
       </div>
       <div class='decoration'>
-           <div :class='["flip",{active:editModule.rotateX}]' >
+           <div :class='["flip",{active:editModule.bold}]' @click="editModule.bold = !editModule.bold">
             <i class='icon iconfont icon-bold'></i>
           </div>
-          <div :class='["flip",{active:editModule.rotateX}]' >
+          <div :class='["flip",{active:editModule.italic}]' @click="editModule.italic = !editModule.italic">
             <i class='icon iconfont icon-zitixieti'></i>
           </div>
-          <div :class='["flip",{active:editModule.rotateX}]' >
+          <div :class='["flip",{active:editModule.textDecoration == "underline"}]' @click="changeDecoration('underline')">
             <i class='icon iconfont icon-zitixiahuaxian'></i>
           </div>
-          <div :class='["flip",{active:editModule.rotateX}]' >
+          <div :class='["flip",{active:editModule.textDecoration == "line-through"}]' @click="changeDecoration('line-through')">
             <i class='icon iconfont icon-strikethrough'></i>
           </div>
       </div>
@@ -42,18 +42,18 @@
          对齐
       </div>
       <div class='decoration'>
-           <div :class='["flip",{active:editModule.rotateX}]' >
+          <div :class='["flip",{active:editModule.textAlign == "left"}]' @click="editModule.textAlign = 'left'">
             <i class='icon iconfont icon-zuoduiqi'></i>
           </div>
-          <div :class='["flip",{active:editModule.rotateX}]' >
+          <div :class='["flip",{active:editModule.textAlign == "center"}]' @click="editModule.textAlign = 'center'">
             <i class='icon iconfont icon-juzhongduiqi'></i>
           </div>
-          <div :class='["flip",{active:editModule.rotateX}]' >
+          <div :class='["flip",{active:editModule.textAlign == "right"}]' @click="editModule.textAlign = 'right'">
             <i class='icon iconfont icon-youduiqi'></i>
           </div>
-          <div :class='["flip",{active:editModule.rotateX}]' >
+          <!-- <div :class='["flip",{active:editModule.textAlign == "justify"}]' @click="editModule.textAlign = 'justify'">
             <i class='icon iconfont icon-zuoyouduiqi'></i>
-          </div>
+          </div> -->
       </div>
      
     </div>
@@ -62,7 +62,7 @@
           行间距  
         </div>
         <div class='oper-input'>
-          <input-number  :min="1" :max="10"></input-number>
+          <input-number v-model="editModule.lineHeight" :min="1" :max="10" :step='0.1'></input-number>
         </div>
       </div>
       <div class='oper-item'>
@@ -70,7 +70,7 @@
           字间距  
         </div>
         <div class='oper-input'>
-          <el-input-number size="mini" :min="1" :max="10" ></el-input-number>
+          <input-number v-model="editModule.letterSpacing" :min="0" :max="100" :step='1'></input-number>
         </div>
       </div>
        <div class='oper-item'>
@@ -78,7 +78,7 @@
           不透明度  
         </div>
         <div class='oper-input'>
-          <input-number  :min="1" :max="10"></input-number>
+           <input-number v-model="editModule.opacity" :min="0" :max="1" :step="0.01"></input-number>
         </div>
       </div>
   </el-collapse-item>
@@ -137,23 +137,19 @@ export default defineComponent({
   setup () {
     const store = useStore()
     let activeNames = ref(['1'])
-    let value = ref(1)
-    let color = ref('rgab(100,100,100,100)')
     const editModule:any= computed(()=>{
       return store.state.editModule
     })
-    const borderRadiusMax = computed(() => {
-      if(editModule.value.width>editModule.value.height){
-        return editModule.value.height/2
+
+    const changeDecoration = (type:string) => {
+      if(editModule.value.textDecoration == type){
+        editModule.value.textDecoration = 'none'
       }else{
-        return editModule.value.width/2
+         editModule.value.textDecoration = type
       }
-    })
-    const clipImage = () => {
-      let clipOper = store.state.clipOper
-      store.commit('setClipOper', !clipOper);
+      
     }
-    return {activeNames,value,color,editModule,borderRadiusMax,clipImage}
+    return {activeNames,editModule,changeDecoration}
   }
 })
 </script>
@@ -197,7 +193,7 @@ export default defineComponent({
  align-items: center;
 }
 .active{
-  color: rgb(5, 142, 255);
+  color: rgb(255, 255, 255);
   background-color: rgb(0, 36, 112);
  
 }
