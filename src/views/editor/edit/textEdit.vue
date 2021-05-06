@@ -19,6 +19,34 @@
       </div>
     </div>
     <div class='oper-item'>
+      <div class='oper-name'>
+         阴影
+      </div>
+      <div class='oper-input'>
+        <div class='add-area'>
+          <i class='el-icon-circle-plus-outline add-icon' @click='addTextShadow'></i>
+        </div>
+         <div class='text-shadow' v-for="(shadow,index) in editModule.textShadowList" :key="index">
+           <div class='item'>
+             <el-color-picker v-model="shadow.color" size="mini" show-alpha ></el-color-picker>
+           </div>
+           <div class='item'>
+              <input-number v-model="shadow.hShadow" :min="0" :max="50"></input-number>
+           </div>
+           <div class='item'>
+              <input-number v-model="shadow.vShadow" :min="0" :max="50"></input-number>
+           </div>
+           <div class='item'>
+              <input-number v-model="shadow.blur" :min="0" :max="50"></input-number>
+           </div>
+            <div class='item'>
+              <i class='el-icon-delete delete-icon' @click='deleteTextShadow(index)'></i>
+           </div>
+         </div>
+      </div>
+      
+    </div>
+    <div class='oper-item'>
        <div class='oper-name'>
          装饰
       </div>
@@ -132,7 +160,7 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
-
+import _ from 'lodash'
 export default defineComponent({
   setup () {
     const store = useStore()
@@ -149,14 +177,28 @@ export default defineComponent({
       }
       
     }
-    return {activeNames,editModule,changeDecoration}
+    const addTextShadow = () => {
+      editModule.value.textShadowList.push({
+         hShadow:10,
+        vShadow:10,
+        blur:0,
+        color:'rgba(0, 0, 0, 1)'
+      })
+    }
+    const deleteTextShadow = (index:number) => {
+      editModule.value.textShadowList.splice(index,1)
+    }
+    return {activeNames,editModule,changeDecoration,addTextShadow,deleteTextShadow}
   }
 })
 </script>
 
 <style lang="scss" scoped>
 .oper-item{
-  height: 40px;
+  height: auto;
+  margin-bottom: 5px;
+  display: inline-block;
+  width: 100%;
 }
 .oper-name{
   width: 30%;
@@ -167,6 +209,7 @@ export default defineComponent({
   width: 70%;
   float: left;
  display: flex;
+ flex-wrap: wrap;
  justify-content: center;
  align-items: center;
 }
@@ -197,5 +240,20 @@ export default defineComponent({
   background-color: rgb(0, 36, 112);
  
 }
-
+.text-shadow{
+  width: 100%;
+  display: flex;
+}
+.add-area{
+  height: 20px;
+  width: 100%;
+}
+.add-icon{
+  font-size: 20px;
+  float: right;
+  cursor: pointer;
+}
+.delete-icon{
+  cursor: pointer;
+}
 </style>

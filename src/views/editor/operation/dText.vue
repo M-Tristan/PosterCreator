@@ -17,7 +17,8 @@
       fontStyle:`${module.italic?'italic':'normal'}`,
       lineHeight:`${module.lineHeight}`,
       letterSpacing:`${module.letterSpacing}px`,
-      opacity:module.opacity
+      opacity:module.opacity,
+      textShadow:textShadow
     }">
       {{module.text}}
     </div>
@@ -32,6 +33,7 @@ import { computed, defineComponent, nextTick, ref, watch } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
+import { textShadow } from '@/interface/module'
 export default defineComponent({
  props:{
     text:{
@@ -75,6 +77,23 @@ export default defineComponent({
       }
       return 1
     })
+    const textShadow = computed(()=>{
+      let textShadowList = module.value.textShadowList
+    
+      if(textShadowList.length == 0){
+        return 'none'
+      }
+      let result = ''
+      textShadowList.forEach((item:textShadow,index:number)=>{
+        if(index == 0){
+           result = result + `${item.hShadow}px ${item.vShadow}px ${item.blur}px ${item.color}`
+        }else{
+           result = result + `,${item.hShadow}px ${item.vShadow}px ${item.blur}px ${item.color}`
+        }
+       
+      })
+      return result
+    })
     watch([fontSize,lineHeight,letterSpacing], (nv, ov) => {
      nextTick(()=>{changeHeight()})
     })
@@ -86,7 +105,8 @@ export default defineComponent({
       selectModel,
       changeHeight,
       contentInput,
-      fontScale
+      fontScale,
+      textShadow
     }
   }
 })

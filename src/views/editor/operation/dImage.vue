@@ -12,7 +12,10 @@
                 <div class='image-border' :style="{
                   borderRadius:`${module.borderRadius}px`,
                   border:`solid ${module.borderWidth}px ${module.borderColor}`,
-                  filter: `blur(${module.blur}px) drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px ${module.dropshadowColor})`,
+                  filter: `blur(${module.blur}px) brightness(${module.filter.brightness}%) 
+                  contrast(${module.filter.contrast}%) grayscale(${module.filter.grayscale}%) 
+                  hue-rotate(${module.filter.hueRotate}deg) invert(${module.filter.invert}%) 
+                  saturate(${module.filter.saturate}%)  drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px ${module.dropshadowColor})`,
                   width: module.width + 'px'
                   ,height: module.height+'px'
                    ,opacity:module.opacity

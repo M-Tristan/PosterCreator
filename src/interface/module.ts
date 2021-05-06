@@ -13,6 +13,13 @@ export interface operItem extends itemBase{
   rotate:number
 }
 
+export interface textShadow{
+  hShadow:number,
+  vShadow:number,
+  blur:number,
+  color:string
+}
+
 export interface image extends operItem{
     src:string,
     blur:number,
@@ -28,6 +35,14 @@ export interface image extends operItem{
       left: number,
       top: number,
       width: number
+    },
+    filter:{
+      brightness:number,
+      contrast:number,
+      grayscale:number,
+      hueRotate:number,
+      invert:number,
+      saturate:number
     }
     // borderWidth:number,
     // borderColor:string
@@ -43,7 +58,8 @@ export interface text extends operItem{
   textAlign:string,
   lineHeight:number,
   letterSpacing:number,
-  opacity:number
+  opacity:number,
+  textShadowList?:Array<textShadow>
 }
 
 export interface code extends operItem{

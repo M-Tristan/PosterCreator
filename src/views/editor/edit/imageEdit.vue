@@ -79,6 +79,58 @@
       </div>
     </div>
   </el-collapse-item>
+  <el-collapse-item title="滤镜" name="3">
+ 
+     <div class='oper-item'>
+      <div class='oper-name'>
+        亮度  
+      </div>
+      <div class='oper-input'>
+         <input-number v-model="editModule.filter.brightness" :min='0' :max='200'></input-number>
+      </div>
+    </div>
+     <div class='oper-item'>
+      <div class='oper-name'>
+        对比度  
+      </div>
+      <div class='oper-input'>
+         <input-number v-model="editModule.filter.contrast" :min='0' :max='200'></input-number>
+      </div>
+    </div>
+     <div class='oper-item'>
+      <div class='oper-name'>
+        灰度  
+      </div>
+      <div class='oper-input'>
+         <input-number v-model="editModule.filter.grayscale" :min='0' :max='100'></input-number>
+      </div>
+    </div>
+    <div class='oper-item'>
+      <div class='oper-name'>
+        色相 
+      </div>
+      <div class='oper-input'>
+         <input-number v-model="editModule.filter.hueRotate" :min='0' :max='360'></input-number>
+      </div>
+    </div>
+    <div class='oper-item'>
+      <div class='oper-name'>
+        反转 
+      </div>
+      <div class='oper-input'>
+         <input-number v-model="editModule.filter.invert" :min='0' :max='100'></input-number>
+      </div>
+    </div>
+     <div class='oper-item'>
+      <div class='oper-name'>
+        饱和度 
+      </div>
+      <div class='oper-input'>
+         <input-number v-model="editModule.filter.saturate" :min='0' :max='200'></input-number>
+      </div>
+    </div>
+   
+  </el-collapse-item>
   <!-- <el-collapse-item title="边框" name="3">
    <div class='oper-item'>
       <div class='oper-name'>
@@ -97,7 +149,7 @@
       </div>
     </div>
   </el-collapse-item> -->
-  <el-collapse-item title="位置" name="3">
+  <el-collapse-item title="位置" name="4">
     <div class='oper-item'>
       <div class='oper-name'>
         旋转角度  
@@ -140,7 +192,7 @@
       </div>
     </div>
   </el-collapse-item>
-  <el-collapse-item title="操作" name="4">
+  <el-collapse-item title="操作" name="5">
     <el-button type="info" plain size="mini" @click="clipImage">裁剪</el-button>
   </el-collapse-item>
 </el-collapse>

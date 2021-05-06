@@ -116,7 +116,7 @@ export default defineComponent({
   }
 }
 .button-area{
-  width: 20%;
+  width: 23px;
   float: left;
   height: 28px;
   .button-item{

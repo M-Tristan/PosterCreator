@@ -37,6 +37,14 @@ class ModuleUtil{
                       height: image.naturalHeight,
                       left: 0,
                       top: 0
+                    },
+                    filter:{
+                      brightness:100,
+                      contrast:100,
+                      grayscale:0,
+                      hueRotate:0,
+                      invert:0,
+                      saturate:100
                     }
                     // borderWidth:0,
                     // borderColor:'rgba(0,0,0,0)',
@@ -66,6 +74,7 @@ class ModuleUtil{
               textAlign:'left',
               letterSpacing:0,
               opacity:1,
+              textShadowList:[]
           })
       })
     }

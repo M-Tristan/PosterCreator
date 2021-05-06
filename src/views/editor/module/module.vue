@@ -10,15 +10,20 @@
        </div>
        <div :class='["module-item" ,{"active":moduleId==3}]' @click="moduleId=3">
             <i class='iconfont icon-erweima modelu-icon'></i>
-            <span class='module-name'>二维码</span>
+            <span class='module-name '>二维码</span>
+        </div>
+        <div :class='["module-item" ,{"active":moduleId==4}]' @click="moduleId=4">
+            <i class='el-icon-star-off modelu-icon'></i>
+            <span class='module-name'>素材</span>
         </div>
         <div class='module-material'>
-            <background-list v-if="moduleId==4"></background-list>
+            <background-list v-if="moduleId==5"></background-list>
             <image-list v-if="moduleId==2"></image-list>
             <text-list v-if="moduleId==1"></text-list>
             <qr-code-list v-if="moduleId==3"></qr-code-list>
+            <material-list v-if="moduleId==4"></material-list>
         </div>
-         <div :class='["module-item" ,{"active":moduleId==4}]' @click="moduleId=4">
+         <div :class='["module-item" ,{"active":moduleId==5}]' @click="moduleId=5">
            <i class='iconfont icon-background modelu-icon'></i>
            <span class='module-name'>背景</span>
        </div>
@@ -31,12 +36,14 @@ import backgroundList from './backgroundList.vue'
 import imageList from './imageList.vue'
 import QrCodeList from './qrCodeList.vue'
 import textList from './textList.vue'
+import materialList from './materialList.vue'
 export default defineComponent({
     components:{
         backgroundList,
         imageList,
         textList,
-        QrCodeList
+        QrCodeList,
+        materialList
     },  
     setup () {
         let moduleId = ref(1)
