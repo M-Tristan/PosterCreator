@@ -1,5 +1,5 @@
 <template>
-   <div  class='canvas-area' :style="{
+   <div  class='canvas-area' draggable="false" :style="{
                                   backgroundColor:`#fff`,
                                   backgroundSize: `16px 16px`,
                                   backgroundPosition: `0 0,8px 8px`,

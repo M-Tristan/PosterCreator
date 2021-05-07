@@ -124,6 +124,55 @@ class PositionUtil{
     }
 
   }
+  static getShapesPoints(num:number,r:number){
+    let startRate = 0
+    let averageAngle = 360/num
+    let index = 0
+    let opints = []
+    while(index < num){
+      opints.push({y:r-r*MathUtil.cos(startRate),x:r-r*MathUtil.sin(startRate)})
+      startRate+=averageAngle
+      index++
+    }
+    return opints
+  }
+  static getStartShapesPoints(num:number,outerR:number,innerR:number){
+    let startRate = 0
+    let averageAngle = 180/num
+    let index = 0
+    let opints = []
+    while(index < num*2){
+      let r = innerR
+      if(index%2 == 0){
+        r = outerR
+      }
+      opints.push({y:outerR-r*MathUtil.cos(startRate),x:outerR-r*MathUtil.sin(startRate)})
+      startRate+=averageAngle
+      index++
+    }
+    return opints
+  }
+  static getFlowerPointsByNum(num:number,r:number){
+  
+
+    let startRate = 0
+    let averageAngle = 360/num
+    let curveR = r/MathUtil.cos(averageAngle/2)
+    // if(num%2 == 0){
+      // let startRate = averageAngle/2
+    // }
+    let index = 0
+    let opints = []
+    while(index < num){
+      let lastCurPoint = {y:r-curveR*MathUtil.cos(startRate-averageAngle/2),x:r-curveR*MathUtil.sin(startRate-averageAngle/2)}
+      let nextCurPoint = {y:r-curveR*MathUtil.cos(startRate+averageAngle/2),x:r-curveR*MathUtil.sin(startRate+averageAngle/2)}
+      opints.push({y:r-r*MathUtil.cos(startRate),x:r-r*MathUtil.sin(startRate),lastCurPoint,nextCurPoint})
+      startRate+=averageAngle
+      index++
+    }
+    return opints
+  }
+  
 }
 
 export default PositionUtil
