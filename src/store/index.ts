@@ -53,7 +53,7 @@ export default createStore({
       state.postInfo.background = {
         id:uuids4(),
         type:'back',
-        color:`rgba(0,0,0,0)`,
+        color:`white`,
         opacity:1,
         image:{
               width:0,

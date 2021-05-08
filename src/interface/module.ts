@@ -43,6 +43,10 @@ export interface image extends operItem{
       hueRotate:number,
       invert:number,
       saturate:number
+    },
+    mask?:{
+      type:string,
+      src?:string
     }
     // borderWidth:number,
     // borderColor:string
@@ -69,7 +73,7 @@ export interface code extends operItem{
   backImage?:string
 }
 export interface background extends itemBase{
-  image:{
+  image?:{
     width:number,
     height:number,
     top:number,
@@ -77,7 +81,7 @@ export interface background extends itemBase{
     src:string,
     blur:number
   },
-  color:string
+  color?:string
 }
 
 export interface canvas{

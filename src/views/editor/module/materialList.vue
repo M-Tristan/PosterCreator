@@ -11,6 +11,7 @@
           <shape type='star'></shape>
           <shape type='sector'></shape>
           <shape type='flower'></shape>
+          <shape type='circle'></shape>
           
       </div>
   </div>

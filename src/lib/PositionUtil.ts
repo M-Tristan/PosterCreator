@@ -9,6 +9,14 @@ interface position{
   width:number,
   height:number,
 }
+interface point{
+  x:number,
+  y:number
+}
+interface flowerPoint extends point{
+  lastCurPoint:point,
+  nextCurPoint:point
+}
 class PositionUtil{
     constructor(){
 
@@ -124,11 +132,11 @@ class PositionUtil{
     }
 
   }
-  static getShapesPoints(num:number,r:number){
+  static getShapesPoints(num:number,r:number):point[]{
     let startRate = 0
     let averageAngle = 360/num
     let index = 0
-    let opints = []
+    let opints:point[] = []
     while(index < num){
       opints.push({y:r-r*MathUtil.cos(startRate),x:r-r*MathUtil.sin(startRate)})
       startRate+=averageAngle
@@ -136,11 +144,11 @@ class PositionUtil{
     }
     return opints
   }
-  static getStartShapesPoints(num:number,outerR:number,innerR:number){
+  static getStartShapesPoints(num:number,outerR:number,innerR:number):point[]{
     let startRate = 0
     let averageAngle = 180/num
     let index = 0
-    let opints = []
+    let opints:point[] = []
     while(index < num*2){
       let r = innerR
       if(index%2 == 0){
@@ -152,9 +160,7 @@ class PositionUtil{
     }
     return opints
   }
-  static getFlowerPointsByNum(num:number,r:number){
-  
-
+  static getFlowerPointsByNum(num:number,r:number):flowerPoint[]{
     let startRate = 0
     let averageAngle = 360/num
     let curveR = r/MathUtil.cos(averageAngle/2)
@@ -162,7 +168,7 @@ class PositionUtil{
       // let startRate = averageAngle/2
     // }
     let index = 0
-    let opints = []
+    let opints:flowerPoint[] = []
     while(index < num){
       let lastCurPoint = {y:r-curveR*MathUtil.cos(startRate-averageAngle/2),x:r-curveR*MathUtil.sin(startRate-averageAngle/2)}
       let nextCurPoint = {y:r-curveR*MathUtil.cos(startRate+averageAngle/2),x:r-curveR*MathUtil.sin(startRate+averageAngle/2)}

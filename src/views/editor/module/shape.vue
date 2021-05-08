@@ -29,6 +29,9 @@ export default defineComponent({
         case 'flower':
             drawFlower();
             break
+        case 'circle':
+            drawCircle();
+            break
       }
     })
     function drawFlower(){
@@ -43,6 +46,13 @@ export default defineComponent({
         ctx.quadraticCurveTo(lastItem.x,lastItem.y,item.x,item.y);
         ctx.quadraticCurveTo(nextItem.x,nextItem.y,70,70);
       })
+      ctx.stroke();
+    }
+      function drawCircle(){
+      let canvas = shape.value
+      let ctx=<CanvasRenderingContext2D>canvas.getContext("2d");
+      ctx.beginPath();
+      ctx.arc(70, 70, 50, 0, Math.PI * 2, false);
       ctx.stroke();
     }
     function drawSector(){

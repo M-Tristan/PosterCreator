@@ -64,6 +64,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
   .canvas-area{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.308);
      -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

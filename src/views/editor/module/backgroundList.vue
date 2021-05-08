@@ -1,4 +1,11 @@
 <template>
+    <div class='color-List'>
+      <div class='color-item' v-for="(item,index) in colorList" :key='index' :style='{backgroundColor:item}' @click="backModel.color = item"></div>  
+      <div class='color-item'>
+        <el-color-picker v-model="backModel.color"  size="mini" show-alpha ></el-color-picker>
+      </div>
+       
+    </div>
     <div class='image-item' v-for="(url,index) in imageList" @click='selectBack(url)'  :key="index">
       <el-image 
         style="width: 80px; height: 80px"
@@ -9,13 +16,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { computed, defineComponent, reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import ModuleUtil from '@/lib/ModuleUtil'
 export default defineComponent({
     setup () {
         const store = useStore()
-        
+        const colorList = ref(['red','green','blue','black','white','gray','yellow','gold','greenyellow','brown','aqua'])
         const imageList = reactive(["https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1886815664,3042078165&fm=26&gp=0.jpg",
               "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3197198635,147065671&fm=26&gp=0.jpg",
               "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2223646626,3318155102&fm=26&gp=0.jpg",
@@ -30,11 +37,23 @@ export default defineComponent({
               "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1428225030,2228787498&fm=26&gp=0.jpg"
           ])
         const selectBack = async (url:string) => {
+             store.commit('setEditModuleToBack')
              let imageInfo = await ModuleUtil.getBackImageInfo(url)
              store.commit('addBackImage', imageInfo); 
+             backModel.value.color=undefined
         }
-
-        return {imageList,selectBack}
+         const selectColor = async (color:string) => {
+             store.commit('setEditModuleToBack')
+             backModel.value.image = undefined
+             backModel.value.color = color
+        }
+        const backModel = computed(()=>{
+          
+          return store.state.postInfo.background
+        })
+     
+        // store.commit('setEditModuleToBack')
+        return {imageList,selectBack,colorList,backModel}
     }
 })
 </script>
@@ -51,5 +70,21 @@ export default defineComponent({
         transform: scale(1.1);
         transition: 0.1s;
     }
+}
+.color-List{
+  width: 100%;
+  display: inline-block;
+}
+.color-item{
+  width: 30px;
+  height: 30px;
+  float: left;
+  margin: 5px;
+  border:1px solid gray;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

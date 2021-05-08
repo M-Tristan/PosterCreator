@@ -20,7 +20,7 @@
     <el-divider content-position="left">背景</el-divider>
       <div class='back-Info'>
         <div class='back-image-area'>
-            <div class='image-info'>
+            <div class='image-info' :style="{backgroundColor:editModule.color}">
 
             </div>
         </div>
@@ -88,8 +88,8 @@ export default defineComponent({
 }
 .image-info{
   width: 200px;
-  height: 200px;
-  background-color: green;
+  min-height: 50px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.281);
 }
 .button-area{
   width: 100%;

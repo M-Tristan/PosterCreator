@@ -131,6 +131,9 @@
     </div>
    
   </el-collapse-item>
+  <el-collapse-item title="蒙版" name="4">
+    <maskDemo v-for="(item,index) in maskList" :key="index" :src='item'></maskDemo>
+  </el-collapse-item>
   <!-- <el-collapse-item title="边框" name="3">
    <div class='oper-item'>
       <div class='oper-name'>
@@ -149,7 +152,7 @@
       </div>
     </div>
   </el-collapse-item> -->
-  <el-collapse-item title="位置" name="4">
+  <el-collapse-item title="位置" name="5">
     <div class='oper-item'>
       <div class='oper-name'>
         旋转角度  
@@ -192,7 +195,7 @@
       </div>
     </div>
   </el-collapse-item>
-  <el-collapse-item title="操作" name="5">
+  <el-collapse-item title="操作" name="6">
     <el-button type="info" plain size="mini" @click="clipImage">裁剪</el-button>
   </el-collapse-item>
 </el-collapse>
@@ -203,8 +206,11 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
+import maskImageList from '@/lib/MaskList'
+import maskDemo from './maskDemo.vue'
 export default defineComponent({
   components:{
+    maskDemo
   },
   setup () {
     const store = useStore()
@@ -213,6 +219,9 @@ export default defineComponent({
     let color = ref('rgab(100,100,100,1)')
     const editModule:any= computed(()=>{
       return store.state.editModule
+    })
+    const maskList:any = computed(()=>{
+      return maskImageList
     })
     const borderRadiusMax = computed(() => {
       if(editModule.value.width>editModule.value.height){
@@ -225,7 +234,7 @@ export default defineComponent({
       let clipOper = store.state.clipOper
       store.commit('setClipOper', !clipOper);
     }
-    return {activeNames,value,color,editModule,borderRadiusMax,clipImage}
+    return {activeNames,value,color,editModule,borderRadiusMax,clipImage,maskList}
   }
 })
 </script>

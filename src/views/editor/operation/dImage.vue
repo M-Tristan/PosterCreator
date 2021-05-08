@@ -16,8 +16,8 @@
                   contrast(${module.filter.contrast}%) grayscale(${module.filter.grayscale}%) 
                   hue-rotate(${module.filter.hueRotate}deg) invert(${module.filter.invert}%) 
                   saturate(${module.filter.saturate}%)  drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px ${module.dropshadowColor})`,
-                  width: module.width + 'px'
-                  ,height: module.height+'px'
+                    width: module.width + 'px'
+                   ,height: module.height+'px'
                    ,opacity:module.opacity
                    ,transform:`rotateY(${module.rotateY?180:0}deg) rotateX(${module.rotateX?180:0}deg)`
                 }">
@@ -92,6 +92,16 @@ export default defineComponent({
         let ctx = imageCanvas.value.getContext('2d') as CanvasRenderingContext2D
         ctx.clearRect(0,0,crop.width,crop.height)
         ctx.drawImage(image,-crop.left,-crop.top)
+        if(editModule.value.mask != undefined && editModule.value.mask != null){
+          let maskImage = new Image()
+          maskImage.src = editModule.value.mask.src
+          maskImage.onload = () => {
+            ctx.globalCompositeOperation="destination-in";
+            ctx.drawImage(maskImage,0,0,crop.width,crop.height);	
+          }
+           
+        }
+       
       }
       const imageSize = computed(() => {
          let crop = module.value.crop 
@@ -107,7 +117,16 @@ export default defineComponent({
             deep: true,
         }
       )
-      
+      watch(
+        () => module.value.mask,
+        (nv, ov) => {
+         draw()
+        },
+        {
+            immediate: false,
+            deep: true,
+        }
+      )
      
       const { moduleMove } = operation()
       const selectModel = () =>{
