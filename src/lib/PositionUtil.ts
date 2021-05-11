@@ -23,11 +23,11 @@ class PositionUtil{
     }
     /**
      * 计算四个顶点的的位置
-     * @param x 
-     * @param y 
-     * @param w 
-     * @param h 
-     * @param angle 
+     * @param x 中心坐标X
+     * @param y 中心坐标Y
+     * @param w 宽
+     * @param h 高
+     * @param angle 角度
      * @returns 
      */
     static getPosition(x:number,y:number,w:number,h:number,angle:number){
@@ -69,7 +69,7 @@ class PositionUtil{
                 minTop = posi.top
             }
         })
-        
+       
         return{
             leftTop, 
             rightTop,
@@ -164,9 +164,6 @@ class PositionUtil{
     let startRate = 0
     let averageAngle = 360/num
     let curveR = r/MathUtil.cos(averageAngle/2)
-    // if(num%2 == 0){
-      // let startRate = averageAngle/2
-    // }
     let index = 0
     let opints:flowerPoint[] = []
     while(index < num){
@@ -177,6 +174,26 @@ class PositionUtil{
       index++
     }
     return opints
+  }
+  static beContent(point:position,position:clip){
+    if(point.left > position.left && point.left < position.left + position.width&&point.top > position.top && point.left < position.top + position.height){
+      return true
+    }
+    return false
+  }
+  static getSelectedByPosition(item:clip,position:clip):boolean{
+    // console.log(position)
+    let minTop = item.top < position.top ? item.top : position.top
+    let maxTop = (item.top+item.height) > (position.top + position.height) ? (item.top+item.height) : (position.top + position.height)
+    let minleft = item.left < position.left ? item.left : position.left
+    let maxLeft = (item.left+item.width) > (position.left + position.width) ? (item.left+item.width) : (position.left + position.width)
+    // && (maxLeft-minleft) < (item.width + position.width)
+    if((maxTop-minTop) < (item.height + position.height)&& (maxLeft-minleft) < (item.width + position.width) ){
+      return true
+    }
+  
+    return false
+
   }
   
 }

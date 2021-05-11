@@ -19,34 +19,6 @@
       </div>
     </div>
     <div class='oper-item'>
-      <div class='oper-name'>
-         阴影
-      </div>
-      <div class='oper-input'>
-        <div class='add-area'>
-          <i class='el-icon-circle-plus-outline add-icon' @click='addTextShadow'></i>
-        </div>
-         <div class='text-shadow' v-for="(shadow,index) in editModule.textShadowList" :key="index">
-           <div class='item'>
-             <el-color-picker v-model="shadow.color" size="mini" show-alpha ></el-color-picker>
-           </div>
-           <div class='item'>
-              <input-number v-model="shadow.hShadow" :min="0" :max="50"></input-number>
-           </div>
-           <div class='item'>
-              <input-number v-model="shadow.vShadow" :min="0" :max="50"></input-number>
-           </div>
-           <div class='item'>
-              <input-number v-model="shadow.blur" :min="0" :max="50"></input-number>
-           </div>
-            <div class='item'>
-              <i class='el-icon-delete delete-icon' @click='deleteTextShadow(index)'></i>
-           </div>
-         </div>
-      </div>
-      
-    </div>
-    <div class='oper-item'>
        <div class='oper-name'>
          装饰
       </div>
@@ -110,7 +82,49 @@
         </div>
       </div>
   </el-collapse-item>
-<el-collapse-item title="位置" name="2">
+  <el-collapse-item title="修饰" name="2">
+     <div class='oper-item'>
+      <div class='oper-name'>
+         描边
+      </div>
+      <div class='oper-input'>
+         <el-color-picker v-model="editModule.strokeColor" size="mini" show-alpha ></el-color-picker>
+         <div class='strokeWidth'>
+           <input-number v-model="editModule.strokeWidth" :min="0" :max="50"></input-number>
+         </div>
+         
+      </div>
+    </div>
+    <div class='oper-item'>
+      <div class='oper-name'>
+         阴影
+      </div>
+      <div class='oper-input'>
+        <div class='add-area'>
+          <i class='el-icon-circle-plus-outline add-icon' @click='addTextShadow'></i>
+        </div>
+         <div class='text-shadow' v-for="(shadow,index) in editModule.textShadowList" :key="index">
+           <div class='item'>
+             <el-color-picker v-model="shadow.color" size="mini" show-alpha ></el-color-picker>
+           </div>
+           <div class='item'>
+              <input-number v-model="shadow.hShadow" :min="0" :max="50"></input-number>
+           </div>
+           <div class='item'>
+              <input-number v-model="shadow.vShadow" :min="0" :max="50"></input-number>
+           </div>
+           <div class='item'>
+              <input-number v-model="shadow.blur" :min="0" :max="50"></input-number>
+           </div>
+            <div class='item'>
+              <i class='el-icon-delete delete-icon' @click='deleteTextShadow(index)'></i>
+           </div>
+         </div>
+      </div>
+      
+    </div>
+  </el-collapse-item>
+<el-collapse-item title="位置" name="3">
     <div class='oper-item'>
       <div class='oper-name'>
         旋转角度  
@@ -255,5 +269,11 @@ export default defineComponent({
 }
 .delete-icon{
   cursor: pointer;
+}
+.strokeWidth{
+  display: inline-block;
+  float: left;
+  width: 70%;
+  margin-left: 10px;
 }
 </style>

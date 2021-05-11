@@ -1,17 +1,20 @@
 <template>
-   <div  class='canvas-area' draggable="false" :style="{
+   <div  class='canvas-area' @mousedown.stop draggable="false" :style="{
                                   backgroundColor:`#fff`,
                                   backgroundSize: `16px 16px`,
                                   backgroundPosition: `0 0,8px 8px`,
                                   backgroundImage: `linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc),linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc)`
                                   ,'width': canvas.width+'px'
                                   ,'height':canvas.height+'px'
-                                  ,'left':`40%`
-                                  ,'top':`10`}">
+                                  ,'left':`100px`
+                                  ,'top':`10px`}">
         <background :background='background'></background>
+        <d-shape v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
+        <d-chart  v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
         <d-image v-for="(image,index) in images" :key="index" :image="image"></d-image>
         <d-text  v-for="(text,index) in texts" :key="index" :text="text"></d-text>
         <d-code  v-for="(code,index) in codes" :key="index" :code="code"></d-code>
+        <d-group v-if='group' :group="group"></d-group>
         <clipper v-if="clipOper"></clipper>
     </div>
 </template>
@@ -24,13 +27,19 @@ import dText from '../operation/dText.vue'
 import clipper from '../operation/clipper.vue'
 import DCode from '../operation/dCode.vue'
 import Background from '../operation/background.vue'
+import DChart from '../operation/dChart.vue'
+import DShape from '../operation/dShape.vue'
+import DGroup from '../operation/dGroup.vue'
 export default defineComponent({
   components:{
     dImage,
     clipper,
     dText,
     DCode,
-    Background
+    Background,
+    DChart,
+    DShape,
+    DGroup
   },
   setup () {
     const store = useStore()
@@ -47,14 +56,26 @@ export default defineComponent({
     let images = computed(()=>{
       return store.state.postInfo.images
     })
+    let charts = computed(()=>{
+      return store.state.postInfo.charts
+    })
+     let shapes = computed(()=>{
+      return store.state.postInfo.shapes
+    })
     let canvas = computed(()=>{
       return store.state.postInfo.canvas
+    })
+    let group = computed(()=>{
+      return store.state.group
     })
     return {
       images:images,
       texts:texts,
       codes:codes,
+      charts:charts,
+      shapes:shapes,
       background:background,
+      group,
       clipOper,
       canvas
     }
@@ -69,17 +90,17 @@ export default defineComponent({
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-          position:absolute;
-          transform-origin: left top;
-          margin-bottom: 30px;
-          overflow: hidden;
-          .background{
-            width: 100%;
-            height: 100%;
-            position: relative;
-            img{
-              position:absolute;
-            }
-          }
+    position:absolute;
+    transform-origin: left top;
+    margin-bottom: 30px;
+    overflow: hidden;
+    .background{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      img{
+        position:absolute;
       }
+    }
+  }
 </style>

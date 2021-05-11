@@ -21,7 +21,7 @@
       </div>
     </div>
   </el-collapse-item>
-<el-collapse-item title="位置" name="2">
+  <el-collapse-item title="位置" name="2">
     <div class='oper-item'>
       <div class='oper-name'>
         旋转角度  

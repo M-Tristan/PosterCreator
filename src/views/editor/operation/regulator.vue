@@ -6,7 +6,7 @@
                                         ,top:0+'px'
                                         ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                        }"></div>
-            <div class='item-vertical' v-if="module.type != 'code'"  @mousedown.stop="controlshape('left-middle')" :style="{ 
+            <div class='item-vertical' v-if="module.type != 'code' && module.type != 'group'"  @mousedown.stop="controlshape('left-middle')" :style="{ 
                                         cursor: cursor.leftMiddle,
                                         left:0+'px'
                                     ,top:module.height/2+'px'
@@ -18,13 +18,13 @@
                                     ,top:module.height+'px'
                                      ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                     }"></div>
-             <div class='item-Horizontal' v-if="module.type != 'text' && module.type != 'code'" @mousedown.stop="controlshape('middle-top')" :style="{ 
+             <div class='item-Horizontal' v-if="module.type != 'text' && module.type != 'code'&& module.type != 'group'" @mousedown.stop="controlshape('middle-top')" :style="{ 
                                          cursor: cursor.middleTop,
                                          left:module.width/2+'px'
                                         ,top:0+'px'
                                          ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                        }"></div>
-                <div class='item-Horizontal' v-if="module.type != 'text' && module.type != 'code'" @mousedown.stop="controlshape('middle-down')" :style="{ 
+                <div class='item-Horizontal' v-if="module.type != 'text' && module.type != 'code'&& module.type != 'group'" @mousedown.stop="controlshape('middle-down')" :style="{ 
                                          cursor: cursor.middleDown,
                                          left:module.width/2+'px'
                                         ,top:module.height+'px'
@@ -36,7 +36,7 @@
                                         ,top:'0px'
                                          ,transform: `translateX(-50%) translateY(-50%) scale(${moveScale})`
                                        }"></div>
-             <div class='item-vertical' v-if="module.type != 'code'" @mousedown.stop="controlshape('right-middle')" :style="{ 
+             <div class='item-vertical' v-if="module.type != 'code'&& module.type != 'group'" @mousedown.stop="controlshape('right-middle')" :style="{ 
                                          cursor: cursor.rightMiddle,
                                          left:module.width+'px'
                                         ,top:module.height/2+'px'

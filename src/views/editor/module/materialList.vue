@@ -7,12 +7,11 @@
       </div>
      <el-divider content-position="left">图形</el-divider>
       <div class='item'>
-          <shape></shape>
+          <shape type='polygon'></shape>
           <shape type='star'></shape>
           <shape type='sector'></shape>
           <shape type='flower'></shape>
           <shape type='circle'></shape>
-          
       </div>
   </div>
 </template>

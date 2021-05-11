@@ -18,7 +18,8 @@
       lineHeight:`${module.lineHeight}`,
       letterSpacing:`${module.letterSpacing}px`,
       opacity:module.opacity,
-      textShadow:textShadow
+      textShadow:textShadow,
+      textStroke:`${module.strokeWidth}px ${module.strokeColor}`
     }">
       {{module.text}}
     </div>

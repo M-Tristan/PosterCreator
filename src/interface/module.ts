@@ -19,7 +19,12 @@ export interface textShadow{
   blur:number,
   color:string
 }
-
+export interface option{
+  hShadow:number,
+  vShadow:number,
+  blur:number,
+  color:string
+}
 export interface image extends operItem{
     src:string,
     blur:number,
@@ -51,6 +56,19 @@ export interface image extends operItem{
     // borderWidth:number,
     // borderColor:string
 }
+export interface chart extends operItem{
+  option:object,
+  chartType:string
+}
+
+export interface shape extends operItem{
+  shapeType:string,
+  color:string,
+  sides?:number,
+  angles?:number,
+  sectorAngle?:number,
+  petals?:number
+}
 
 export interface text extends operItem{
   text:string,
@@ -63,7 +81,9 @@ export interface text extends operItem{
   lineHeight:number,
   letterSpacing:number,
   opacity:number,
-  textShadowList?:Array<textShadow>
+  textShadowList?:Array<textShadow>,
+  strokeWidth:number,
+  strokeColor:string
 }
 
 export interface code extends operItem{

@@ -7,13 +7,12 @@
       height:`${background.image.height}px`,
       left:`-${background.image.left}px`,
       top:`-${background.image.top}px`,
-    }" draggable="false" v-if="background.image.src" :src='background.image.src' />
+    }" draggable="false" v-if="background.image" :src='background.image.src' />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-
 export default defineComponent({
    props:{
     background:{

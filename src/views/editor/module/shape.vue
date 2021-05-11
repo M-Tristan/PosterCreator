@@ -1,5 +1,5 @@
 <template>
-  <div class='shape'>
+  <div class='shape' @click='selectShape'>
     <canvas ref='shape' width="140" height="140"></canvas>
   </div>
 </template>
@@ -7,6 +7,9 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import PositionUtil from '@/lib/PositionUtil';
+import ModuleUtil from '@/lib/ModuleUtil';
+import { operItem } from '@/interface/module';
+import { useStore } from 'vuex';
 export default defineComponent({
   props:{
     type:{
@@ -15,6 +18,7 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const store = useStore()
     onMounted(()=>{
       switch(props.type){
         case 'polygon':
@@ -48,7 +52,7 @@ export default defineComponent({
       })
       ctx.stroke();
     }
-      function drawCircle(){
+    function drawCircle(){
       let canvas = shape.value
       let ctx=<CanvasRenderingContext2D>canvas.getContext("2d");
       ctx.beginPath();
@@ -65,7 +69,6 @@ export default defineComponent({
       ctx.arc(w/6,h/6*5,w/3*2,0,-Math.PI/2,true);
       ctx.closePath();
       ctx.stroke();
-      // ctx.fill();
     }
     function drawStart(){
         let points = PositionUtil.getStartShapesPoints(5,70,30)
@@ -102,8 +105,12 @@ export default defineComponent({
         ctx.stroke();
     }
     let shape = ref(null as unknown as HTMLCanvasElement)
-
-    return {shape}
+    const selectShape = async () => {
+      let shapeInfo = <operItem> await ModuleUtil.getShapeInfo(props.type)
+       store.commit('addShape',shapeInfo)
+       store.commit('setEditModule',shapeInfo.id)
+    }
+    return {shape,selectShape}
   }
 })
 </script>
@@ -114,5 +121,6 @@ export default defineComponent({
   height: 140px;
   display: inline-block;
   float: left;
+  cursor: pointer;
 }
 </style>

@@ -21,13 +21,13 @@
       <div class='back-Info'>
         <div class='back-image-area'>
             <div class='image-info' :style="{backgroundColor:editModule.color}">
-
+              <img class='image' v-if="editModule.image" :src='editModule.image.src' />
             </div>
         </div>
       </div>
       <div class='button-area'>
-         <el-button type="primary">设置图片</el-button>
-          <el-button type="primary">设置颜色</el-button>
+         <el-button type="primary">设置背景</el-button>
+          <el-button type="primary"  v-if="editModule.image" >背景裁剪</el-button>
       </div>
   </div>
 
@@ -90,6 +90,9 @@ export default defineComponent({
   width: 200px;
   min-height: 50px;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.281);
+  .image{
+    width: 200px;
+  }
 }
 .button-area{
   width: 100%;

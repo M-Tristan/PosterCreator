@@ -3,7 +3,7 @@
                                         ,height: module.height+'px'
                                         ,left:module.left+'px'
                                         ,top:module.top+'px',
-                                        transform:  `rotate(${module.rotate?image.rotate:0}deg)`
+                                        transform:  `rotate(${module.rotate?module.rotate:0}deg)`
                                         ,zIndex:module.zindex
                                        
                                               }" >

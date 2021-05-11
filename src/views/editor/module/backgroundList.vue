@@ -1,6 +1,6 @@
 <template>
     <div class='color-List'>
-      <div class='color-item' v-for="(item,index) in colorList" :key='index' :style='{backgroundColor:item}' @click="backModel.color = item"></div>  
+      <div class='color-item' v-for="(item,index) in colorList" :key='index' :style='{backgroundColor:item}' @click="selectColor(item)"></div>  
       <div class='color-item'>
         <el-color-picker v-model="backModel.color"  size="mini" show-alpha ></el-color-picker>
       </div>
@@ -53,7 +53,7 @@ export default defineComponent({
         })
      
         // store.commit('setEditModuleToBack')
-        return {imageList,selectBack,colorList,backModel}
+        return {imageList,selectBack,colorList,backModel,selectColor}
     }
 })
 </script>
