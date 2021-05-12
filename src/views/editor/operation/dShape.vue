@@ -5,9 +5,9 @@
                                         ,top:module.top+'px',
                                         transform:  `rotate(${module.rotate?module.rotate:0}deg)`
                                         ,zIndex:module.zindex}">
-   <canvas ref='shape' width="500" height="500" class='shape'></canvas>
-   <regulator :module='module' v-if="editModule.id == module.id" ></regulator>
-    <rotate :module='module' v-if="editModule.id == module.id"></rotate>    
+   <canvas  v-if="pattern == 'show'"  ref='shape' width="500" height="500" class='shape'></canvas>
+   <regulator :module='module' v-if="editModule.id == module.id&& pattern == 'edit'" ></regulator>
+    <rotate :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></rotate>    
   </div>
 </template>
 
@@ -23,6 +23,10 @@ export default defineComponent({
     shape:{
       type:Object,
       default:new Object()
+    },
+    pattern:{
+      type:String,
+      default:'edit'
     }
   },
    components:{

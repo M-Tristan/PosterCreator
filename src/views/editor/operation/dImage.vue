@@ -15,13 +15,13 @@
                   filter: `blur(${module.blur}px) brightness(${module.filter.brightness}%) 
                   contrast(${module.filter.contrast}%) grayscale(${module.filter.grayscale}%) 
                   hue-rotate(${module.filter.hueRotate}deg) invert(${module.filter.invert}%) 
-                  saturate(${module.filter.saturate}%)  drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px ${module.dropshadowColor})`,
+                  saturate(${module.filter.saturate}%)  drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px  ${module.dropshadowColor} )`,
                     width: module.width + 'px'
                    ,height: module.height+'px'
                    ,opacity:module.opacity
                    ,transform:`rotateY(${module.rotateY?180:0}deg) rotateX(${module.rotateX?180:0}deg)`
                 }">
-                  <canvas class='image' :style="{ 
+                  <canvas v-if="pattern == 'show'" class='image' :style="{ 
                     width: imageSize.width + 'px'
                   ,height: imageSize.height+'px'
                   }" ref='imageCanvas'></canvas>
@@ -36,8 +36,8 @@
 
    
                                             
-    <regulator :module='module' v-if="editModule.id == module.id" ></regulator>
-    <rotate :module='module' v-if="editModule.id == module.id"></rotate>                                      
+    <regulator :module='module' v-if="editModule.id == module.id&& pattern == 'edit'" ></regulator>
+    <rotate :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></rotate>                                      
   </div>
 </template>
 
@@ -53,6 +53,10 @@ export default defineComponent({
     image:{
       type:Object,
       default:new Object()
+    },
+    pattern:{
+      type:String,
+      default:'edit'
     }
   },
   components:{
@@ -86,6 +90,9 @@ export default defineComponent({
       }
       let imageCanvas = ref(null as unknown as HTMLCanvasElement)
       const draw = () => {
+        if(props.pattern == 'edit'){
+          return
+        }
         let crop = module.value.crop
         imageCanvas.value.setAttribute('width', String(crop.width))
         imageCanvas.value.setAttribute('height',String(crop.height))

@@ -1,6 +1,7 @@
 <template>
    <i class='el-icon-refresh swing-button'
    @mousedown.stop='rotate'
+   draggable="false"
    :style="{
        transform: `translateX(-50%) scale(${moveScale})`
      }"
@@ -8,6 +9,7 @@
 </template>
 
 <script lang="ts">
+import { useStore } from 'vuex'
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
@@ -18,10 +20,13 @@ export default defineComponent({
         }
     },
     setup (props) {
+        const store = useStore()
+        const moveScale = computed(() => {
+          return 100/store.state.scale
+        })
         const module:any = computed(()=>{
             return props.module
         })
-        let moveScale = 1
         let  rotatePositonX = computed(()=>{
             return  Math.sin(module.value.rotate * (Math.PI / 180)) *  (module.value.height/2+40)
         })
@@ -37,8 +42,8 @@ export default defineComponent({
             window.onmousemove = (event:MouseEvent)=>{
                 let X = event.clientX
                 let Y = event.clientY
-                let width =  (X-oriX)*moveScale-orileft 
-                let height =  (Y-oriY)*moveScale-oritop
+                let width =  (X-oriX)*moveScale.value-orileft 
+                let height =  (Y-oriY)*moveScale.value-oritop
                 let deg = 0
                 if(width<0&&height>0){
                    deg = -Math.atan(width/height)/Math.PI*180

@@ -1,23 +1,39 @@
 <template>
-    <div class='InputNumber'>
-        <div >
-            <i class='el-icon-minus'></i>
-        </div>
-        <div>100%</div>
+    <div @mousedown.stop class='InputNumber'>
         <div>
-            <i class='el-icon-plus'></i>
+            <i  @click='reduce' class='el-icon-minus'></i>
+        </div>
+        <div>{{scale}}%</div>
+        <div>
+            <i @click='increase' class='el-icon-plus'></i>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { computed, defineComponent } from 'vue'
+import { useStore } from 'vuex'
 export default defineComponent({
     setup () {
-        
+        const store = useStore()
+        const scale = computed(() => {
+          return store.state.scale
+        })
+        const increase = () => {
+          if(scale.value >= 400){
+            return
+          }
+          store.commit('setScale',scale.value + 10)
+        }
 
-        return {}
+        const reduce = () => {
+           if(scale.value <= 10){
+            return
+          }
+          store.commit('setScale',scale.value - 10)
+        }
+
+        return {increase,reduce,scale}
     }
 })
 </script>
@@ -28,15 +44,18 @@ export default defineComponent({
       position: absolute;
       width: 158px;
       height: 38px;
-      background: #2B2C2F;
+      background: #fdfdfd;
       border-radius: 19px;
-      left: 50%;
-      bottom: 50px;
-      transform: translateX(-50%);
+      right:240px;
+      bottom: 10px;
       z-index: 99;
       display: flex;
       justify-content: space-around;
       align-items: center;
-      color: white;
+      border: 1px solid rgb(190, 190, 190);
+      color: rgb(0, 0, 0);
+     
     }
+
+
 </style>

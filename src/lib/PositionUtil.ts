@@ -106,6 +106,19 @@ class PositionUtil{
       top:posi.top + Hypotenuse*MathUtil.sin(angle)
     }
   }
+  /*
+  * 根据自身坐标，斜边长度，角度对应点坐标
+  * @param angle 
+  * @param Hypotenuse 
+  * @param posi 
+  * @returns 
+  */
+ static getPositionbyCenter(angle:number,Hypotenuse:number,posi:position):position{
+   return{
+     left:posi.left - Hypotenuse*MathUtil.cos(angle),
+     top:posi.top + Hypotenuse*MathUtil.sin(angle)
+   }
+ }
   /**
    * 通过中心点得到坐标位置
    * @param x 

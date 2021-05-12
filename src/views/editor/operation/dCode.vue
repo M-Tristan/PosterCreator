@@ -1,19 +1,19 @@
 <template>
-  <div class='code-content' @click='selectModel'   @mousedown="moduleMove(module)" :style="{  width: module.width + 'px'
+  <div class='code-content' @click='selectModel'    @mousedown="moduleMove(module)" :style="{  width: module.width + 'px'
                                         ,height: module.height+'px'
                                         ,left:module.left+'px'
                                         ,top:module.top+'px',
                                         transform:  `rotate(${module.rotate?module.rotate:0}deg)`
                                         ,zIndex:module.zindex
-                                       
                                               }" >
-          <img class='backImage' draggable="false" v-if="module.backImage" :src='module.backImage'/>                                     
-         <div ref='code' class='code' draggable="false" >
+                                              
+          <img class='backImage' draggable="false" v-if="module.backImage&&pattern == 'show'" :src='module.backImage'/>                                     
+         <div v-if="pattern == 'show'"  ref='code' class='code' draggable="false" >
          
            
          </div>                                
-    <regulator :module='module' v-if="editModule.id == module.id" ></regulator>
-    <rotate :module='module' v-if="editModule.id == module.id"></rotate>                                      
+    <regulator :module='module' v-if="editModule.id == module.id&& pattern == 'edit'" ></regulator>
+    <rotate :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></rotate>                                      
   </div>
 </template>
 
@@ -29,6 +29,10 @@ export default defineComponent({
     code:{
       type:Object,
       default:new Object()
+    },
+    pattern:{
+      type:String,
+      default:'edit'
     }
   },
   components:{
@@ -43,6 +47,9 @@ export default defineComponent({
      
     })
      const draw = () =>{
+       if(props.pattern == 'edit'){
+         return
+       }
            QRCode.toCanvas(module.value.text, {
             margin: 1,
             color:{

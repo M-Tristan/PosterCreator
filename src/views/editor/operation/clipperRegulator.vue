@@ -53,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import { useStore } from 'vuex'
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
     props:{
@@ -62,7 +63,11 @@ export default defineComponent({
         }
     },
     setup (props,{emit}) {
-        let moveScale = 1
+       const store = useStore()
+        const moveScale = computed(() => {
+          return 100/store.state.scale
+        })
+        
         const module:any = computed(()=>{
             return props.module
         })
@@ -169,8 +174,8 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width+(X-oriX)*moveScale*cos +(Y-oriY)*moveScale*sin
-                        let newHeight = height-(X-oriX)*moveScale*sin +(Y-oriY)*moveScale*cos
+                        let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
+                        let newHeight = height-(X-oriX)*moveScale.value*sin +(Y-oriY)*moveScale.value*cos
                         if(newHeight+oriShowTop>=showHeigth){
                           newHeight = showHeigth - oriShowTop
                         }
@@ -188,7 +193,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width+(X-oriX)*moveScale*cos +(Y-oriY)*moveScale*sin
+                        let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
                         if(newWidth+oriShowLeft>=showWidth){
                           newWidth = showWidth - oriShowLeft
                         }
@@ -203,8 +208,8 @@ export default defineComponent({
 
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width+(X-oriX)*moveScale*cos +(Y-oriY)*moveScale*sin
-                        let newHeight = height+(X-oriX)*moveScale*sin -(Y-oriY)*moveScale*cos
+                        let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
+                        let newHeight = height+(X-oriX)*moveScale.value*sin -(Y-oriY)*moveScale.value*cos
                          if(oriShowTop - newHeight + height <= 0){
                           newHeight = oriShowTop + height
                         }
@@ -223,7 +228,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let Y = event.clientY
                         let X = event.clientX
-                        let newHeight = height-(X-oriX)*moveScale*sin +(Y-oriY)*moveScale*cos
+                        let newHeight = height-(X-oriX)*moveScale.value*sin +(Y-oriY)*moveScale.value*cos
                         if(newHeight+oriShowTop>=showHeigth){
                           newHeight = showHeigth - oriShowTop
                         }
@@ -236,7 +241,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{      
                         let Y = event.clientY
                         let X = event.clientX
-                        let newHeight = height+(X-oriX)*moveScale*sin -(Y-oriY)*moveScale*cos
+                        let newHeight = height+(X-oriX)*moveScale.value*sin -(Y-oriY)*moveScale.value*cos
                         if(oriShowTop - newHeight + height <= 0){
                           newHeight = oriShowTop + height
                         }
@@ -250,8 +255,8 @@ export default defineComponent({
 
                          let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width-(X-oriX)*moveScale*cos -(Y-oriY)*moveScale*sin
-                        let newHeight = height+(X-oriX)*moveScale*sin -(Y-oriY)*moveScale*cos
+                        let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
+                        let newHeight = height+(X-oriX)*moveScale.value*sin -(Y-oriY)*moveScale.value*cos
                          if(oriShowLeft - newWidth + width <= 0){
                           newWidth = oriShowLeft + width
                         }
@@ -273,7 +278,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width-(X-oriX)*moveScale*cos -(Y-oriY)*moveScale*sin
+                        let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
                         if(oriShowLeft - newWidth + width <= 0){
                           newWidth = oriShowLeft + width
                         }
@@ -287,8 +292,8 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width-(X-oriX)*moveScale*cos -(Y-oriY)*moveScale*sin
-                        let newHeight = height-(X-oriX)*moveScale*sin +(Y-oriY)*moveScale*cos
+                        let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
+                        let newHeight = height-(X-oriX)*moveScale.value*sin +(Y-oriY)*moveScale.value*cos
                          if(oriShowLeft - newWidth + width <= 0){
                           newWidth = oriShowLeft + width
                         }

@@ -21,6 +21,12 @@ class MathUtil{
   static atan(tanvalue:number):number{
     return Math.atan(tanvalue)/Math.PI*180
   }
+  /**
+   * 得到直角三角形斜边
+   * @param width 
+   * @param height 
+   * @returns 
+   */
   static getHypotenuse(width:number,height:number):number{
     return Math.sqrt(Math.pow(width,2)+Math.pow(height,2))
   }

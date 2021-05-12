@@ -16,9 +16,18 @@ export default createStore({
     },
     editModule:<itemBase>new Object(),//当前编辑模块
     clipOper:false,
-    group:undefined as any
+    group:undefined as any,
+    editSize:{width:800,height:800},
+    scale:100
   },
   mutations: {
+    setScale(state,scale){
+      state.scale = scale
+    },
+    setEditSize(state,size){
+      state.editSize.width = size.width
+      state.editSize.height = size.height
+    },
     addChart(state,chart:chart){
       chart.type='chart'
       chart.zindex = state.postInfo.layers.length
@@ -136,9 +145,13 @@ export default createStore({
           state.group.operItems.forEach(item=>{
             item.width = item.operItem.width/state.group.width
             item.height = item.operItem.height/state.group.height
-            item.centerLeft = item.operItem.left + item.operItem.width/2 - state.group.left
-            item.centerTop = item.operItem.top + item.operItem.height/2 - state.group.top
+            item.centerLeft = (item.operItem.left + item.operItem.width/2 - state.group.left)/state.group.width
+            item.centerTop = (item.operItem.top + item.operItem.height/2 - state.group.top)/state.group.height
             item.rotate = item.operItem.rotate
+            if(item.operItem.type == 'text'){
+              item.fontSize = item.operItem.fontSize/state.group.width
+              item.letterSpacing = item.operItem.letterSpacing/state.group.width
+            }
           })
       }
     }

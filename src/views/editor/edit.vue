@@ -4,9 +4,9 @@
         <div class='module-area'>
             <module></module>
         </div>
-        <div  class='canvas-area' @mousedown="batchStart" @mouseleave="moveOut">
-            <zoom @click.stop></zoom>
-            <editCom  @click.stop></editCom>
+        <div  class='canvas-area' ref='canvasArea'  @mousedown="batchStart" @mouseleave="moveOut">
+            <editCom pattern='show'  @click.stop></editCom>
+            <editCom pattern='edit'  @click.stop></editCom>
             <div class='batchMask' v-if="showBatchMask"></div>
             <div class='batchContent' v-if="showBatchMask" :style="{
               top:`${batchPosition.top}px`,
@@ -14,8 +14,10 @@
               width:`${batchPosition.width}px`,
               height:`${batchPosition.height}px`
             }"></div>
-          
+             
         </div>
+        <!-- <navigate></navigate> -->
+        <zoom @click.stop></zoom>
         <div class='edit-area'>
          
           <image-edit v-if="editModule.type=='image'"></image-edit>
@@ -41,6 +43,7 @@ import backEdit from './edit/backEdit.vue'
 import CodeEdit from './edit/codeEdit.vue'
 import ShapeEdit from './edit/shapeEdit.vue'
 import ChartEdit from './edit/chartEdit.vue'
+import navigate from './edit/navigate.vue'
 export default defineComponent({
     setup () {
       const batchPosition = reactive({
@@ -50,6 +53,18 @@ export default defineComponent({
         height:0
       })
       const showBatchMask = ref(false)
+        onMounted(()=>{
+          store.commit("setEditSize",{
+            width:canvasArea.value.offsetWidth,
+            height:canvasArea.value.offsetHeight
+          })
+        })
+        window.onresize = () => {
+          store.commit("setEditSize",{
+            width:canvasArea.value.offsetWidth,
+            height:canvasArea.value.offsetHeight
+          })
+        }
         document.addEventListener ( 'paste' , (e)  =>  {
        
           e.preventDefault();
@@ -79,7 +94,8 @@ export default defineComponent({
           }
       });
         const store = useStore()
-      const editModule:any= computed(()=>{
+        const canvasArea = ref(null as unknown as HTMLElement)
+        const editModule:any= computed(()=>{
           return store.state.editModule
         })
         store.commit('initBack');
@@ -135,7 +151,7 @@ export default defineComponent({
             window.onmouseup = null
             showBatchMask.value = false
         }
-        return {selectModel,editModule,batchStart,batchPosition,showBatchMask,moveOut}
+        return {selectModel,editModule,batchStart,batchPosition,showBatchMask,moveOut,canvasArea}
     },
     components:{
         module,
@@ -146,7 +162,8 @@ export default defineComponent({
         backEdit,
         CodeEdit,
         ShapeEdit,
-        ChartEdit
+        ChartEdit,
+        navigate
     }
 })
 </script>
@@ -190,6 +207,8 @@ export default defineComponent({
     bottom: 0px;
     right: 240px;
     left:346px;
+    background-color: rgba(236, 236, 236, 0.205);
+    overflow: scroll;
 }
 .batchContent{
   display: inline-block;

@@ -6,11 +6,11 @@
                                         transform:  `rotate(${module.rotate?module.rotate:0}deg)`
                                         ,zIndex:module.zindex}"
                                        >
-    <div  ref='chart' :style="{  width: module.width + 'px'
+    <div v-if="pattern == 'show'"  ref='chart' :style="{  width: module.width + 'px'
                                         ,height: module.height+'px'
                                        }"></div>
-     <regulator :module='module' v-if="editModule.id == module.id" ></regulator>
-    <rotate :module='module' v-if="editModule.id == module.id"></rotate>    
+     <regulator :module='module' v-if="editModule.id == module.id&& pattern == 'edit'" ></regulator>
+    <rotate :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></rotate>    
   </div>
 </template>
 
@@ -26,6 +26,10 @@ export default defineComponent({
     chart:{
       type:Object,
       default:new Object()
+    },
+    pattern:{
+      type:String,
+      default:'edit'
     }
   },
   components:{

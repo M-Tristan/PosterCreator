@@ -1,5 +1,5 @@
 <template>
-    <div class='item-list' >
+    <div class='item-list' draggable="false" >
              <div class='item' @mousedown.stop="controlshape('left-top')" :style="{ 
                                          cursor: cursor.leftTop,
                                          left:0+'px'
@@ -53,6 +53,7 @@
 </template>
 
 <script lang="ts">
+import { useStore } from 'vuex'
 import { computed, defineComponent } from 'vue'
 export default defineComponent({
     props:{
@@ -62,7 +63,10 @@ export default defineComponent({
         }
     },
     setup (props,{emit}) {
-        let moveScale = 1
+       const store = useStore()
+        const moveScale = computed(() => {
+          return 100/store.state.scale
+        })
         const module:any = computed(()=>{
             return props.module
         })
@@ -169,7 +173,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width+(X-oriX)*moveScale*cos +(Y-oriY)*moveScale*sin
+                        let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
                         module.value.width = newWidth>20?newWidth:20
                         module.value.left = oriLeft - (module.value.width-width)*(1-cos)/2
                         module.value.top = oriTop + (module.value.width-width)*sin/2
@@ -188,7 +192,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width+(X-oriX)*moveScale*cos +(Y-oriY)*moveScale*sin
+                        let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
                         module.value.width = newWidth>20?newWidth:20
                         if(module.value.type == 'text'){
                           module.value.width = newWidth>module.value.fontSize?newWidth:module.value.fontSize
@@ -204,7 +208,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width+(X-oriX)*moveScale*cos +(Y-oriY)*moveScale*sin
+                        let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
                         module.value.width = newWidth>20?newWidth:20
                         module.value.left = oriLeft - (module.value.width-width)*(1-cos)/2
                         module.value.top = oriTop + (module.value.width-width)*sin/2
@@ -220,7 +224,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let Y = event.clientY
                         let X = event.clientX
-                        let newHeight = height-(X-oriX)*moveScale*sin +(Y-oriY)*moveScale*cos
+                        let newHeight = height-(X-oriX)*moveScale.value*sin +(Y-oriY)*moveScale.value*cos
                         module.value.height = newHeight>40?newHeight:40
                         module.value.left = oriLeft - (module.value.height-height)*sin/2
                         module.value.top = oriTop - (module.value.height-height)*(1-cos)/2 
@@ -229,7 +233,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{      
                         let Y = event.clientY
                         let X = event.clientX
-                        let newHeight = height+(X-oriX)*moveScale*sin -(Y-oriY)*moveScale*cos
+                        let newHeight = height+(X-oriX)*moveScale.value*sin -(Y-oriY)*moveScale.value*cos
                         module.value.height = newHeight>40?newHeight:40
                          module.value.left = oriLeft + (module.value.height-height)*sin/2
                         module.value.top = oriTop - (module.value.height-height)*(1+cos)/2 
@@ -238,7 +242,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width-(X-oriX)*moveScale*cos -(Y-oriY)*moveScale*sin
+                        let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
                         module.value.width = newWidth>20?newWidth:20
                         module.value.left = oriLeft - (module.value.width-width)*(cos+1)/2
                         module.value.top = oriTop - (module.value.width-width)*sin/2
@@ -255,7 +259,7 @@ export default defineComponent({
                        
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width-(X-oriX)*moveScale*cos -(Y-oriY)*moveScale*sin
+                        let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
                         module.value.width = newWidth>20?newWidth:20
                         if(module.value.type == 'text'){
                           module.value.width = newWidth>module.value.fontSize?newWidth:module.value.fontSize
@@ -270,7 +274,7 @@ export default defineComponent({
                     window.onmousemove = (event:MouseEvent)=>{
                         let X = event.clientX
                         let Y = event.clientY
-                        let newWidth = width-(X-oriX)*moveScale*cos -(Y-oriY)*moveScale*sin
+                        let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
                         module.value.width = newWidth>20?newWidth:20
                         module.value.left = oriLeft - (module.value.width-width)*(cos+1)/2
                         module.value.top = oriTop - (module.value.width-width)*sin/2
@@ -333,5 +337,6 @@ export default defineComponent({
   right: 0;
   bottom: 0;
   position:absolute;
+  z-index: 999;
 }
 </style>

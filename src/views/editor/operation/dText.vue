@@ -10,7 +10,7 @@
     <div class='content' :contenteditable='true' @input="changeHeight" ref='contentInput' :style="{
       fontSize:`${module.fontSize}px`,
       transform: `scale(${fontScale})`,
-      color:`${module.color}`,
+      color:`${pattern == 'show'?module.color:'rgba(0,0,0,0)'}`,
       width: `${module.width/fontScale}px`,
       fontWeight:`${module.bold?900:400}`,
       textDecoration:`${module.textDecoration}`,
@@ -23,8 +23,8 @@
     }">
       {{module.text}}
     </div>
-    <regulator :module='module' v-if="editModule.id == module.id" @changeHeight='changeHeight' ></regulator>
-    <rotate :module='module' v-if="editModule.id == module.id"></rotate> 
+    <regulator :module='module' v-if="editModule.id == module.id && pattern == 'edit'" @changeHeight='changeHeight' ></regulator>
+    <rotate :module='module' v-if="editModule.id == module.id && pattern == 'edit'"></rotate> 
   </div>
 </template>
 
@@ -40,6 +40,10 @@ export default defineComponent({
     text:{
       type:String,
       default:''
+    },
+    pattern:{
+      type:String,
+      default:'edit'
     }
   },
   components:{

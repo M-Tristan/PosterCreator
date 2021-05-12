@@ -1,21 +1,19 @@
 <template>
-   <div  class='canvas-area' @mousedown.stop draggable="false" :style="{
-                                  backgroundColor:`#fff`,
-                                  backgroundSize: `16px 16px`,
-                                  backgroundPosition: `0 0,8px 8px`,
-                                  backgroundImage: `linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc),linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc)`
-                                  ,'width': canvas.width+'px'
-                                  ,'height':canvas.height+'px'
-                                  ,'left':`100px`
-                                  ,'top':`10px`}">
-        <background :background='background'></background>
-        <d-shape v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
-        <d-chart  v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
-        <d-image v-for="(image,index) in images" :key="index" :image="image"></d-image>
-        <d-text  v-for="(text,index) in texts" :key="index" :text="text"></d-text>
-        <d-code  v-for="(code,index) in codes" :key="index" :code="code"></d-code>
-        <d-group v-if='group' :group="group"></d-group>
-        <clipper v-if="clipOper"></clipper>
+   <div  :class='["editContent",{"backgroundImage":pattern=="show"}]' @mousedown.stop draggable="false" :style="{
+                                  overflow:`${pattern=='edit'?'none':'hidden'}`,
+                                  transform:`scale(${scale/100},${scale/100}) `,
+                                  width: canvas.width+'px'
+                                  ,height:canvas.height+'px'
+                                  ,left:`${editPosition.left}px`
+                                  ,top:`${editPosition.top}px`}">
+        <background v-if="pattern=='show'"  :background='background'></background>
+        <d-shape :pattern='pattern'   v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
+        <d-chart :pattern='pattern'  v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
+        <d-image :pattern='pattern' v-for="(image,index) in images" :key="index" :image="image"></d-image>
+        <d-text  :pattern='pattern' v-for="(text,index) in texts" :key="index" :text="text"></d-text>
+        <d-code  :pattern='pattern' v-for="(code,index) in codes" :key="index" :code="code"></d-code>
+        <d-group v-if="group&&pattern=='edit'" :group="group"></d-group>
+        <clipper  v-if="clipOper&&pattern=='edit'"></clipper>
     </div>
 </template>
 
@@ -41,8 +39,20 @@ export default defineComponent({
     DShape,
     DGroup
   },
+  props:{
+    pattern:{
+      type:String,
+      default:'edit'
+    }
+  },
   setup () {
     const store = useStore()
+    const scale = computed(() => {
+      return store.state.scale
+    })
+    let editSize = computed(()=>{
+      return  store.state.editSize
+    })
     let clipOper = computed(()=>store.state.clipOper)
     let background = computed(()=>{
       return store.state.postInfo.background
@@ -68,6 +78,17 @@ export default defineComponent({
     let group = computed(()=>{
       return store.state.group
     })
+    let editPosition = computed(()=>{
+      let left = 0
+      let top = 0
+      if(canvas.value.width*scale.value/100 < editSize.value.width){
+        left = (editSize.value.width - canvas.value.width*scale.value/100)/2
+      }
+      if(canvas.value.height*scale.value/100 < editSize.value.height){
+        top = (editSize.value.height - canvas.value.height*scale.value/100)/2
+      }
+      return {left,top}
+    })
     return {
       images:images,
       texts:texts,
@@ -77,14 +98,17 @@ export default defineComponent({
       background:background,
       group,
       clipOper,
-      canvas
+      canvas,
+      editSize,
+      editPosition,
+      scale
     }
   }
 })
 </script>
 
 <style lang="scss" scoped>
-  .canvas-area{
+  .editContent{
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.308);
      -webkit-user-select: none;
     -moz-user-select: none;
@@ -93,7 +117,6 @@ export default defineComponent({
     position:absolute;
     transform-origin: left top;
     margin-bottom: 30px;
-    overflow: hidden;
     .background{
       width: 100%;
       height: 100%;
@@ -102,5 +125,11 @@ export default defineComponent({
         position:absolute;
       }
     }
+  }
+  .backgroundImage{
+     background-color:#fff;
+    background-size: 16px 16px;
+    background-position: 0 0,8px 8px;
+    background-image: linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc),linear-gradient(to top right,#ccc 25%,transparent 0,transparent 75%,#ccc 0,#ccc)
   }
 </style>
