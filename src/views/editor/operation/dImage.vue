@@ -78,7 +78,7 @@ export default defineComponent({
       })
       const store = useStore()
       let image = new Image()
-      image.src = store.state.editModule.src
+      image.src = module.value.src
       const nature = {
         naturalWidth:0,
         naturalHeight:0
@@ -99,9 +99,9 @@ export default defineComponent({
         let ctx = imageCanvas.value.getContext('2d') as CanvasRenderingContext2D
         ctx.clearRect(0,0,crop.width,crop.height)
         ctx.drawImage(image,-crop.left,-crop.top)
-        if(editModule.value.mask != undefined && editModule.value.mask != null){
+        if(module.value.mask != undefined && module.value.mask != null){
           let maskImage = new Image()
-          maskImage.src = editModule.value.mask.src
+          maskImage.src = module.value.mask.src
           maskImage.onload = () => {
             ctx.globalCompositeOperation="destination-in";
             ctx.drawImage(maskImage,0,0,crop.width,crop.height);	

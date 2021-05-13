@@ -8,7 +8,7 @@
             颜色  
           </div>
           <div class='oper-input'>
-             <el-color-picker  v-model="editModule.color" size="mini" show-alpha ></el-color-picker>
+             <el-color-picker @change='pushBack' v-model="editModule.color" size="mini" show-alpha ></el-color-picker>
           </div>
         </div>
          <div class='oper-item' v-if="editModule.sectorAngle">
@@ -16,7 +16,7 @@
             角度  
           </div>
           <div class='oper-input'>
-            <input-number :min='1' :max='359'  v-model="editModule.sectorAngle"></input-number>
+            <input-number @finishChange='pushBack' :min='1' :max='359'  v-model="editModule.sectorAngle"></input-number>
           </div>
         </div>
         <div class='oper-item' v-if="editModule.angles">
@@ -24,7 +24,7 @@
             角数  
           </div>
           <div class='oper-input'>
-            <input-number :min='2' :max='50'  v-model="editModule.angles"></input-number>
+            <input-number @finishChange='pushBack' :min='2' :max='50'  v-model="editModule.angles"></input-number>
           </div>
         </div>
          <div class='oper-item' v-if="editModule.sides">
@@ -32,7 +32,7 @@
             边数  
           </div>
           <div class='oper-input'>
-            <input-number :min='3' :max='50'  v-model="editModule.sides"></input-number>
+            <input-number @finishChange='pushBack' :min='3' :max='50'  v-model="editModule.sides"></input-number>
           </div>
         </div>
         <div class='oper-item' v-if="editModule.petals">
@@ -40,7 +40,7 @@
             花瓣数
           </div>
           <div class='oper-input'>
-            <input-number :min='5' :max='50'  v-model="editModule.petals"></input-number>
+            <input-number @finishChange='pushBack' :min='5' :max='50'  v-model="editModule.petals"></input-number>
           </div>
         </div>
         
@@ -53,7 +53,7 @@
             旋转角度  
           </div>
           <div class='oper-input'>
-            <input-number  :min='0' :max='360' v-model="editModule.rotate"></input-number>
+            <input-number @finishChange='pushBack'  :min='0' :max='360' v-model="editModule.rotate"></input-number>
           </div>
         </div>
         <div class='oper-item'>
@@ -61,7 +61,7 @@
             左边距  
           </div>
           <div class='oper-input'>
-            <input-number  v-model="editModule.left"></input-number>
+            <input-number @finishChange='pushBack'  v-model="editModule.left"></input-number>
           </div>
         </div>
         <div class='oper-item'>
@@ -69,7 +69,7 @@
             上边距  
           </div>
           <div class='oper-input'>
-            <input-number  v-model="editModule.top"></input-number>
+            <input-number @finishChange='pushBack'  v-model="editModule.top"></input-number>
           </div>
         </div>
         <div class='oper-item'>
@@ -77,7 +77,7 @@
             宽  
           </div>
           <div class='oper-input'>
-            <input-number  v-model="editModule.width"></input-number>
+            <input-number @finishChange='pushBack'  v-model="editModule.width"></input-number>
           </div>
         </div>
         <div class='oper-item'>
@@ -85,7 +85,7 @@
             高 
           </div>
           <div class='oper-input'>
-            <input-number  v-model="editModule.height"></input-number>
+            <input-number @finishChange='pushBack'  v-model="editModule.height"></input-number>
           </div>
         </div>
       </el-collapse-item>
@@ -97,15 +97,17 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
+import operation from '../operation/common/operation'
 
 export default defineComponent({
   setup () {
     const store = useStore()
+    const { pushBack } = operation()
     const editModule:any= computed(()=>{
       return store.state.editModule
     })
      let activeNames = ref(['1'])
-    return {editModule,activeNames}
+    return {editModule,activeNames,pushBack}
   }
 })
 </script>

@@ -44,6 +44,9 @@ export default defineComponent({
       draw()
     })
     const draw=()=>{
+      if(props.pattern == 'edit'){
+         return
+       }
       if(myChart){
         myChart.dispose()
       }

@@ -72,6 +72,7 @@ export interface shape extends operItem{
 
 export interface text extends operItem{
   text:string,
+  html:string,
   fontSize:number,
   color:string,
   bold:boolean,

@@ -109,7 +109,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
   .editContent{
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.308);
+   
      -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -127,6 +127,7 @@ export default defineComponent({
     }
   }
   .backgroundImage{
+     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.308);
      background-color:#fff;
     background-size: 16px 16px;
     background-position: 0 0,8px 8px;

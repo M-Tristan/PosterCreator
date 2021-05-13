@@ -6,11 +6,11 @@
     <el-divider content-position="left">画布</el-divider>
     <div class='size-area'>
       <div class='size-item'>
-         <input-number v-model="canvas.width"  :min="100" :max="10000"></input-number>
+         <input-number v-model="canvas.width" @finishChange='pushBack'  :min="100" :max="10000"></input-number>
         <span>宽</span>
       </div>
       <div class='size-item'>
-        <input-number v-model="canvas.height"   :min="100" :max="10000"></input-number>
+        <input-number v-model="canvas.height" @finishChange='pushBack'  :min="100" :max="10000"></input-number>
         <span>高</span>
       </div>
     
@@ -36,13 +36,15 @@
 <script lang="ts">
 import { useStore } from "vuex"
 import { computed, defineComponent, ref } from "vue"
+import operation from "../operation/common/operation"
 export default defineComponent({
   setup () {
     const store = useStore()
+     const { pushBack } = operation()
     let width = ref(400)
      let height = ref(400)
     const editModule:any= computed(()=>{
-      return store.state.editModule
+      return store.state.postInfo.background
     })
     const canvas:any= computed(()=>{
       return store.state.postInfo.canvas
@@ -51,7 +53,8 @@ export default defineComponent({
       width,
       height,
       editModule,
-      canvas
+      canvas,
+      pushBack
     }
   }
 })

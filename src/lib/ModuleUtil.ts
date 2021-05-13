@@ -59,7 +59,7 @@ class ModuleUtil{
       return new Promise((resolve,reject)=>{
           resolve({
               id:uuidv4(),
-              width:80,
+              width:140,
               height:26,
               top:10,
               left:10,
@@ -67,6 +67,7 @@ class ModuleUtil{
               fontSize:20,
               color:'rgba(0,0,0,1)',
               text:text,
+              html:text,
               bold:false,
               italic:false,
               textDecoration:'none',

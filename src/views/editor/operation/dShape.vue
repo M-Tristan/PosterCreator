@@ -38,6 +38,9 @@ export default defineComponent({
       draw()
     })
     const draw = () => {
+      if(props.pattern == 'edit'){
+         return
+       }
       switch(props.shape.shapeType){
         case 'polygon':
           drawPolygon()

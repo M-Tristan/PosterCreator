@@ -13,7 +13,7 @@ export default {
   setup () {
     const store = useStore()
     const addText = async () => {
-     let textInfo = await ModuleUtil.getAddTextInfo('添加文字')
+     let textInfo = await ModuleUtil.getAddTextInfo('双击修改文字')
      store.commit('addText',textInfo)
      store.commit('setEditModule',textInfo.id)
     }

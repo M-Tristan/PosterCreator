@@ -7,7 +7,7 @@
         模糊  
       </div>
       <div class='oper-input'>
-        <input-number v-model="editModule.blur" :min="0" :max="50"></input-number>
+        <input-number @finishChange='pushBack' v-model="editModule.blur" :min="0" :max="50"></input-number>
         <!-- <el-input-number size="mini" :min="0" :max="50" v-model="editModule.blur"></el-input-number> -->
       </div>
     </div>
@@ -16,7 +16,7 @@
         透明度  
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.opacity" :min="0" :max="1" :step="0.01"></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.opacity" :min="0" :max="1" :step="0.01"></input-number>
         <!-- <el-input-number size="mini" :min="0" :max="1" :step="0.01"  v-model="editModule.opacity"></el-input-number> -->
       </div>
     </div>
@@ -25,7 +25,7 @@
         圆角
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.borderRadius" :min="0" :max="borderRadiusMax"></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.borderRadius" :min="0" :max="borderRadiusMax"></input-number>
       </div>
     </div>
    <!-- <div class='oper-item'>
@@ -51,7 +51,7 @@
       </div>
      
       <div class='oper-input'>
-         <el-color-picker v-model="editModule.dropshadowColor" size="mini" show-alpha ></el-color-picker>
+         <el-color-picker @change='pushBack' v-model="editModule.dropshadowColor" size="mini" show-alpha ></el-color-picker>
       </div>
     </div>
      <div class='oper-item'>
@@ -59,7 +59,7 @@
         横向距离  
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.dropshadowX" ></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.dropshadowX" ></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -67,7 +67,7 @@
         纵向距离  
       </div>
       <div class='oper-input'>
-        <input-number v-model="editModule.dropshadowY" ></input-number>
+        <input-number @finishChange='pushBack' v-model="editModule.dropshadowY" ></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -75,7 +75,7 @@
         模糊  
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.dropshadowBlur" ></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.dropshadowBlur" ></input-number>
       </div>
     </div>
   </el-collapse-item>
@@ -86,7 +86,7 @@
         亮度  
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.filter.brightness" :min='0' :max='200'></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.filter.brightness" :min='0' :max='200'></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -94,7 +94,7 @@
         对比度  
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.filter.contrast" :min='0' :max='200'></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.filter.contrast" :min='0' :max='200'></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -102,7 +102,7 @@
         灰度  
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.filter.grayscale" :min='0' :max='100'></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.filter.grayscale" :min='0' :max='100'></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -110,7 +110,7 @@
         色相 
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.filter.hueRotate" :min='0' :max='360'></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.filter.hueRotate" :min='0' :max='360'></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -118,7 +118,7 @@
         反转 
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.filter.invert" :min='0' :max='100'></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.filter.invert" :min='0' :max='100'></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -126,7 +126,7 @@
         饱和度 
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.filter.saturate" :min='0' :max='200'></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.filter.saturate" :min='0' :max='200'></input-number>
       </div>
     </div>
    
@@ -158,7 +158,7 @@
         旋转角度  
       </div>
       <div class='oper-input'>
-        <input-number v-model="editModule.rotate" :min='0' :max='360' ></input-number>
+        <input-number @finishChange='pushBack' v-model="editModule.rotate" :min='0' :max='360' ></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -166,7 +166,7 @@
         左边距  
       </div>
       <div class='oper-input'>
-        <input-number v-model="editModule.left"  ></input-number>
+        <input-number @finishChange='pushBack' v-model="editModule.left"  ></input-number>
        
       </div>
     </div>
@@ -175,7 +175,7 @@
         上边距  
       </div>
       <div class='oper-input'>
-        <input-number v-model="editModule.top"  ></input-number>
+        <input-number @finishChange='pushBack' v-model="editModule.top"  ></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -183,7 +183,7 @@
         宽  
       </div>
       <div class='oper-input'>
-        <input-number v-model="editModule.width"  ></input-number>
+        <input-number @finishChange='pushBack' v-model="editModule.width"  ></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -191,7 +191,7 @@
         高 
       </div>
       <div class='oper-input'>
-        <input-number v-model="editModule.height"  ></input-number>
+        <input-number @finishChange='pushBack' v-model="editModule.height"  ></input-number>
       </div>
     </div>
   </el-collapse-item>
@@ -208,12 +208,14 @@ import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
 import maskImageList from '@/lib/MaskList'
 import maskDemo from './maskDemo.vue'
+import operation from '../operation/common/operation'
 export default defineComponent({
   components:{
     maskDemo
   },
   setup () {
     const store = useStore()
+    const { pushBack } = operation()
     let activeNames = ref(['1'])
     let value = ref(1)
     let color = ref('rgab(100,100,100,1)')
@@ -234,7 +236,7 @@ export default defineComponent({
       let clipOper = store.state.clipOper
       store.commit('setClipOper', !clipOper);
     }
-    return {activeNames,value,color,editModule,borderRadiusMax,clipImage,maskList}
+    return {activeNames,value,color,editModule,borderRadiusMax,clipImage,maskList,pushBack}
   }
 })
 </script>

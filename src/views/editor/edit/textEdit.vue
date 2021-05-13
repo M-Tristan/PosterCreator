@@ -7,7 +7,7 @@
         字号  
       </div>
       <div class='oper-input'>
-         <input-number v-model="editModule.fontSize" :min="6" :max="1000"></input-number>
+         <input-number @finishChange='pushBack' v-model="editModule.fontSize" :min="6" :max="1000"></input-number>
       </div>
     </div>
      <div class='oper-item'>
@@ -15,7 +15,7 @@
          颜色
       </div>
       <div class='oper-input'>
-         <el-color-picker v-model="editModule.color" size="mini" show-alpha ></el-color-picker>
+         <el-color-picker @change='pushBack' v-model="editModule.color" size="mini" show-alpha ></el-color-picker>
       </div>
     </div>
     <div class='oper-item'>
@@ -62,7 +62,7 @@
           行间距  
         </div>
         <div class='oper-input'>
-          <input-number v-model="editModule.lineHeight" :min="1" :max="10" :step='0.1'></input-number>
+          <input-number @finishChange='pushBack' v-model="editModule.lineHeight" :min="1" :max="10" :step='0.1'></input-number>
         </div>
       </div>
       <div class='oper-item'>
@@ -70,7 +70,7 @@
           字间距  
         </div>
         <div class='oper-input'>
-          <input-number v-model="editModule.letterSpacing" :min="0" :max="100" :step='1'></input-number>
+          <input-number @finishChange='pushBack' v-model="editModule.letterSpacing" :min="0" :max="100" :step='1'></input-number>
         </div>
       </div>
        <div class='oper-item'>
@@ -78,7 +78,7 @@
           不透明度  
         </div>
         <div class='oper-input'>
-           <input-number v-model="editModule.opacity" :min="0" :max="1" :step="0.01"></input-number>
+           <input-number @finishChange='pushBack' v-model="editModule.opacity" :min="0" :max="1" :step="0.01"></input-number>
         </div>
       </div>
   </el-collapse-item>
@@ -88,9 +88,9 @@
          描边
       </div>
       <div class='oper-input'>
-         <el-color-picker v-model="editModule.strokeColor" size="mini" show-alpha ></el-color-picker>
+         <el-color-picker @change='pushBack' v-model="editModule.strokeColor" size="mini" show-alpha ></el-color-picker>
          <div class='strokeWidth'>
-           <input-number v-model="editModule.strokeWidth" :min="0" :max="50"></input-number>
+           <input-number @finishChange='pushBack' v-model="editModule.strokeWidth" :min="0" :max="50"></input-number>
          </div>
          
       </div>
@@ -105,16 +105,16 @@
         </div>
          <div class='text-shadow' v-for="(shadow,index) in editModule.textShadowList" :key="index">
            <div class='item'>
-             <el-color-picker v-model="shadow.color" size="mini" show-alpha ></el-color-picker>
+             <el-color-picker @change='pushBack' v-model="shadow.color" size="mini" show-alpha ></el-color-picker>
            </div>
            <div class='item'>
-              <input-number v-model="shadow.hShadow" :min="0" :max="50"></input-number>
+              <input-number @finishChange='pushBack' v-model="shadow.hShadow" :min="0" :max="50"></input-number>
            </div>
            <div class='item'>
-              <input-number v-model="shadow.vShadow" :min="0" :max="50"></input-number>
+              <input-number @finishChange='pushBack' v-model="shadow.vShadow" :min="0" :max="50"></input-number>
            </div>
            <div class='item'>
-              <input-number v-model="shadow.blur" :min="0" :max="50"></input-number>
+              <input-number @finishChange='pushBack' v-model="shadow.blur" :min="0" :max="50"></input-number>
            </div>
             <div class='item'>
               <i class='el-icon-delete delete-icon' @click='deleteTextShadow(index)'></i>
@@ -130,7 +130,7 @@
         旋转角度  
       </div>
       <div class='oper-input'>
-        <input-number  :min='0' :max='360' v-model="editModule.rotate"></input-number>
+        <input-number @finishChange='pushBack'  :min='0' :max='360' v-model="editModule.rotate"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -138,7 +138,7 @@
         左边距  
       </div>
       <div class='oper-input'>
-        <input-number  v-model="editModule.left"></input-number>
+        <input-number @finishChange='pushBack'  v-model="editModule.left"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -146,7 +146,7 @@
         上边距  
       </div>
       <div class='oper-input'>
-        <input-number  v-model="editModule.top"></input-number>
+        <input-number @finishChange='pushBack'  v-model="editModule.top"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -154,7 +154,7 @@
         宽  
       </div>
       <div class='oper-input'>
-        <input-number  v-model="editModule.width"></input-number>
+        <input-number @finishChange='pushBack'  v-model="editModule.width"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -162,7 +162,7 @@
         高 
       </div>
       <div class='oper-input'>
-         <input-number  v-model="editModule.height"></input-number>
+         <input-number @finishChange='pushBack'  v-model="editModule.height"></input-number>
       </div>
     </div>
   </el-collapse-item>
@@ -175,9 +175,11 @@
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
 import _ from 'lodash'
+import operation from '../operation/common/operation'
 export default defineComponent({
   setup () {
     const store = useStore()
+    const { pushBack } = operation()
     let activeNames = ref(['1'])
     const editModule:any= computed(()=>{
       return store.state.editModule
@@ -202,7 +204,7 @@ export default defineComponent({
     const deleteTextShadow = (index:number) => {
       editModule.value.textShadowList.splice(index,1)
     }
-    return {activeNames,editModule,changeDecoration,addTextShadow,deleteTextShadow}
+    return {activeNames,editModule,changeDecoration,addTextShadow,deleteTextShadow,pushBack}
   }
 })
 </script>

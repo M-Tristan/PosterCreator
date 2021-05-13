@@ -1,6 +1,6 @@
 <template>
     <div class='main'>
-        <div class='edit-head'></div>
+        <edit-head></edit-head>
         <div class='module-area'>
             <module></module>
         </div>
@@ -44,6 +44,7 @@ import CodeEdit from './edit/codeEdit.vue'
 import ShapeEdit from './edit/shapeEdit.vue'
 import ChartEdit from './edit/chartEdit.vue'
 import navigate from './edit/navigate.vue'
+import editHead from './edit/editHead.vue'
 export default defineComponent({
     setup () {
       const batchPosition = reactive({
@@ -98,17 +99,38 @@ export default defineComponent({
         const editModule:any= computed(()=>{
           return store.state.editModule
         })
-        store.commit('initBack');
+        
         onMounted(async()=>{
           let canvas = {
             width:800,
             height:800,
           }
           store.commit('addCanvas', canvas);
+          store.commit('initBack');
         })
         const selectModel = () =>{
           store.commit('setEditModuleToBack')
         }
+        const scale = computed(() => {
+            return store.state.scale
+          })
+          let canvas = computed(()=>{
+            return store.state.postInfo.canvas
+          })
+          let editSize = computed(()=>{
+            return  store.state.editSize
+          })
+        let editPosition = computed(()=>{
+          let left = 0
+          let top = 0
+          if(canvas.value.width*scale.value/100 < editSize.value.width){
+            left = (editSize.value.width - canvas.value.width*scale.value/100)/2
+          }
+          if(canvas.value.height*scale.value/100 < editSize.value.height){
+            top = (editSize.value.height - canvas.value.height*scale.value/100)/2
+          }
+          return {left,top}
+        })
         const batchStart = () => {
           store.commit('setEditModuleToBack')
           const event:MouseEvent  = <MouseEvent>window.event
@@ -138,11 +160,14 @@ export default defineComponent({
              
           }
           window.onmouseup = () => {
+            let rate = 100/scale.value
             window.onmousemove = null
             window.onmouseup = null
             showBatchMask.value = false
-            batchPosition.left -=100
-            batchPosition.top -=10
+            batchPosition.left =-( editPosition.value.left-batchPosition.left)*rate
+            batchPosition.top = -(editPosition.value.top-batchPosition.top)*rate
+             batchPosition.width*=rate
+             batchPosition.height*=rate
             store.commit('batchSelect',batchPosition)
           }
         }
@@ -163,7 +188,8 @@ export default defineComponent({
         CodeEdit,
         ShapeEdit,
         ChartEdit,
-        navigate
+        navigate,
+        editHead
     }
 })
 </script>
@@ -178,12 +204,7 @@ export default defineComponent({
     transform: translateX(-50%) ;
     overflow: hidden;
 }
-.edit-head{
-   width: 100%;
-   height: 50px;
-   background-color: blue;
-    
-}
+
 .module-area{
     position: absolute;
     top: 50px;

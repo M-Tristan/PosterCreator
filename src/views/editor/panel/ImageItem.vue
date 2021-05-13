@@ -1,5 +1,9 @@
 <template>
-   <div  class='editContent' @mousedown.stop draggable="false" :style="{
+  <div class='image-content' :style="{
+     width: canvas.width*scale+'px'
+    ,height:canvas.height*scale+'px'
+  }">
+    <div  class='editContent' @mousedown.stop draggable="false" :style="{
                                   transform:`scale(${scale},${scale}) `,
                                   backgroundColor:`#fff`,
                                   backgroundSize: `16px 16px`,
@@ -9,13 +13,15 @@
                                   ,height:canvas.height+'px'
                                   }">
         <background :background='background'></background>
-        <d-shape v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
-        <d-chart  v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
-        <d-image v-for="(image,index) in images" :key="index" :image="image"></d-image>
-        <d-text  v-for="(text,index) in texts" :key="index" :text="text"></d-text>
-        <d-code  v-for="(code,index) in codes" :key="index" :code="code"></d-code>
+        <d-shape pattern='show' v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
+        <d-chart pattern='show' v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
+        <d-image pattern='show' v-for="(image,index) in images" :key="index" :image="image"></d-image>
+        <d-text pattern='show' v-for="(text,index) in texts" :key="index" :text="text"></d-text>
+        <d-code pattern='show' v-for="(code,index) in codes" :key="index" :code="code"></d-code>
        
     </div>
+  </div>
+   
 </template>
 
 <script lang="ts">
@@ -93,19 +99,24 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.image-content{
+  display: inline-block;
+  position: relative;
+  float: left;
+  pointer-events: none;
+}
   .editContent{
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.308);
+    
      -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     position:relative;
     transform-origin: left top;
-    margin-bottom: 30px;
     overflow: hidden;
+    float: left;
+    display: inline-block;
     .background{
-      width: 100%;
-      height: 100%;
       position: relative;
       img{
         position:absolute;

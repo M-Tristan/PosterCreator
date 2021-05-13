@@ -72,10 +72,12 @@ import PositionUtil from '@/lib/PositionUtil'
 import MathUtil from '@/lib/MathUtil'
 import clipperRegulator from './clipperRegulator.vue'
 import _ from 'lodash'
+import operation from './common/operation'
 export default defineComponent({
   setup() {
     let showBack = ref(false)
     const store = useStore()
+    const { pushBack } = operation()
     const editModule: any = reactive(_.cloneDeep(store.state.editModule))
     const showImage = reactive({ ...editModule })
     let crop = PositionUtil.getClipInfo(editModule.width,editModule.height,editModule.crop)
@@ -138,6 +140,7 @@ export default defineComponent({
         imageEdit.height = showImage.height
         let clipOper = store.state.clipOper
         store.commit('setClipOper', !clipOper);
+        pushBack()
       }
     }
  

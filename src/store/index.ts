@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import {background, canvas, chart, code, image,itemBase,operItem,shape,text} from '../interface/module'
 import { v4 as uuids4 } from 'uuid';
 import PositionUtil from '@/lib/PositionUtil';
+import _ from 'lodash'
 export default createStore({
   state: {
     postInfo:{
@@ -14,6 +15,9 @@ export default createStore({
       background:<background>new Object(),
       canvas:<canvas>new Object()
     },
+    postList:new Array<any>(),
+    backList:new Array<any>(),
+    nextList:new Array<any>(),
     editModule:<itemBase>new Object(),//当前编辑模块
     clipOper:false,
     group:undefined as any,
@@ -21,6 +25,33 @@ export default createStore({
     scale:100
   },
   mutations: {
+    next(state){
+      let postState = state.nextList.pop()
+      state.backList.push(postState)
+      state.postInfo = _.cloneDeep(postState.postInfo)
+      state.postList = _.cloneDeep(postState.postList)
+    },
+    back(state){
+      let postState = state.backList.pop()
+      state.nextList.push(postState)
+      state.postInfo = _.cloneDeep(state.backList[state.backList.length-1].postInfo)
+      state.postList = _.cloneDeep(state.backList[state.backList.length-1].postList)
+    },
+    pushBack(state){
+      state.backList.push({
+        postInfo:_.cloneDeep(state.postInfo),
+        postList:_.cloneDeep(state.postList)
+      })
+      state.nextList = []
+    },
+
+    deletePostByIndex(state,index){
+      state.postList.splice(index,1)
+      state.postInfo = state.postList[0]
+    },
+    selectPostByIndex(state,index){
+      state.postInfo = state.postList[index]
+    },
     setScale(state,scale){
       state.scale = scale
     },
@@ -63,7 +94,20 @@ export default createStore({
       state.postInfo.background = back
     },
     addCanvas(state,canvas:canvas){
-      state.postInfo.canvas = canvas
+      let postInfo = {
+        images:new Array<image>(),
+        texts:new Array<text>(),
+        codes:new Array<code>(),
+        charts:new Array<chart>(),
+        layers:new Array<operItem>(),
+        shapes:new Array<shape>(),
+        background:<background>new Object(),
+        canvas:<canvas>new Object()
+      }
+      postInfo.canvas = canvas
+      state.postList.push(postInfo)
+      
+      state.postInfo = postInfo
     },
     setEditModule(state,moduleId:string){
       state.editModule = <operItem>state.postInfo.layers.find(item=>item.id == moduleId )

@@ -16,8 +16,8 @@
          颜色
       </div>
       <div class='oper-input'>
-         <el-color-picker color-format='hex' v-model="editModule.colorLight" size="mini" :show-alpha='false' ></el-color-picker>
-         <el-color-picker color-format='hex' v-if="!editModule.backImage" v-model="editModule.colorDark" size="mini" :show-alpha='false' ></el-color-picker>
+         <el-color-picker @change='pushBack' color-format='hex' v-model="editModule.colorLight" size="mini" :show-alpha='false' ></el-color-picker>
+         <el-color-picker @change='pushBack' color-format='hex' v-if="!editModule.backImage" v-model="editModule.colorDark" size="mini" :show-alpha='false' ></el-color-picker>
       </div>
     </div>
   </el-collapse-item>
@@ -27,7 +27,7 @@
         旋转角度  
       </div>
       <div class='oper-input'>
-        <input-number  :min='0' :max='360' v-model="editModule.rotate"></input-number>
+        <input-number @finishChange='pushBack'  :min='0' :max='360' v-model="editModule.rotate"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -35,7 +35,7 @@
         左边距  
       </div>
       <div class='oper-input'>
-        <input-number  v-model="editModule.left"></input-number>
+        <input-number @finishChange='pushBack'  v-model="editModule.left"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -43,7 +43,7 @@
         上边距  
       </div>
       <div class='oper-input'>
-        <input-number  v-model="editModule.top"></input-number>
+        <input-number @finishChange='pushBack'  v-model="editModule.top"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -51,7 +51,7 @@
         宽  
       </div>
       <div class='oper-input'>
-        <input-number  v-model="editModule.width"></input-number>
+        <input-number @finishChange='pushBack'  v-model="editModule.width"></input-number>
       </div>
     </div>
     <div class='oper-item'>
@@ -59,7 +59,7 @@
         高 
       </div>
       <div class='oper-input'>
-         <input-number  v-model="editModule.width"></input-number>
+         <input-number @finishChange='pushBack'  v-model="editModule.width"></input-number>
       </div>
     </div>
   </el-collapse-item>
@@ -84,10 +84,12 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
+import operation from '../operation/common/operation'
 
 export default defineComponent({
   setup () {
     const store = useStore()
+     const { pushBack } = operation()
     let activeNames = ref(['1'])
     const editModule:any= computed(()=>{
       return store.state.editModule
@@ -104,7 +106,7 @@ export default defineComponent({
     }
    
 
-    return {editModule,dialogVisible,editCodeContent,showContent,changeCodeContent,activeNames}
+    return {editModule,dialogVisible,editCodeContent,showContent,changeCodeContent,activeNames,pushBack}
   }
 })
 </script>

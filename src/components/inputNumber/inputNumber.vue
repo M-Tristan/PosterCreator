@@ -64,6 +64,7 @@ export default defineComponent({
     }
     const closeInter = () => {
       clearInterval(t)
+       emit('finishChange')
     }
     const handleChange = ( ) => {
        let inputValue = input.value.value

@@ -7,7 +7,7 @@
             旋转角度  
           </div>
           <div class='oper-input'>
-            <input-number  :min='0' :max='360' v-model="editModule.rotate"></input-number>
+            <input-number @finishChange='pushBack'  :min='0' :max='360' v-model="editModule.rotate"></input-number>
           </div>
         </div>
         <div class='oper-item'>
@@ -15,7 +15,7 @@
             左边距  
           </div>
           <div class='oper-input'>
-            <input-number  v-model="editModule.left"></input-number>
+            <input-number @finishChange='pushBack'  v-model="editModule.left"></input-number>
           </div>
         </div>
         <div class='oper-item'>
@@ -23,7 +23,7 @@
             上边距  
           </div>
           <div class='oper-input'>
-            <input-number  v-model="editModule.top"></input-number>
+            <input-number @finishChange='pushBack'  v-model="editModule.top"></input-number>
           </div>
         </div>
         <div class='oper-item'>
@@ -31,7 +31,7 @@
             宽  
           </div>
           <div class='oper-input'>
-            <input-number  v-model="editModule.width"></input-number>
+            <input-number @finishChange='pushBack'  v-model="editModule.width"></input-number>
           </div>
         </div>
         <div class='oper-item'>
@@ -39,7 +39,7 @@
             高 
           </div>
           <div class='oper-input'>
-            <input-number  v-model="editModule.height"></input-number>
+            <input-number @finishChange='pushBack'  v-model="editModule.height"></input-number>
           </div>
         </div>
       </el-collapse-item>
@@ -50,17 +50,18 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
+import operation from '../operation/common/operation'
 
 export default defineComponent({
   setup () {
     const store = useStore()
+    const { pushBack } = operation()
     const editModule:any= computed(()=>{
       return store.state.editModule
     })
      let activeNames = ref(['1'])
-    return {editModule,activeNames}
+    return {editModule,activeNames,pushBack}
 
-    return {}
   }
 })
 </script>

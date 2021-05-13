@@ -1,5 +1,5 @@
 <template>
-  <div class='text-content'  @click='selectModel'   @mousedown="moduleMove(module)" :style="{  width: module.width + 'px'
+  <div class='text-content'  @click='selectModel'   @mousedown="moveEvent" :style="{  width: module.width + 'px'
                                         , height:`${fontScale!=1?module.height*fontScale+'px':'auto'}`
                                         ,left:module.left+'px'
                                         ,top:module.top+'px',
@@ -7,10 +7,11 @@
                                          ,zIndex:module.zindex,
                                          textAlign:`${module.textAlign}`
                                    }" >
-    <div class='content' :contenteditable='true' @input="changeHeight" ref='contentInput' :style="{
+    <div class='content' :contenteditable='contenteditable' @input="contentChange" @dblclick="dbClickEvent" @blur="contenteditable=false" ref='contentInput' :style="{
       fontSize:`${module.fontSize}px`,
       transform: `scale(${fontScale})`,
       color:`${pattern == 'show'?module.color:'rgba(0,0,0,0)'}`,
+      caretColor: module.color,
       width: `${module.width/fontScale}px`,
       fontWeight:`${module.bold?900:400}`,
       textDecoration:`${module.textDecoration}`,
@@ -19,7 +20,7 @@
       letterSpacing:`${module.letterSpacing}px`,
       opacity:module.opacity,
       textShadow:textShadow,
-      textStroke:`${module.strokeWidth}px ${module.strokeColor}`
+      textStroke:`${pattern == 'edit'?0: module.strokeWidth}px ${module.strokeColor}`
     }">
       {{module.text}}
     </div>
@@ -52,6 +53,7 @@ export default defineComponent({
   },
   setup (props,ctx) {
      const store = useStore()
+     const contenteditable = ref(false)
     const editModule:any= computed(()=>{
       return store.state.editModule
     })
@@ -85,7 +87,7 @@ export default defineComponent({
     const textShadow = computed(()=>{
       let textShadowList = module.value.textShadowList
     
-      if(textShadowList.length == 0){
+      if(textShadowList.length == 0 || props.pattern == 'edit' ){
         return 'none'
       }
       let result = ''
@@ -99,6 +101,26 @@ export default defineComponent({
       })
       return result
     })
+    const contentChange = () => {
+        module.value.html=contentInput.value.innerHTML
+        module.value.text = contentInput.value.innerText
+        changeHeight()
+    }
+    const  dbClickEvent = () => {
+      contenteditable.value = true
+      contentInput.value.focus()
+      nextTick(()=>{
+        contentInput.value.focus()
+        document.execCommand('selectAll')
+      })
+ 
+    }
+    const moveEvent = () => {
+      if(contenteditable.value){
+        return
+      }
+      moduleMove(module.value)
+    }
     watch([fontSize,lineHeight,letterSpacing], (nv, ov) => {
      nextTick(()=>{changeHeight()})
     })
@@ -111,7 +133,11 @@ export default defineComponent({
       changeHeight,
       contentInput,
       fontScale,
-      textShadow
+      textShadow,
+      contentChange,
+      contenteditable,
+      dbClickEvent,
+      moveEvent
     }
   }
 })

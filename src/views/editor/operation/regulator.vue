@@ -55,6 +55,7 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent } from 'vue'
+import operation from './common/operation'
 export default defineComponent({
     props:{
         module:{
@@ -64,6 +65,7 @@ export default defineComponent({
     },
     setup (props,{emit}) {
        const store = useStore()
+       const { pushBack } = operation()
         const moveScale = computed(() => {
           return 100/store.state.scale
         })
@@ -169,8 +171,11 @@ export default defineComponent({
             let oldR = Math.sqrt(Math.pow(width,2)+Math.pow(height,2))
             let orgFontSize = module.value.fontSize
             let letterSpacing =  module.value.letterSpacing
+            let shouldPushBack = false
+          
             if(direction == 'right-down'){
                     window.onmousemove = (event:MouseEvent)=>{
+                        shouldPushBack = true
                         let X = event.clientX
                         let Y = event.clientY
                         let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
@@ -190,6 +195,7 @@ export default defineComponent({
                      }
             }else if(direction == 'right-middle'){
                     window.onmousemove = (event:MouseEvent)=>{
+                        shouldPushBack = true
                         let X = event.clientX
                         let Y = event.clientY
                         let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
@@ -206,6 +212,7 @@ export default defineComponent({
             }else if(direction == 'right-top'){
               
                     window.onmousemove = (event:MouseEvent)=>{
+                        shouldPushBack = true
                         let X = event.clientX
                         let Y = event.clientY
                         let newWidth = width+(X-oriX)*moveScale.value*cos +(Y-oriY)*moveScale.value*sin
@@ -222,6 +229,7 @@ export default defineComponent({
                      }
             }else if(direction == 'middle-down'){
                     window.onmousemove = (event:MouseEvent)=>{
+                        shouldPushBack = true
                         let Y = event.clientY
                         let X = event.clientX
                         let newHeight = height-(X-oriX)*moveScale.value*sin +(Y-oriY)*moveScale.value*cos
@@ -231,6 +239,7 @@ export default defineComponent({
                      }
             }else if(direction == 'middle-top'){
                     window.onmousemove = (event:MouseEvent)=>{      
+                        shouldPushBack = true
                         let Y = event.clientY
                         let X = event.clientX
                         let newHeight = height+(X-oriX)*moveScale.value*sin -(Y-oriY)*moveScale.value*cos
@@ -240,6 +249,7 @@ export default defineComponent({
                      }
             }else if(direction == 'left-top'){
                     window.onmousemove = (event:MouseEvent)=>{
+                        shouldPushBack = true
                         let X = event.clientX
                         let Y = event.clientY
                         let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
@@ -256,7 +266,7 @@ export default defineComponent({
                      }
             }else if(direction == 'left-middle'){
                     window.onmousemove = (event:MouseEvent)=>{
-                       
+                        shouldPushBack = true
                         let X = event.clientX
                         let Y = event.clientY
                         let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
@@ -272,6 +282,7 @@ export default defineComponent({
                      }
             }else if(direction == 'left-down'){
                     window.onmousemove = (event:MouseEvent)=>{
+                        shouldPushBack = true
                         let X = event.clientX
                         let Y = event.clientY
                         let newWidth = width-(X-oriX)*moveScale.value*cos -(Y-oriY)*moveScale.value*sin
@@ -292,6 +303,10 @@ export default defineComponent({
             window.onmouseup = ()=>{
                 window.onmousemove = null
                  window.onmouseup=null
+                 if(shouldPushBack){
+                   pushBack()
+                 }
+                 
                    module.value.left = Math.round(module.value.left)
                    module.value.height = Math.round(module.value.height)
                    module.value.width = Math.round(module.value.width)
@@ -334,9 +349,9 @@ export default defineComponent({
   border: 1px solid rgb(0, 140, 255);
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width:100%;
+  height:100%;
   position:absolute;
-  z-index: 999;
+  z-index: -1;
 }
 </style>

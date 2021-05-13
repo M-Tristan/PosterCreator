@@ -11,6 +11,7 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent } from 'vue'
+import operation from './common/operation'
 
 export default defineComponent({
     props:{
@@ -21,6 +22,7 @@ export default defineComponent({
     },
     setup (props) {
         const store = useStore()
+         const { pushBack } = operation()
         const moveScale = computed(() => {
           return 100/store.state.scale
         })
@@ -39,7 +41,9 @@ export default defineComponent({
             let oriY = event.clientY
             let orileft = rotatePositonX.value
             let oritop = rotatePositonY.value
+              let shouldPushBack = false
             window.onmousemove = (event:MouseEvent)=>{
+              shouldPushBack = true
                 let X = event.clientX
                 let Y = event.clientY
                 let width =  (X-oriX)*moveScale.value-orileft 
@@ -59,7 +63,9 @@ export default defineComponent({
            window.onmouseup = (event:MouseEvent)=>{
                 window.onmousemove = null
                 window.onmouseup=null
-                
+                if(shouldPushBack){
+                   pushBack()
+                 }
                 
             }
        }

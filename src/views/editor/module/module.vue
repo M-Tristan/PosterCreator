@@ -16,17 +16,23 @@
             <i class='el-icon-star-off modelu-icon'></i>
             <span class='module-name'>素材</span>
         </div>
+        <div :class='["module-item" ,{"active":moduleId==5}]' @click="moduleId=5">
+           <i class='iconfont icon-background modelu-icon'></i>
+           <span class='module-name'>背景</span>
+       </div>
+         <div :class='["module-item" ,{"active":moduleId==5}]' @click="moduleId=6">
+            <i class='el-icon-film modelu-icon'></i>
+            <span class='module-name'>导航器</span>
+        </div>
         <div class='module-material'>
             <background-list v-if="moduleId==5"></background-list>
             <image-list v-if="moduleId==2"></image-list>
             <text-list v-if="moduleId==1"></text-list>
             <qr-code-list v-if="moduleId==3"></qr-code-list>
             <material-list v-if="moduleId==4"></material-list>
+            <canvas-list v-if="moduleId==6"></canvas-list>
         </div>
-         <div :class='["module-item" ,{"active":moduleId==5}]' @click="moduleId=5">
-           <i class='iconfont icon-background modelu-icon'></i>
-           <span class='module-name'>背景</span>
-       </div>
+         
     </div>
 </template>
 
@@ -37,13 +43,15 @@ import imageList from './imageList.vue'
 import QrCodeList from './qrCodeList.vue'
 import textList from './textList.vue'
 import materialList from './materialList.vue'
+import canvasList from './canvasList.vue'
 export default defineComponent({
     components:{
         backgroundList,
         imageList,
         textList,
         QrCodeList,
-        materialList
+        materialList,
+        canvasList
     },  
     setup () {
         let moduleId = ref(1)
