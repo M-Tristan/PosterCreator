@@ -103,6 +103,7 @@ export default defineComponent({
     const changeCodeContent = () => {
       editModule.value.text = showContent.value
       dialogVisible.value = false
+      pushBack()
     }
    
 

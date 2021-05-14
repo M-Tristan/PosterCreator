@@ -173,7 +173,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex'
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import _ from 'lodash'
 import operation from '../operation/common/operation'
 export default defineComponent({
@@ -190,9 +190,24 @@ export default defineComponent({
         editModule.value.textDecoration = 'none'
       }else{
          editModule.value.textDecoration = type
-      }
-      
+      }  
     }
+    watch(()=>editModule.value.textDecoration,()=>{
+      pushBack()
+    })
+    watch(()=>editModule.value.textAlign,()=>{
+      pushBack()
+    })
+    watch(()=>editModule.value.textAlign,()=>{
+      pushBack()
+    })
+    watch(()=>editModule.value.bold,()=>{
+      pushBack()
+    })
+    watch(()=>editModule.value.italic,()=>{
+      pushBack()
+    })
+
     const addTextShadow = () => {
       editModule.value.textShadowList.push({
          hShadow:10,

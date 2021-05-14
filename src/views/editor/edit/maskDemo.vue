@@ -7,6 +7,7 @@
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent, onMounted, ref } from 'vue'
+import operation from '../operation/common/operation'
 
 export default defineComponent({
   props:{
@@ -17,6 +18,7 @@ export default defineComponent({
   },
   setup (props) {
     const store = useStore()
+    const { pushBack } = operation()
     const canvasDom = ref(null as unknown as HTMLCanvasElement)
     const editModule:any= computed(()=>{
       return store.state.editModule
@@ -41,7 +43,7 @@ export default defineComponent({
         type:'normal',
         src:props.src
       }
-      console.log(store.state.editModule)
+      pushBack()
     }
     return {canvasDom,selectMask}
   }

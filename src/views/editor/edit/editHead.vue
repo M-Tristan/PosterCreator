@@ -1,7 +1,7 @@
 <template>
   <div class='edit-head'>
     <div class='logo'>
-      logo
+      LOGO
     </div>
     <div class='history-area '>
       <div class='reverse'><i :class='["icon","iconfont","icon-chexiaoyou","icon-history",{disabled:backList.length<1}]' @click='back'></i></div>
