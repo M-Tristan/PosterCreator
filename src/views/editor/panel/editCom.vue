@@ -10,8 +10,13 @@
         <d-shape :pattern='pattern'   v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
         <d-chart :pattern='pattern'  v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
         <d-image :pattern='pattern' v-for="(image,index) in images" :key="index" :image="image"></d-image>
-        <d-text  :pattern='pattern' v-for="(text,index) in texts" :key="index" :text="text"></d-text>
+        <template v-for="(text,index) in texts">
+           <d-text  :pattern='pattern'  :key="index" :text="text" v-if="!text.deformation"></d-text>
+           <d-text-deformation  :pattern='pattern' :key="index" :text="text" v-if="text.deformation"></d-text-deformation>
+        </template>
+       
         <d-code  :pattern='pattern' v-for="(code,index) in codes" :key="index" :code="code"></d-code>
+        
         <d-group v-if="group&&pattern=='edit'" :group="group"></d-group>
         <clipper  v-if="clipOper&&pattern=='edit'"></clipper>
     </div>
@@ -28,6 +33,7 @@ import Background from '../operation/background.vue'
 import DChart from '../operation/dChart.vue'
 import DShape from '../operation/dShape.vue'
 import DGroup from '../operation/dGroup.vue'
+import DTextDeformation from '../operation/dTextDeformation.vue'
 export default defineComponent({
   components:{
     dImage,
@@ -37,7 +43,8 @@ export default defineComponent({
     Background,
     DChart,
     DShape,
-    DGroup
+    DGroup,
+    DTextDeformation
   },
   props:{
     pattern:{

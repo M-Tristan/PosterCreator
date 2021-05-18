@@ -124,7 +124,10 @@
       
     </div>
   </el-collapse-item>
-<el-collapse-item title="位置" name="3">
+  <el-collapse-item title="变形" name="3">
+    <el-button @click='addDeformation("circle")'>圆</el-button>
+  </el-collapse-item>
+<el-collapse-item title="位置" name="4">
     <div class='oper-item'>
       <div class='oper-name'>
         旋转角度  
@@ -209,17 +212,33 @@ export default defineComponent({
     })
 
     const addTextShadow = () => {
-      editModule.value.textShadowList.push({
-         hShadow:10,
-        vShadow:10,
-        blur:0,
-        color:'rgba(0, 0, 0, 1)'
-      })
+      if( editModule.value.textShadowList.length == 0){
+         editModule.value.textShadowList.push({
+          hShadow:1,
+          vShadow:1,
+          blur:0,
+          color:'rgba(0, 0, 0, 1)'
+        })
+      }else{
+        let lastShadow =  editModule.value.textShadowList[ editModule.value.textShadowList.length-1]
+        editModule.value.textShadowList.push({
+          hShadow:lastShadow.hShadow+1,
+          vShadow:lastShadow.vShadow+1,
+          blur:0,
+          color:'rgba(0, 0, 0, 1)'
+        })
+      }
+     
     }
     const deleteTextShadow = (index:number) => {
       editModule.value.textShadowList.splice(index,1)
     }
-    return {activeNames,editModule,changeDecoration,addTextShadow,deleteTextShadow,pushBack}
+    const addDeformation = (shape:string) => {
+      editModule.value.deformation = {
+        type:shape
+      }
+    }
+    return {activeNames,editModule,changeDecoration,addTextShadow,deleteTextShadow,pushBack,addDeformation}
   }
 })
 </script>

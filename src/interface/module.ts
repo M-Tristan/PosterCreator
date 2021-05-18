@@ -69,7 +69,9 @@ export interface shape extends operItem{
   sectorAngle?:number,
   petals?:number
 }
-
+interface deformation{
+  type:string
+}
 export interface text extends operItem{
   text:string,
   html:string,
@@ -84,7 +86,8 @@ export interface text extends operItem{
   opacity:number,
   textShadowList?:Array<textShadow>,
   strokeWidth:number,
-  strokeColor:string
+  strokeColor:string,
+  deformation?:deformation
 }
 
 export interface code extends operItem{
