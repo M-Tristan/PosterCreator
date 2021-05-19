@@ -120,7 +120,7 @@ export default defineComponent({
       let ctx=<CanvasRenderingContext2D>canvas.getContext("2d");
       ctx.clearRect(0,0,500,500);
       ctx.beginPath();
-      ctx.moveTo(250,250);
+      ctx.moveTo(249,249);
       points.forEach((item,index)=>{
         let lastItem = item.lastCurPoint
         let nextItem = item.nextCurPoint

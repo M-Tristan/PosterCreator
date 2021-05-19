@@ -126,6 +126,9 @@
   </el-collapse-item>
   <el-collapse-item title="变形" name="3">
     <el-button @click='addDeformation("circle")'>圆</el-button>
+    <el-button @click='addDeformation("heart")'>心</el-button>
+    <input-number @finishChange='pushBack' v-model="editModule.lengthRate" :min="10" :max="100"></input-number>
+    
   </el-collapse-item>
 <el-collapse-item title="位置" name="4">
     <div class='oper-item'>
@@ -179,6 +182,7 @@ import { useStore } from 'vuex'
 import { computed, defineComponent, ref, watch } from 'vue'
 import _ from 'lodash'
 import operation from '../operation/common/operation'
+import ModuleUtil from '@/lib/ModuleUtil'
 export default defineComponent({
   setup () {
     const store = useStore()
@@ -234,9 +238,8 @@ export default defineComponent({
       editModule.value.textShadowList.splice(index,1)
     }
     const addDeformation = (shape:string) => {
-      editModule.value.deformation = {
-        type:shape
-      }
+      ModuleUtil.textToEffectText(editModule.value.id,shape)
+    
     }
     return {activeNames,editModule,changeDecoration,addTextShadow,deleteTextShadow,pushBack,addDeformation}
   }

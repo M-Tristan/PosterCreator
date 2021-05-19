@@ -3,7 +3,8 @@
    @mousedown.stop='rotate'
    draggable="false"
    :style="{
-       transform: `translateX(-50%) scale(${moveScale})`
+       transform: `translateX(-50%) scale(${moveScale})`,
+        bottom: `${-80*moveScale}px`
      }"
    ></i>
 </template>
@@ -30,10 +31,10 @@ export default defineComponent({
             return props.module
         })
         let  rotatePositonX = computed(()=>{
-            return  Math.sin(module.value.rotate * (Math.PI / 180)) *  (module.value.height/2+40)
+            return  Math.sin(module.value.rotate * (Math.PI / 180)) *  (module.value.height/2+moveScale.value*2)
         })
         let rotatePositonY = computed(()=>{
-            return  - Math.cos(module.value.rotate * (Math.PI / 180)) * (module.value.height/2+40)
+            return  - Math.cos(module.value.rotate * (Math.PI / 180)) * (module.value.height/2+moveScale.value*2)
         })
        
         const  rotate  = (event:MouseEvent) => {
@@ -80,7 +81,7 @@ export default defineComponent({
   color: rgb(0, 0, 0);
   background-color: white;
   position: absolute;
-  bottom: -80px;
+ 
   left: 50%;
   border-radius: 50%;
 

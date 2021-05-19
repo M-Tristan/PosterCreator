@@ -6,6 +6,7 @@ interface codeBaseInfo{
 }
 import { v4 as uuidv4 } from 'uuid';
 import store from './../store/index';
+
 class ModuleUtil{
     constructor(){
 
@@ -65,6 +66,7 @@ class ModuleUtil{
               left:10,
               rotate:0,
               fontSize:20,
+              fontFamily:'SourceHanSansCN-Regular',
               color:'rgba(0,0,0,1)',
               text:text,
               html:text,
@@ -93,6 +95,40 @@ class ModuleUtil{
               ...code
           })
       })
+    }
+    static textToEffectText(id:string,shape:string){
+      let text:any 
+      let texts = store.state.postInfo.texts
+      let index = 0
+      while(index < texts.length){
+        if(texts[index].id == id){
+          text = texts[index]
+          break
+        }
+      }
+      texts.splice(index,1)
+      let ctx = document.createElement("canvas").getContext("2d") as CanvasRenderingContext2D
+      ctx.font=`${text.fontSize}px ${text.fontFamily}`;
+      let c = ctx.measureText(text.text).width
+     
+      switch(shape){
+        case 'circle':
+          let r = c/2/Math.PI
+          text.width = 2*r+2*text.fontSize
+          text.height = 2*r+2*text.fontSize
+          break;
+        case 'heart':
+          let rate = c/350
+          text.width = 200*rate+3*text.fontSize
+          text.height = 160*rate+3*text.fontSize
+          break;
+
+      }
+      
+      text.lengthRate = 100
+      text.shape = shape
+      delete text['html']
+      store.commit('addEffectText', text);
     }
     static  getBackImageInfo(url:string){
       return new Promise((resolve,reject)=>{

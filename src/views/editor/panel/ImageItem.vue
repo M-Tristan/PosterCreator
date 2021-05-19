@@ -18,7 +18,7 @@
         <d-image pattern='show' v-for="(image,index) in images" :key="index" :image="image"></d-image>
         <d-text pattern='show' v-for="(text,index) in texts" :key="index" :text="text"></d-text>
         <d-code pattern='show' v-for="(code,index) in codes" :key="index" :code="code"></d-code>
-       
+        <d-effect-text pattern='show'  v-for="(effectText,index) in effectTexts"  :key="index" :effectText="effectText"></d-effect-text>
     </div>
   </div>
    
@@ -34,6 +34,7 @@ import DCode from '../operation/dCode.vue'
 import Background from '../operation/background.vue'
 import DChart from '../operation/dChart.vue'
 import DShape from '../operation/dShape.vue'
+import dEffectText from '../operation/dEffectText.vue'
 export default defineComponent({
   components:{
     dImage,
@@ -42,7 +43,8 @@ export default defineComponent({
     DCode,
     Background,
     DChart,
-    DShape
+    DShape,
+    dEffectText
   },
   props:{
     postInfo:{
@@ -81,7 +83,9 @@ export default defineComponent({
     let canvas = computed(()=>{
       return props.postInfo.canvas
     })
-    
+    let effectTexts = computed(()=>{
+      return store.state.postInfo.effectTexts
+    })
   
     return {
       images:images,
@@ -92,7 +96,8 @@ export default defineComponent({
       background:background,
       clipOper,
       canvas,
-      scale
+      scale,
+      effectTexts
     }
   }
 })

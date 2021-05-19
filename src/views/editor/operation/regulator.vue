@@ -185,7 +185,7 @@ export default defineComponent({
                         module.value.height = module.value.width/rate
                         module.value.left = module.value.left - (module.value.height-height)*sin/2
                         module.value.top =  module.value.top - (module.value.height-height)*(1-cos)/2 
-                        if(module.value.type == 'text'){
+                        if(module.value.type == 'text' || module.value.type == 'effectText'){
 
                           module.value.fontSize = orgFontSize * module.value.height/height
                            module.value.letterSpacing = letterSpacing * module.value.height/height
@@ -205,7 +205,7 @@ export default defineComponent({
                         }
                         module.value.left = oriLeft - (module.value.width-width)*(1-cos)/2
                         module.value.top = oriTop + (module.value.width-width)*sin/2
-                         if(module.value.type == 'text'){
+                         if(module.value.type == 'text'|| module.value.type == 'effectText'){
                            emit('changeHeight')
                         }
                      }
@@ -222,7 +222,7 @@ export default defineComponent({
                         module.value.height = module.value.width/rate
                         module.value.left = module.value.left + (module.value.height-height)*sin/2
                         module.value.top = module.value.top - (module.value.height-height)*(1+cos)/2 
-                        if(module.value.type == 'text'){
+                        if(module.value.type == 'text'|| module.value.type == 'effectText'){
                           module.value.fontSize = orgFontSize * module.value.height/height
                            module.value.letterSpacing = letterSpacing * module.value.height/height
                         }
@@ -259,7 +259,7 @@ export default defineComponent({
                         module.value.height = module.value.width/rate
                         module.value.left = module.value.left + (module.value.height-height)*sin/2
                         module.value.top = module.value.top - (module.value.height-height)*(1+cos)/2 
-                        if(module.value.type == 'text'){
+                        if(module.value.type == 'text'|| module.value.type == 'effectText'){
                           module.value.fontSize = orgFontSize * module.value.height/height
                            module.value.letterSpacing = letterSpacing * module.value.height/height
                         }
@@ -276,7 +276,7 @@ export default defineComponent({
                         }
                         module.value.left = oriLeft - (module.value.width-width)*(cos+1)/2
                         module.value.top = oriTop - (module.value.width-width)*sin/2
-                         if(module.value.type == 'text'){
+                         if(module.value.type == 'text'|| module.value.type == 'effectText'){
                            emit('changeHeight')
                         }
                      }
@@ -292,7 +292,7 @@ export default defineComponent({
                         module.value.height = module.value.width/rate
                         module.value.left = module.value.left - (module.value.height-height)*sin/2
                         module.value.top = module.value.top - (module.value.height-height)*(1-cos)/2 
-                        if(module.value.type == 'text'){
+                        if(module.value.type == 'text'|| module.value.type == 'effectText'){
                           module.value.fontSize = orgFontSize * module.value.height/height
                            module.value.letterSpacing = letterSpacing * module.value.height/height
                         }

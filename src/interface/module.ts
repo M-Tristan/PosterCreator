@@ -76,6 +76,7 @@ export interface text extends operItem{
   text:string,
   html:string,
   fontSize:number,
+  fontFamily:string,
   color:string,
   bold:boolean,
   italic:boolean,
@@ -90,6 +91,23 @@ export interface text extends operItem{
   deformation?:deformation
 }
 
+export interface effectText extends operItem{
+  text:string,
+  fontSize:number,
+  fontFamily:string,
+  color:string,
+  bold:boolean,
+  italic:boolean,
+  textDecoration:string,
+  textAlign:string,
+  lineHeight:number,
+  letterSpacing:number,
+  opacity:number,
+  textShadowList?:Array<textShadow>,
+  strokeWidth:number,
+  strokeColor:string,
+  lengthRate:number
+}
 export interface code extends operItem{
   text:string,
   colorDark:string,

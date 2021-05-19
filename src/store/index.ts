@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import {background, canvas, chart, code, image,itemBase,operItem,shape,text} from '../interface/module'
+import {background, canvas, chart, code, image,itemBase,operItem,shape,text,effectText} from '../interface/module'
 import { v4 as uuids4 } from 'uuid';
 import PositionUtil from '@/lib/PositionUtil';
 import _ from 'lodash'
@@ -13,6 +13,7 @@ export default createStore({
       layers:new Array<operItem>(),
       shapes:new Array<shape>(),
       background:<background>new Object(),
+      effectTexts:Array<effectText>(),
       canvas:<canvas>new Object()
     },
     postList:new Array<any>(),
@@ -65,6 +66,12 @@ export default createStore({
       state.postInfo.charts.push(chart)
       state.postInfo.layers.push(chart)
     },
+    addEffectText(state,effectText:effectText){
+      effectText.type='effectText'
+      // effectText.zindex = state.postInfo.layers.length
+      state.postInfo.effectTexts.push(effectText)
+      // state.postInfo.layers.push(effectText)
+    },
     addShape(state,shape:shape){
       shape.type='shape'
       shape.zindex = state.postInfo.layers.length
@@ -102,6 +109,7 @@ export default createStore({
         layers:new Array<operItem>(),
         shapes:new Array<shape>(),
         background:<background>new Object(),
+        effectTexts:Array<effectText>(),
         canvas:<canvas>new Object()
       }
       postInfo.canvas = canvas
@@ -192,7 +200,7 @@ export default createStore({
             item.centerLeft = (item.operItem.left + item.operItem.width/2 - state.group.left)/state.group.width
             item.centerTop = (item.operItem.top + item.operItem.height/2 - state.group.top)/state.group.height
             item.rotate = item.operItem.rotate
-            if(item.operItem.type == 'text'){
+            if(item.operItem.type == 'text'||item.operItem.type == 'effectText'){
               item.fontSize = item.operItem.fontSize/state.group.width
               item.letterSpacing = item.operItem.letterSpacing/state.group.width
             }

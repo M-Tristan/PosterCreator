@@ -20,7 +20,8 @@
       letterSpacing:`${module.letterSpacing}px`,
       opacity:module.opacity,
       textShadow:textShadow,
-      textStroke:`${pattern == 'edit'?0: module.strokeWidth}px ${module.strokeColor}`
+      textStroke:`${pattern == 'edit'?0: module.strokeWidth}px ${module.strokeColor}`,
+      fontFamily:module.fontFamily
     }">
       {{module.text}}
     </div>
@@ -39,8 +40,8 @@ import { textShadow } from '@/interface/module'
 export default defineComponent({
  props:{
     text:{
-      type:String,
-      default:''
+      type:Object,
+      default:new Object()
     },
     pattern:{
       type:String,

@@ -60,7 +60,7 @@ export default defineComponent({
       module.value.operItems.forEach(item=>{
         item.operItem.width = item.width*module.value.width
         item.operItem.height = item.height*module.value.height
-        if(item.operItem.type == 'text'){
+        if(item.operItem.type == 'text'||item.operItem.type == 'effectText' ){
           item.operItem.fontSize = item.fontSize*nv
           item.operItem.letterSpacing = item.letterSpacing*nv
         }

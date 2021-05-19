@@ -10,11 +10,8 @@
         <d-shape :pattern='pattern'   v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
         <d-chart :pattern='pattern'  v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
         <d-image :pattern='pattern' v-for="(image,index) in images" :key="index" :image="image"></d-image>
-        <template v-for="(text,index) in texts">
-           <d-text  :pattern='pattern'  :key="index" :text="text" v-if="!text.deformation"></d-text>
-           <d-text-deformation  :pattern='pattern' :key="index" :text="text" v-if="text.deformation"></d-text-deformation>
-        </template>
-       
+        <d-text :pattern='pattern'  v-for="(text,index) in texts"  :key="index" :text="text" ></d-text>
+        <d-effect-text :pattern='pattern'  v-for="(effectText,index) in effectTexts"  :key="index" :effectText="effectText"></d-effect-text>
         <d-code  :pattern='pattern' v-for="(code,index) in codes" :key="index" :code="code"></d-code>
         
         <d-group v-if="group&&pattern=='edit'" :group="group"></d-group>
@@ -33,7 +30,7 @@ import Background from '../operation/background.vue'
 import DChart from '../operation/dChart.vue'
 import DShape from '../operation/dShape.vue'
 import DGroup from '../operation/dGroup.vue'
-import DTextDeformation from '../operation/dTextDeformation.vue'
+import dEffectText from '../operation/dEffectText.vue'
 export default defineComponent({
   components:{
     dImage,
@@ -44,7 +41,7 @@ export default defineComponent({
     DChart,
     DShape,
     DGroup,
-    DTextDeformation
+    dEffectText
   },
   props:{
     pattern:{
@@ -79,6 +76,10 @@ export default defineComponent({
      let shapes = computed(()=>{
       return store.state.postInfo.shapes
     })
+     let effectTexts = computed(()=>{
+      return store.state.postInfo.effectTexts
+    })
+    
     let canvas = computed(()=>{
       return store.state.postInfo.canvas
     })
@@ -108,7 +109,8 @@ export default defineComponent({
       canvas,
       editSize,
       editPosition,
-      scale
+      scale,
+      effectTexts
     }
   }
 })

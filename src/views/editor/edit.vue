@@ -21,7 +21,7 @@
         <div class='edit-area'>
          
           <image-edit v-if="editModule.type=='image'"></image-edit>
-          <text-edit v-if="editModule.type=='text'&&!editModule.deformation"></text-edit>
+          <text-edit v-if="editModule.type=='text'||editModule.type=='effectText'"></text-edit>
           <back-edit v-if="editModule.type=='back'"></back-edit>
           <code-edit v-if="editModule.type=='code'"></code-edit>
           <shape-edit v-if="editModule.type=='shape'"></shape-edit>
