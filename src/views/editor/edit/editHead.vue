@@ -7,6 +7,65 @@
       <div class='reverse'><i :class='["icon","iconfont","icon-chexiaoyou","icon-history",{disabled:backList.length<1}]' @click='back'></i></div>
       <i :class='["icon","iconfont","icon-chexiaoyou","icon-history",{disabled:nextList.length<1}]'  @click='next'></i>
     </div>
+    <div class='operation'>
+      <el-popover
+        placement="bottom"
+        :width="200"
+        trigger="click"
+      >
+        <template #reference>
+         <div class='positionAjust'>
+          位置调整
+        </div>
+        </template>
+        <div @click='positionAjust("left")' class='position-item'>
+          左对齐
+        </div>
+        <div @click='positionAjust("right")' class='position-item'>
+          右对齐
+        </div>
+        <div @click='positionAjust("horizontally")' class='position-item'>
+          水平居中
+        </div>
+        <div @click='positionAjust("verticalcenter")' class='position-item'>
+          垂直居中
+        </div>
+        <div @click='positionAjust("top")' class='position-item'>
+          顶部对齐
+        </div>
+        <div @click='positionAjust("bottom")' class='position-item'>
+          底部对齐
+        </div>
+      </el-popover>
+      <div class='space'>|</div>
+      <el-popover
+        placement="bottom"
+        :width="100"
+        trigger="click"
+      >
+        <template #reference>
+         <div class='layerAjust'><i class='icon iconfont icon-tuceng1'></i></div>
+        </template>
+        <div @click='layerAdjustment("up")' class='layer-item'>
+          上移
+        </div>
+        <div @click='layerAdjustment("down")' class='layer-item'>
+          下移
+        </div>
+        <div @click='layerAdjustment("top")' class='layer-item'>
+          置顶
+        </div>
+        <div @click='layerAdjustment("bottom")' class='layer-item'>
+          置底
+        </div>
+      </el-popover>
+     
+      <div class='lockAjust'><i class='icon el-icon-unlock'></i></div>
+       <div class='deleteAjust'><i class='icon el-icon-delete'></i></div>
+    </div>
+    <div class='download'>
+      <i class='icon iconfont icon-xiazai'></i>
+    </div>
   </div>
 </template>
 
@@ -37,12 +96,21 @@ export default defineComponent({
       }
      store.commit('next');
     }
-    return {backList,nextList,back,next,pushBack}
+    const positionAjust = (type) => {
+      store.commit('positionAdjustment',type);
+    }
+    const layerAdjustment = (type) => {
+       store.commit('layerAdjustment',type);
+    }
+    return {backList,nextList,back,next,pushBack,positionAjust,layerAdjustment}
   }
 })
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
+*{
+  box-sizing: border-box;
+}
 .edit-head{
    width: 100%;
    height: 50px;
@@ -84,5 +152,118 @@ export default defineComponent({
 }
 .disabled{
   color: #8f8f8f;
+}
+.operation{
+  float: left;
+  height: 50px;
+  width: 300px;
+}
+.positionAjust{
+  float: left;
+  line-height: 40px;
+  width: 80px;
+  color: white;
+  font-size: 16px;
+  font-family: SourceHanSansCN-Regular;
+  cursor: pointer;
+  padding: 5px;
+  font-weight: 900;
+  &:hover{
+    background-color: #8f8f8f5d;
+  }
+}
+.layerAjust{
+  float: left;
+  line-height: 40px;
+  height: 50px;
+  width: 40px;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  // font-weight: 900;
+  &:hover{
+    background-color: #8f8f8f5d;
+  }
+  .icon{
+    font-size: 25px;
+  }
+}
+.lockAjust{
+  float: left;
+  line-height: 45px;
+  height: 50px;
+  width: 40px;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  // font-weight: 900;
+  &:hover{
+    background-color: #8f8f8f5d;
+  }
+  .icon{
+    font-size: 20px;
+  }
+}
+.deleteAjust{
+  float: left;
+  line-height: 45px;
+  height: 50px;
+  width: 40px;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  // font-weight: 900;
+  &:hover{
+    background-color: #8f8f8f5d;
+  }
+  .icon{
+    font-size: 20px;
+  }
+}
+.position-item{
+  width: 100px;
+  float: left;
+  color: black;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  font-weight: 900;
+  &:hover{
+    background-color: #8f8f8f32;
+  }
+}
+.layer-item{
+  width: 70px;
+  float: left;
+  color: black;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  font-weight: 900;
+  &:hover{
+    background-color: #8f8f8f32;
+  }
+}
+.space{
+  color: white;
+  font-weight: 900;
+  width: 10px;
+  line-height: 50px;
+  float: left;
+
+}
+.download{
+  width: 50px;
+  float: right;
+  line-height: 50px;
+  cursor: pointer;
+   color: white;
+  .icon{
+    font-size: 30px;
+   
+  }
+  &:hover{
+    color: aqua;
+  }
 }
 </style>

@@ -98,19 +98,20 @@ class ModuleUtil{
     }
     static textToEffectText(id:string,shape:string){
       let text:any 
-      let texts = store.state.postInfo.texts
+      let layers = store.state.postInfo.layers
       let index = 0
-      while(index < texts.length){
-        if(texts[index].id == id){
-          text = texts[index]
+      
+      while(index < layers.length){
+        if(layers[index].id == id){
+          text = layers[index]
           break
         }
+        index++
       }
-      texts.splice(index,1)
+      // layers.splice(index,1)
       let ctx = document.createElement("canvas").getContext("2d") as CanvasRenderingContext2D
       ctx.font=`${text.fontSize}px ${text.fontFamily}`;
       let c = ctx.measureText(text.text).width
-     
       switch(shape){
         case 'circle':
           let r = c/2/Math.PI
@@ -122,13 +123,33 @@ class ModuleUtil{
           text.width = 200*rate+3*text.fontSize
           text.height = 160*rate+3*text.fontSize
           break;
-
+        case 'rectangle':
+          text.width = c/4+2*text.fontSize
+          text.height = c/4+2*text.fontSize
+          break;
       }
       
       text.lengthRate = 100
       text.shape = shape
       delete text['html']
       store.commit('addEffectText', text);
+    }
+    static effectTextToText(id:string){
+      let text:any 
+      let layers = store.state.postInfo.layers
+      let index = 0
+      while(index < layers.length){
+        if(layers[index].id == id){
+          text = layers[index]
+          break
+        }
+        index++
+      }
+      // layers.splice(index,1)
+      text.html = text.text
+      text.type='text'
+      delete text['shape']
+      // store.state.postInfo.texts.push(text)
     }
     static  getBackImageInfo(url:string){
       return new Promise((resolve,reject)=>{

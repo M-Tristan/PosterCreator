@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex'
-import { computed, defineComponent, nextTick, ref, watch } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, ref, watch } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
@@ -55,6 +55,9 @@ export default defineComponent({
   setup (props,ctx) {
      const store = useStore()
      const contenteditable = ref(false)
+     onMounted(()=>{
+       changeHeight()
+     })
     const editModule:any= computed(()=>{
       return store.state.editModule
     })

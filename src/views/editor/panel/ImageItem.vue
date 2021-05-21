@@ -13,12 +13,14 @@
                                   ,height:canvas.height+'px'
                                   }">
         <background :background='background'></background>
-        <d-shape pattern='show' v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
-        <d-chart pattern='show' v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
-        <d-image pattern='show' v-for="(image,index) in images" :key="index" :image="image"></d-image>
-        <d-text pattern='show' v-for="(text,index) in texts" :key="index" :text="text"></d-text>
-        <d-code pattern='show' v-for="(code,index) in codes" :key="index" :code="code"></d-code>
-        <d-effect-text pattern='show'  v-for="(effectText,index) in effectTexts"  :key="index" :effectText="effectText"></d-effect-text>
+       <template v-for="(layer,index) in layers" :key="index">
+          <d-shape v-if="layer.type=='shape'" pattern='show'  :shape="layer"></d-shape>
+          <d-chart v-if="layer.type=='chart'" pattern='show' :chart="layer"></d-chart>
+          <d-image v-if="layer.type=='image'" pattern='show' :image="layer"></d-image>
+          <d-text  v-if="layer.type=='text'" pattern='show' :text="layer" ></d-text>
+          <d-effect-text v-if="layer.type=='effectText'" pattern='show'  :effectText="layer"></d-effect-text>
+          <d-code v-if="layer.type=='code'" pattern='show'  :code="layer"></d-code>
+        </template>
     </div>
   </div>
    
@@ -65,39 +67,44 @@ export default defineComponent({
     let background = computed(()=>{
       return props.postInfo.background
     })
-    let codes = computed(()=>{
-      return props.postInfo.codes
-    })
-    let texts = computed(()=>{
-      return props.postInfo.texts
-    })
-    let images = computed(()=>{
-      return props.postInfo.images
-    })
-    let charts = computed(()=>{
-      return props.postInfo.charts
-    })
-     let shapes = computed(()=>{
-      return props.postInfo.shapes
+    // let codes = computed(()=>{
+    //   return props.postInfo.codes
+    // })
+    // let texts = computed(()=>{
+    //   return props.postInfo.texts
+    // })
+    // let images = computed(()=>{
+    //   return props.postInfo.images
+    // })
+    // let charts = computed(()=>{
+    //   return props.postInfo.charts
+    // })
+    //  let shapes = computed(()=>{
+    //   return props.postInfo.shapes
+    // })
+    // let effectTexts = computed(()=>{
+    //   return store.state.postInfo.effectTexts
+    // })
+    let layers = computed(()=>{
+      return store.state.postInfo.layers
     })
     let canvas = computed(()=>{
       return props.postInfo.canvas
     })
-    let effectTexts = computed(()=>{
-      return store.state.postInfo.effectTexts
-    })
-  
+    
+
     return {
-      images:images,
-      texts:texts,
-      codes:codes,
-      charts:charts,
-      shapes:shapes,
+      // images:images,
+      // texts:texts,
+      // codes:codes,
+      // charts:charts,
+      // shapes:shapes,
       background:background,
       clipOper,
       canvas,
       scale,
-      effectTexts
+      layers,
+      // effectTexts
     }
   }
 })

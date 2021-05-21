@@ -6,26 +6,79 @@ import _ from 'lodash'
 export default createStore({
   state: {
     postInfo:{
-      images:new Array<image>(),
-      texts:new Array<text>(),
-      codes:new Array<code>(),
-      charts:new Array<chart>(),
       layers:new Array<operItem>(),
-      shapes:new Array<shape>(),
       background:<background>new Object(),
-      effectTexts:Array<effectText>(),
       canvas:<canvas>new Object()
     },
     postList:new Array<any>(),
     backList:new Array<any>(),
     nextList:new Array<any>(),
-    editModule:<itemBase>new Object(),//当前编辑模块
+    editModule:<any>new Object(),//当前编辑模块
     clipOper:false,
     group:undefined as any,
     editSize:{width:800,height:800},
     scale:100
   },
   mutations: {
+    layerAdjustment(state,type){
+      let index = state.editModule.zindex
+      let changeModule
+      switch(type){
+        case "up":
+          if(index != state.postInfo.layers.length-1){
+            changeModule = state.postInfo.layers[index+1]
+            changeModule.zindex -= 1
+            state.editModule.zindex+=1
+          }
+          break;
+        case "down":
+          break;
+        case "top":
+          break;
+        case "bottom":
+          break;
+      }
+      state.postInfo.layers.sort((layerO,layerT)=>{
+        return layerO.zindex - layerT.zindex
+      })
+    },
+    positionAdjustment(state,type){
+      let canvas = state.postInfo.canvas
+      let range = {
+        top:0,
+        left:0,
+        width:canvas.width,
+        height:canvas.height
+      }
+      let editModule = state.editModule as operItem
+      let res = PositionUtil.getPosition(editModule.left+editModule.width/2,editModule.top+editModule.height/2,editModule.width,editModule.height,editModule.rotate)
+      let itemPositionInfo = {
+          top:res.most.minTop,
+          left:res.most.minLeft,
+          width:res.most.maxLeft-res.most.minLeft,
+          height:res.most.maxTop - res.most.minTop
+      }
+      switch(type){
+        case "top":
+          editModule.top-=(itemPositionInfo.top-range.top)
+          break;
+        case "bottom":
+          editModule.top-=(itemPositionInfo.top+itemPositionInfo.height-range.top-range.height)
+          break;
+        case "left":
+          editModule.left-=(itemPositionInfo.left-range.left)
+          break;
+        case "right":
+          editModule.left-=(itemPositionInfo.left+itemPositionInfo.width-range.left-range.width)
+          break;
+        case "horizontally":
+          editModule.top-=(itemPositionInfo.top+itemPositionInfo.height/2-range.height/2)
+          break;
+        case "verticalcenter":
+          editModule.left-=(itemPositionInfo.left+itemPositionInfo.width/2-range.left-range.width/2)
+          break
+      }
+    },
     next(state){
       let postState = state.nextList.pop()
       state.backList.push(postState)
@@ -63,37 +116,29 @@ export default createStore({
     addChart(state,chart:chart){
       chart.type='chart'
       chart.zindex = state.postInfo.layers.length
-      state.postInfo.charts.push(chart)
       state.postInfo.layers.push(chart)
     },
     addEffectText(state,effectText:effectText){
       effectText.type='effectText'
-      // effectText.zindex = state.postInfo.layers.length
-      state.postInfo.effectTexts.push(effectText)
-      // state.postInfo.layers.push(effectText)
     },
     addShape(state,shape:shape){
       shape.type='shape'
       shape.zindex = state.postInfo.layers.length
-      state.postInfo.shapes.push(shape)
       state.postInfo.layers.push(shape)
     },
     addImage(state,image:image){
       image.type='image'
       image.zindex = state.postInfo.layers.length
-      state.postInfo.images.push(image)
       state.postInfo.layers.push(image)
     },
     addText(state,text:text){
       text.type='text'
       text.zindex = state.postInfo.layers.length
-      state.postInfo.texts.push(text)
       state.postInfo.layers.push(text)
     },
     addCode(state,code:code){
       code.type='code'
       code.zindex = state.postInfo.layers.length
-      state.postInfo.codes.push(code)
       state.postInfo.layers.push(code)
     },
     addBack(state,back:background){
@@ -102,14 +147,9 @@ export default createStore({
     },
     addCanvas(state,canvas:canvas){
       let postInfo = {
-        images:new Array<image>(),
-        texts:new Array<text>(),
-        codes:new Array<code>(),
-        charts:new Array<chart>(),
+  
         layers:new Array<operItem>(),
-        shapes:new Array<shape>(),
         background:<background>new Object(),
-        effectTexts:Array<effectText>(),
         canvas:<canvas>new Object()
       }
       postInfo.canvas = canvas

@@ -7,12 +7,15 @@
                                   ,left:`${editPosition.left}px`
                                   ,top:`${editPosition.top}px`}">
         <background v-if="pattern=='show'"  :background='background'></background>
-        <d-shape :pattern='pattern'   v-for="(shape,index) in shapes" :key="index" :shape="shape"></d-shape>
-        <d-chart :pattern='pattern'  v-for="(chart,index) in charts" :key="index" :chart="chart"></d-chart>
-        <d-image :pattern='pattern' v-for="(image,index) in images" :key="index" :image="image"></d-image>
-        <d-text :pattern='pattern'  v-for="(text,index) in texts"  :key="index" :text="text" ></d-text>
-        <d-effect-text :pattern='pattern'  v-for="(effectText,index) in effectTexts"  :key="index" :effectText="effectText"></d-effect-text>
-        <d-code  :pattern='pattern' v-for="(code,index) in codes" :key="index" :code="code"></d-code>
+        <template v-for="(layer,index) in layers" :key="index">
+          <d-shape v-if="layer.type=='shape'" :pattern='pattern' :shape="layer"></d-shape>
+          <d-chart v-if="layer.type=='chart'" :pattern='pattern' :chart="layer"></d-chart>
+          <d-image v-if="layer.type=='image'" :pattern='pattern' :image="layer"></d-image>
+          <d-text  v-if="layer.type=='text'" :pattern='pattern' :text="layer" ></d-text>
+          <d-effect-text v-if="layer.type=='effectText'" :pattern='pattern'  :effectText="layer"></d-effect-text>
+          <d-code v-if="layer.type=='code'"  :pattern='pattern' :code="layer"></d-code>
+        </template>
+        
         
         <d-group v-if="group&&pattern=='edit'" :group="group"></d-group>
         <clipper  v-if="clipOper&&pattern=='edit'"></clipper>
@@ -61,23 +64,26 @@ export default defineComponent({
     let background = computed(()=>{
       return store.state.postInfo.background
     })
-    let codes = computed(()=>{
-      return store.state.postInfo.codes
-    })
-    let texts = computed(()=>{
-      return store.state.postInfo.texts
-    })
-    let images = computed(()=>{
-      return store.state.postInfo.images
-    })
-    let charts = computed(()=>{
-      return store.state.postInfo.charts
-    })
-     let shapes = computed(()=>{
-      return store.state.postInfo.shapes
-    })
-     let effectTexts = computed(()=>{
-      return store.state.postInfo.effectTexts
+    // let codes = computed(()=>{
+    //   return store.state.postInfo.codes
+    // })
+    // let texts = computed(()=>{
+    //   return store.state.postInfo.texts
+    // })
+    // let images = computed(()=>{
+    //   return store.state.postInfo.images
+    // })
+    // let charts = computed(()=>{
+    //   return store.state.postInfo.charts
+    // })
+    //  let shapes = computed(()=>{
+    //   return store.state.postInfo.shapes
+    // })
+    //  let effectTexts = computed(()=>{
+    //   return store.state.postInfo.effectTexts
+    // })
+      let layers = computed(()=>{
+      return store.state.postInfo.layers
     })
     
     let canvas = computed(()=>{
@@ -98,11 +104,11 @@ export default defineComponent({
       return {left,top}
     })
     return {
-      images:images,
-      texts:texts,
-      codes:codes,
-      charts:charts,
-      shapes:shapes,
+      // images:images,
+      // texts:texts,
+      // codes:codes,
+      // charts:charts,
+      // shapes:shapes,
       background:background,
       group,
       clipOper,
@@ -110,7 +116,8 @@ export default defineComponent({
       editSize,
       editPosition,
       scale,
-      effectTexts
+      layers
+      // effectTexts
     }
   }
 })

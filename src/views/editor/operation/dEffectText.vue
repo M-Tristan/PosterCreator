@@ -94,6 +94,9 @@ export default defineComponent({
           }
           path = `M ${startPoint.left} ${startPoint.top} A 1 1 0 1 1 ${startPoint.left+rWidth} ${startPoint.top-rWidth} M ${startPoint.left+rWidth} ${startPoint.top-rWidth} A 1 1 0 1 1 ${startPoint.left+2*rWidth} ${startPoint.top} M ${startPoint.left+2*rWidth} ${startPoint.top} C ${startPoint.left+rWidth},${startPoint.top+rWidth} ${startPoint.left+rWidth},${startPoint.top+rWidth} ${startPoint.left} ${startPoint.top}`
           break
+        case 'rectangle':
+            path = `M ${module.value.fontSize} ${module.value.fontSize} L ${module.value.width-module.value.fontSize} ${module.value.fontSize} L ${module.value.width-module.value.fontSize} ${module.value.height-module.value.fontSize} L ${module.value.fontSize} ${module.value.height-module.value.fontSize} Z`
+          break
       }
       return path
     })
@@ -110,7 +113,6 @@ export default defineComponent({
       return module.value.fontSize
     })
     onMounted(()=>{
-      console.log(pathDom)
     })
     return {moduleMove,editModule,module,path,textLength,pathDom,textShadow,selectModel}
   }
