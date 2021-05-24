@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class='button-area'>
-         <el-button type="primary">设置背景</el-button>
+          <el-button type="primary" @click="setBack">设置背景</el-button>
           <el-button type="primary"  v-if="editModule.image" >背景裁剪</el-button>
       </div>
   </div>
@@ -35,26 +35,28 @@
 
 <script lang="ts">
 import { useStore } from "vuex"
-import { computed, defineComponent, ref } from "vue"
+import { ComponentInternalInstance, computed, defineComponent, getCurrentInstance } from "vue"
 import operation from "../operation/common/operation"
 export default defineComponent({
   setup () {
+    const {proxy} = (getCurrentInstance() as ComponentInternalInstance)
+    
     const store = useStore()
      const { pushBack } = operation()
-    let width = ref(400)
-     let height = ref(400)
     const editModule:any= computed(()=>{
       return store.state.postInfo.background
     })
     const canvas:any= computed(()=>{
       return store.state.postInfo.canvas
     })
+    const setBack = () => {
+      proxy?.$emitter.emit('selectModule', 5)
+    }
     return {
-      width,
-      height,
       editModule,
       canvas,
-      pushBack
+      pushBack,
+      setBack
     }
   }
 })

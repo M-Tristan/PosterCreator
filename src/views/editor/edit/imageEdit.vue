@@ -200,7 +200,7 @@
   </el-collapse-item>
 </el-collapse>
 </div>
-
+<lock-mask v-if="editModule.lock"></lock-mask>
 </template>
 
 <script lang="ts">
@@ -209,9 +209,11 @@ import { computed, defineComponent, ref } from 'vue'
 import maskImageList from '@/lib/MaskList'
 import maskDemo from './maskDemo.vue'
 import operation from '../operation/common/operation'
+import LockMask from './lockMask.vue'
 export default defineComponent({
   components:{
-    maskDemo
+    maskDemo,
+    LockMask
   },
   setup () {
     const store = useStore()

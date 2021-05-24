@@ -25,6 +25,7 @@
     }">
       {{module.text}}
     </div>
+    <lock :module='module' v-if="editModule.id == module.id && pattern == 'edit'"></lock>
     <regulator :module='module' v-if="editModule.id == module.id && pattern == 'edit'" @changeHeight='changeHeight' ></regulator>
     <rotate :module='module' v-if="editModule.id == module.id && pattern == 'edit'"></rotate> 
   </div>
@@ -37,6 +38,7 @@ import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
 import { textShadow } from '@/interface/module'
+import Lock from './lock.vue'
 export default defineComponent({
  props:{
     text:{
@@ -50,7 +52,8 @@ export default defineComponent({
   },
   components:{
     regulator,
-    rotate
+    rotate,
+    Lock
   },
   setup (props,ctx) {
      const store = useStore()

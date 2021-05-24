@@ -7,11 +7,12 @@
       <div class='reverse'><i :class='["icon","iconfont","icon-chexiaoyou","icon-history",{disabled:backList.length<1}]' @click='back'></i></div>
       <i :class='["icon","iconfont","icon-chexiaoyou","icon-history",{disabled:nextList.length<1}]'  @click='next'></i>
     </div>
-    <div class='operation'>
+    <div class='operation' >
       <el-popover
         placement="bottom"
         :width="200"
         trigger="click"
+        v-if="!editModule.lock"
       >
         <template #reference>
          <div class='positionAjust'>
@@ -37,11 +38,12 @@
           底部对齐
         </div>
       </el-popover>
-      <div class='space'>|</div>
+      <div class='space'  v-if="!editModule.lock ">|</div>
       <el-popover
         placement="bottom"
         :width="100"
         trigger="click"
+        v-if="!editModule.lock"
       >
         <template #reference>
          <div class='layerAjust'><i class='icon iconfont icon-tuceng1'></i></div>
@@ -60,8 +62,9 @@
         </div>
       </el-popover>
      
-      <div class='lockAjust'><i class='icon el-icon-unlock'></i></div>
-       <div class='deleteAjust'><i class='icon el-icon-delete'></i></div>
+      <div class='lockAjust' v-if="!editModule.lock && editModule.type != 'back'" @click='lock'><i class='icon el-icon-unlock'></i></div>
+       <div class='lockAjust' v-if="editModule.lock" @click='unlock'><i class='icon el-icon-lock'></i></div>
+       <div class='deleteAjust'  v-if="editModule.type != 'back' && !editModule.lock" @click='deletelayer'><i class='icon el-icon-delete'></i></div>
     </div>
     <div class='download'>
       <i class='icon iconfont icon-xiazai'></i>
@@ -102,7 +105,19 @@ export default defineComponent({
     const layerAdjustment = (type) => {
        store.commit('layerAdjustment',type);
     }
-    return {backList,nextList,back,next,pushBack,positionAjust,layerAdjustment}
+    const editModule:any= computed(()=>{
+          return store.state.editModule
+        })
+    const lock = () => {
+      store.commit('lock');
+    }
+    const unlock = () => {
+      store.commit('unlock');
+    }
+    const deletelayer = () => {
+      store.commit('delete');
+    }
+    return {backList,nextList,back,next,pushBack,positionAjust,layerAdjustment,editModule,lock,unlock,deletelayer}
   }
 })
 </script>

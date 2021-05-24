@@ -22,24 +22,38 @@ export default createStore({
   mutations: {
     layerAdjustment(state,type){
       let index = state.editModule.zindex
+      state.editModule.zindex=1000
       let changeModule
       switch(type){
         case "up":
           if(index != state.postInfo.layers.length-1){
-            changeModule = state.postInfo.layers[index+1]
-            changeModule.zindex -= 1
-            state.editModule.zindex+=1
+            state.postInfo.layers[index].zindex=index+1
+            state.postInfo.layers[index+1].zindex = index
           }
           break;
         case "down":
+          if(index != 0){
+            changeModule = state.postInfo.layers[index-1]
+            state.postInfo.layers[index].zindex=index-1
+            state.postInfo.layers[index-1].zindex = index
+          }
           break;
         case "top":
+          if(index != state.postInfo.layers.length-1){
+            state.postInfo.layers[index].zindex=state.postInfo.layers.length-1
+            state.postInfo.layers[state.postInfo.layers.length-1].zindex = index
+          }
           break;
         case "bottom":
+          if(index != 0){
+            state.postInfo.layers[index].zindex=0
+            state.postInfo.layers[0].zindex = index
+           
+          }
           break;
       }
-      state.postInfo.layers.sort((layerO,layerT)=>{
-        return layerO.zindex - layerT.zindex
+      state.postInfo.layers.sort((layero,layert)=>{
+        return layero.zindex-layert.zindex
       })
     },
     positionAdjustment(state,type){
@@ -199,6 +213,9 @@ export default createStore({
       let minTop = Number.MAX_VALUE
       let maxTop = Number.MIN_VALUE
       state.postInfo.layers.forEach(item => {
+        if(item.lock){
+          return
+        }
         let res = PositionUtil.getPosition(item.left+item.width/2,item.top+item.height/2,item.width,item.height,item.rotate)
         let itemPositionInfo = {
           top:res.most.minTop,
@@ -246,6 +263,21 @@ export default createStore({
             }
           })
       }
+    },
+    lock(state){
+      state.editModule.lock = true
+    },
+    unlock(state){
+      state.editModule.lock = false
+    },
+    delete(state){
+      let index = state.editModule.zindex
+      state.postInfo.layers.splice(index,1)
+      state.postInfo.layers = [...state.postInfo.layers]
+      state.postInfo.layers.forEach((item,index)=>{
+        item.zindex = index
+      })
+      state.editModule = state.postInfo.background
     }
   },
   actions: {

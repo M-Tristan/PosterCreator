@@ -10,7 +10,8 @@ export interface operItem extends itemBase{
   height:number,
   top:number,
   left:number,
-  rotate:number
+  rotate:number,
+  lock:boolean
 }
 
 export interface textShadow{

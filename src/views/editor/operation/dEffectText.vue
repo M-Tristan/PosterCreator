@@ -22,7 +22,7 @@
         </textPath>
     </text>
   </svg>   
-                                         
+      <lock :module='module' v-if="editModule.id == module.id && pattern == 'edit'"></lock>                                   
      <regulator :module='module' v-if="editModule.id == module.id && pattern == 'edit'"  ></regulator>
      <rotate :module='module' v-if="editModule.id == module.id && pattern == 'edit'"></rotate> 
   </div>
@@ -35,6 +35,7 @@ import rotate from './rotate.vue'
 import { useStore } from 'vuex'
 import operation from './common/operation'
 import { textShadow } from '@/interface/module'
+import Lock from './lock.vue'
 export default defineComponent({
   props:{
     effectText:{
@@ -48,8 +49,10 @@ export default defineComponent({
   },
    components:{
     regulator,
-    rotate
+    rotate,
+    Lock
   },
+      
   setup (props) {
     const pathDom = ref(null as unknown as SVGPathElement)
    

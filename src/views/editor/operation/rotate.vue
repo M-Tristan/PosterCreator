@@ -2,6 +2,7 @@
    <i class='el-icon-refresh swing-button'
    @mousedown.stop='rotate'
    draggable="false"
+   v-if="!module.lock"
    :style="{
        transform: `translateX(-50%) scale(${moveScale})`,
         bottom: `${-80*moveScale}px`

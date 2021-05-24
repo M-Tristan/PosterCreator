@@ -9,6 +9,7 @@
     <div v-if="pattern == 'show'"  ref='chart' :style="{  width: module.width + 'px'
                                         ,height: module.height+'px'
                                        }"></div>
+     <lock :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></lock>                                  
      <regulator :module='module' v-if="editModule.id == module.id&& pattern == 'edit'" ></regulator>
     <rotate :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></rotate>    
   </div>
@@ -21,6 +22,7 @@ import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import * as echarts from 'echarts'
 import operation from './common/operation'
+import Lock from './lock.vue'
 export default defineComponent({
   props:{
     chart:{
@@ -34,7 +36,8 @@ export default defineComponent({
   },
   components:{
     regulator,
-    rotate
+    rotate,
+    Lock
   },
   setup (props) {
       let myChart

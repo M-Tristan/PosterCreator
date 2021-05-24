@@ -200,6 +200,7 @@
     </div>
   </el-collapse-item>
 </el-collapse>
+<lock-mask v-if="editModule.lock"></lock-mask>
 </div>
 
 </template>
@@ -211,7 +212,9 @@ import _ from 'lodash'
 import operation from '../operation/common/operation'
 import ModuleUtil from '@/lib/ModuleUtil'
 import fontList from '@/lib/fontList'
+import lockMask from './lockMask.vue'
 export default defineComponent({
+  components: { lockMask },
   setup () {
     const store = useStore()
     const { pushBack } = operation()

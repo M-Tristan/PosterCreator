@@ -44,6 +44,7 @@
         </div>
       </el-collapse-item>
     </el-collapse>
+   <lock-mask v-if="editModule.lock"></lock-mask>
   </div>
 </template>
 
@@ -51,8 +52,10 @@
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
 import operation from '../operation/common/operation'
+import lockMask from './lockMask.vue'
 
 export default defineComponent({
+  components: { lockMask },
   setup () {
     const store = useStore()
     const { pushBack } = operation()

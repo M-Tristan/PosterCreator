@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { ComponentInternalInstance, ComponentPublicInstance, defineComponent, getCurrentInstance, ref } from 'vue'
 import backgroundList from './backgroundList.vue'
 import imageList from './imageList.vue'
 import QrCodeList from './qrCodeList.vue'
@@ -54,8 +54,10 @@ export default defineComponent({
         canvasList
     },  
     setup () {
-        let moduleId = ref(1)
-        return {moduleId}
+      const {proxy} = getCurrentInstance() as ComponentInternalInstance
+      proxy?.$emitter.on('selectModule', index => {moduleId.value = index } )
+      let moduleId = ref(1)
+      return {moduleId}
     }
 })
 </script>

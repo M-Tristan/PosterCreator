@@ -26,6 +26,7 @@ class ModuleUtil{
                     rotate:0,
                     blur:0,
                     opacity:1,
+                    lock:false,
                     borderRadius:0,
                     rotateY:false,
                     rotateX:false,
@@ -77,6 +78,7 @@ class ModuleUtil{
               textAlign:'left',
               letterSpacing:0,
               opacity:1,
+              lock:false,
               textShadowList:[],
               strokeWidth:0,
               strokeColor:'rgba(0,0,0,1)'
@@ -92,6 +94,7 @@ class ModuleUtil{
             top:10,
             left:10,
             rotate:0,
+            lock:false,
               ...code
           })
       })
@@ -234,6 +237,7 @@ class ModuleUtil{
             left:10,
             rotate:0,
             opacity:1,
+            lock:false,
             option,
             chartType:'pie'
         })
@@ -249,6 +253,7 @@ class ModuleUtil{
           left:10,
           rotate:0,
           opacity:1,
+          lock:false,
           shapeType:type,
           color:'rgba(255, 255, 255, 1)'
       }

@@ -107,6 +107,7 @@ export default defineComponent({
           }
           store.commit('addCanvas', canvas);
           store.commit('initBack');
+          store.commit('setEditModuleToBack')
         })
         const selectModel = () =>{
           store.commit('setEditModuleToBack')

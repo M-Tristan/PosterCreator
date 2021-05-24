@@ -1,5 +1,5 @@
 <template>
-    <div class='item-list' draggable="false" >
+    <div class='item-list' draggable="false" v-if="!module.lock" >
              <div class='item' @mousedown.stop="controlshape('left-top')" :style="{ 
                                          cursor: cursor.leftTop,
                                          left:0+'px'

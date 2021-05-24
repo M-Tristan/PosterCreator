@@ -78,15 +78,17 @@
     </span>
   </template>
 </el-dialog>
-
+<lock-mask v-if="editModule.lock"></lock-mask>
 </template>
 
 <script lang="ts">
 import { useStore } from 'vuex'
 import { computed, defineComponent, ref } from 'vue'
 import operation from '../operation/common/operation'
+import lockMask from './lockMask.vue'
 
 export default defineComponent({
+  components: { lockMask },
   setup () {
     const store = useStore()
      const { pushBack } = operation()

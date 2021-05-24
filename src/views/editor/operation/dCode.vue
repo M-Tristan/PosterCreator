@@ -5,15 +5,13 @@
                                         ,top:module.top+'px',
                                         transform:  `rotate(${module.rotate?module.rotate:0}deg)`
                                         ,zIndex:module.zindex
-                                              }" >
-                                              
-          <img class='backImage' draggable="false" v-if="module.backImage&&pattern == 'show'" :src='module.backImage'/>                                     
-         <div v-if="pattern == 'show'"  ref='code' class='code' draggable="false" >
-         
-           
-         </div>                                
-    <regulator :module='module' v-if="editModule.id == module.id&& pattern == 'edit'" ></regulator>
-    <rotate :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></rotate>                                      
+                                              }" >                                         
+      <img class='backImage' draggable="false" v-if="module.backImage&&pattern == 'show'" :src='module.backImage'/>                                     
+      <div v-if="pattern == 'show'"  ref='code' class='code' draggable="false" >
+      </div>    
+      <lock :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></lock>                            
+      <regulator :module='module' v-if="editModule.id == module.id&& pattern == 'edit'" ></regulator>
+      <rotate :module='module' v-if="editModule.id == module.id&& pattern == 'edit'"></rotate>                                      
   </div>
 </template>
 
@@ -23,7 +21,8 @@ import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import regulator from './regulator.vue'
 import rotate from './rotate.vue'
 import operation from './common/operation'
-import * as QRCode from 'qrcode';
+import * as QRCode from 'qrcode'
+import Lock from './lock.vue'
 export default defineComponent({
   props:{
     code:{
@@ -37,8 +36,10 @@ export default defineComponent({
   },
   components:{
     regulator,
-    rotate
+    rotate,
+    Lock
   },
+    
   setup (props) {
     const store = useStore()
     let code = ref(null as unknown as HTMLElement)

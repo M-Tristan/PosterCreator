@@ -82,7 +82,7 @@ export default defineComponent({
     //  let effectTexts = computed(()=>{
     //   return store.state.postInfo.effectTexts
     // })
-      let layers = computed(()=>{
+    let layers = computed(()=>{
       return store.state.postInfo.layers
     })
     
@@ -116,7 +116,7 @@ export default defineComponent({
       editSize,
       editPosition,
       scale,
-      layers
+      layers,
       // effectTexts
     }
   }
