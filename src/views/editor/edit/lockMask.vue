@@ -1,23 +1,19 @@
 <template>
-  <div class='lockMask'>
-
-  </div>
+  <div class="lockMask"></div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  setup () {
-    
-
-    return {}
-  }
-})
+  setup() {
+    return {};
+  },
+});
 </script>
 
 <style scoped>
-.lockMask{
+.lockMask {
   position: absolute;
   width: 100%;
   height: 100%;

@@ -1,7 +1,7 @@
 <template>
-  <div class='textList'>
-    <div class='text-item'  @click='addText'>
-       <i class='el-icon-plus'></i>添加文字
+  <div class="textList">
+    <div class="text-item" @click="addText">
+      <i class="el-icon-plus"></i>添加文字
     </div>
   </div>
 </template>
@@ -13,9 +13,9 @@ export default {
   setup () {
     const store = useStore()
     const addText = async () => {
-     let textInfo = await ModuleUtil.getAddTextInfo('双击修改文字')
-     store.commit('addText',textInfo)
-     store.commit('setEditModule',textInfo.id)
+      let textInfo = await ModuleUtil.getAddTextInfo('双击修改文字')
+      store.commit('addText', textInfo)
+      store.commit('setEditModule', textInfo.id)
     }
     return {
       addText
@@ -25,10 +25,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text-item{
+.text-item {
   font-size: 20px;
   cursor: pointer;
-  &:hover{
+  &:hover {
     color: rgb(0, 162, 255);
   }
 }

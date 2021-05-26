@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 
 <style lang="scss">
@@ -42,7 +42,7 @@
   border-radius: 10px;
 }
 @font-face {
-    font-family: SourceHanSansCN-Regular;
-    src:url('https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com/SourceHanSansCN-Regular.otf')
+  font-family: SourceHanSansCN-Regular;
+  src: url("https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com/SourceHanSansCN-Regular.otf");
 }
 </style>

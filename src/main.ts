@@ -6,7 +6,7 @@ import eleInstall from './lib/elementUI'
 import 'element-plus/lib/theme-chalk/index.css'
 import './assets/iconfont/iconfont.css'
 import inputNumber from './components/inputNumber/inputNumber.vue'
-import {TinyEmitter} from 'tiny-emitter'
+import { TinyEmitter } from 'tiny-emitter'
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $emitter: TinyEmitter;  // 声明全局方法
