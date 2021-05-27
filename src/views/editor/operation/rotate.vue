@@ -3,7 +3,7 @@
     class="el-icon-refresh swing-button"
     @mousedown.stop="rotate"
     draggable="false"
-    v-if="!module.lock"
+    v-if="!module.lock && !module.groupId"
     :style="{
       transform: `translateX(-50%) scale(${moveScale})`,
       bottom: `${-80 * moveScale}px`,

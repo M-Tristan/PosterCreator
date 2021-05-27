@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { background, canvas, chart, code, image, itemBase, operItem, shape, text, effectText } from '../interface/module'
+import { background, canvas, chart, code, image, operItem, shape, text, effectText, group } from '../interface/module'
 import { v4 as uuids4 } from 'uuid';
 import PositionUtil from '@/lib/PositionUtil';
 import _ from 'lodash'
@@ -7,6 +7,7 @@ export default createStore({
   state: {
     postInfo: {
       layers: new Array<operItem>(),
+      groups: new Array<group>(),
       background: <background>new Object(),
       canvas: <canvas>new Object()
     },
@@ -161,7 +162,7 @@ export default createStore({
     },
     addCanvas(state, canvas: canvas) {
       let postInfo = {
-
+        groups: new Array<group>(),
         layers: new Array<operItem>(),
         background: <background>new Object(),
         canvas: <canvas>new Object()
@@ -171,8 +172,32 @@ export default createStore({
 
       state.postInfo = postInfo
     },
+    /**
+     * 
+     * @param state 设置组合
+     */
+    addGroup(state) {
+      let group = {} as group
+      group.type = 'group'
+      group.id = state.group.id
+      group.layerIds = state.group.layersIds
+      group.top = state.group.top
+      group.left = state.group.left
+      group.width = state.group.width
+      group.height = state.group.height
+      group.rotate = state.group.rotate
+      state.postInfo.groups.push(group)
+    },
     setEditModule(state, moduleId: string) {
       state.editModule = <operItem>state.postInfo.layers.find(item => item.id == moduleId)
+
+      if (state.editModule.groupId) {
+        let group = state.postInfo.groups.find(item => {
+          return item.id = state.editModule.groupId
+        })
+
+        state.group = { ...group }
+      }
     },
     setEditModuleToBack(state) {
       state.editModule = state.postInfo.background
@@ -200,7 +225,7 @@ export default createStore({
       state.postInfo.background.image = image
     },
     batchSelect(state, position) {
-      state.group = { ids: new Array<string>(), operItems: new Array<any>(), rotate: 0, type: 'group' }
+      state.group = { layersIds: new Array<string>(), operItems: new Array<any>(), rotate: 0, type: 'group' }
 
       let positionInfo = {
         top: position.top,
@@ -212,7 +237,7 @@ export default createStore({
       let maxLeft = Number.MIN_SAFE_INTEGER
       let minTop = Number.MAX_SAFE_INTEGER
       let maxTop = Number.MIN_SAFE_INTEGER
-      let pointList: { left: number, top: number }[] = []
+      // let pointList: { left: number, top: number }[] = []
       state.postInfo.layers.forEach(item => {
         if (item.lock) {
           return
@@ -226,10 +251,10 @@ export default createStore({
         }
 
         if (PositionUtil.getSelectedByPosition(itemPositionInfo, positionInfo)) {
-          pointList.push(res.leftTop)
-          pointList.push(res.leftBottom)
-          pointList.push(res.rightTop)
-          pointList.push(res.rightBottom)
+          // pointList.push(res.leftTop)
+          // pointList.push(res.leftBottom)
+          // pointList.push(res.rightTop)
+          // pointList.push(res.rightBottom)
           if (minLeft > itemPositionInfo.left) {
             minLeft = itemPositionInfo.left
           }
@@ -245,18 +270,18 @@ export default createStore({
           state.group.operItems.push({
             operItem: item
           })
-          state.group.ids.push(item.id)
+          state.group.layersIds.push(item.id)
         }
       })
 
-      if (state.group.ids.length == 0) {
+      if (state.group.layersIds.length == 0) {
         state.group = undefined
       } else {
         state.group.left = minLeft
         state.group.top = minTop
         state.group.width = maxLeft - minLeft
         state.group.height = maxTop - minTop
-        state.group.anglePositionInfo = PositionUtil.getGroupPositionInfo(pointList, 340)
+        // state.group.anglePositionInfo = PositionUtil.getGroupPositionInfo(pointList, 340)
         state.group.operItems.forEach(item => {
           item.width = item.operItem.width / state.group.width
           item.height = item.operItem.height / state.group.height

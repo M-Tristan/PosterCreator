@@ -9,9 +9,13 @@ const operation = () => {
     return 100 / store.state.scale
   })
   const moduleMove = (module: operItem) => {
-    if (module.lock) {
-      return
-    }
+    // console.log(module)
+    // if (module.groupId) {
+    //   module = store.state.group
+    // }
+    // if (module.lock) {
+    //   return
+    // }
     let event = <MouseEvent>window.event
     let oriX = event.clientX
     let oriY = event.clientY

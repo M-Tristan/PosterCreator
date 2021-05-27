@@ -161,6 +161,34 @@ class PositionUtil {
     }
   }
   /**
+   * 获得两点之间的的信息
+   */
+  static getPositionInfoByTwoPoint(pointone: position, pointtwo: position) {
+    let x = pointtwo.left - pointone.left
+    let y = pointtwo.top - pointone.top
+    let length = PositionUtil.getLengthToOrigin(x, y)
+    let sin = Math.abs(y / length)
+
+    let angle = MathUtil.asin(sin)
+    if (y > 0 && x > 0) {
+      angle = angle
+    } else if (y > 0 && x < 0) {
+      angle = 180 - angle
+    } else if (y < 0 && x < 0) {
+      angle = angle + 180
+    } else if (y < 0 && x > 0) {
+      angle = 360 - angle
+    }
+    if (length == 0) {
+      angle = 0
+    }
+    return {
+      length,
+      angle
+    }
+
+  }
+  /**
    * 
    * @param x 获得点到坐标系原点的距离
    * @param y 

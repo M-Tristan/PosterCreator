@@ -134,13 +134,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.shape-area {
+/* .shape-area {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-}
+} */
 .oper-item {
   height: auto;
   margin-bottom: 5px;

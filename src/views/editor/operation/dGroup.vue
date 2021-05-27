@@ -1,5 +1,5 @@
 <template>
-  <!-- <div
+  <div
     class="group-content"
     @mousedown="moduleMove(module)"
     :style="{
@@ -9,8 +9,8 @@
       top: module.top + 'px',
       transform: `rotate(${module.rotate ? module.rotate : 0}deg)`,
     }"
-  > -->
-  <div
+  >
+    <!-- <div
     class="group-content"
     @mousedown="moduleMove(module)"
     :style="{
@@ -22,7 +22,7 @@
         module.anglePositionInfo.rotate ? module.anglePositionInfo.rotate : 0
       }deg)`,
     }"
-  >
+  > -->
     <regulator :module="module"></regulator>
     <rotate :module="module"></rotate>
   </div>
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent, watch } from "vue";
+import { computed, defineComponent, onMounted, watch } from "vue";
 import regulator from "./regulator.vue";
 import rotate from "./rotate.vue";
 import operation from "./common/operation";
@@ -53,6 +53,58 @@ export default defineComponent({
       return props.group;
     });
     const { moduleMove } = operation();
+    onMounted(() => {
+      if (!module.value.operItems) {
+        let layers = {} as any;
+        let moduleCenerPosition = PositionUtil.getCenterPosition(
+          module.value.left,
+          module.value.top,
+          module.value.width,
+          module.value.height
+        );
+        store.state.postInfo.layers.forEach((item) => {
+          layers[item.id] = item;
+        });
+        module.value.operItems = [];
+        module.value.layerIds.forEach((layerId) => {
+          let operItem = layers[layerId];
+          let itemLengthInfo = PositionUtil.getPositionInfoByTwoPoint(
+            moduleCenerPosition,
+            PositionUtil.getCenterPosition(
+              operItem.left,
+              operItem.top,
+              operItem.width,
+              operItem.height
+            )
+          );
+          let innerAngle = itemLengthInfo.angle - module.value.rotate;
+          console.log(itemLengthInfo);
+          console.log(module.value.rotate);
+          console.log(itemLengthInfo.angle + module.value.rotate);
+          let groupItem: any = {
+            centerLeft:
+              (itemLengthInfo.length * MathUtil.cos(innerAngle) +
+                module.value.width / 2) /
+              module.value.width,
+            centerTop:
+              (module.value.height / 2 +
+                itemLengthInfo.length * MathUtil.sin(innerAngle)) /
+              module.value.height,
+            height: operItem.height / module.value.height,
+            operItem: operItem,
+            rotate: operItem.rotate - module.value.rotate,
+            width: operItem.width / module.value.width,
+          };
+          if (operItem.type == "text" || operItem.type == "effectText") {
+            groupItem.fontSize = operItem.fontSize / module.value.width;
+            groupItem.letterSpacing =
+              operItem.letterSpacing / module.value.width;
+          }
+          module.value.operItems.push(groupItem);
+        });
+      }
+      console.log(module.value);
+    });
     const resetGroupItem = () => {
       module.value.operItems.forEach((item) => {
         item.operItem.rotate = (item.rotate + module.value.rotate) % 360;
@@ -124,7 +176,7 @@ export default defineComponent({
 .group-content {
   position: absolute;
   border: 1px solid blue;
-  background-color: rgba(0, 255, 255, 0.356);
-  z-index: 999;
+  /* background-color: rgba(0, 255, 255, 0.356); */
+  z-index: 0;
 }
 </style>

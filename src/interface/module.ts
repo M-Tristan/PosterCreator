@@ -11,7 +11,8 @@ export interface operItem extends itemBase {
   top: number,
   left: number,
   rotate: number,
-  lock: boolean
+  lock: boolean,
+  groupId?: string
 }
 
 export interface textShadow {
@@ -127,6 +128,18 @@ export interface background extends itemBase {
   color?: string
 }
 
+export interface group {
+  id: string,
+  layerIds: string[],
+  rotate: number,
+  width: number,
+  height: number,
+  left: number,
+  top: number,
+  lock: boolean,
+  type: string
+}
+
 export interface canvas {
   width: number,
   height: number
@@ -136,6 +149,7 @@ export interface postInfo {
   images: image[],
   texts: text[],
   layers: operItem[],
+  groups: group[]
   codes: code[],
   background: background
 }

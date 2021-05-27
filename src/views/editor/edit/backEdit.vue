@@ -79,13 +79,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.back-area {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
+// .back-area {r
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+// }
 .size-area {
   width: 100%;
   // float: left;

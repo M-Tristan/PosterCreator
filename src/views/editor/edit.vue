@@ -27,6 +27,7 @@
     <!-- <navigate></navigate> -->
     <zoom @click.stop></zoom>
     <div class="edit-area">
+      <group-edit v-if="group"></group-edit>
       <image-edit v-if="editModule.type == 'image'"></image-edit>
       <text-edit
         v-if="editModule.type == 'text' || editModule.type == 'effectText'"
@@ -53,6 +54,7 @@ import ShapeEdit from "./edit/shapeEdit.vue";
 import ChartEdit from "./edit/chartEdit.vue";
 import navigate from "./edit/navigate.vue";
 import editHead from "./edit/editHead.vue";
+import groupEdit from "./edit/groupEdit.vue";
 export default defineComponent({
   setup() {
     const batchPosition = reactive({
@@ -190,6 +192,9 @@ export default defineComponent({
       window.onmouseup = null;
       showBatchMask.value = false;
     };
+    let group = computed(() => {
+      return store.state.group;
+    });
     return {
       selectModel,
       editModule,
@@ -198,6 +203,7 @@ export default defineComponent({
       showBatchMask,
       moveOut,
       canvasArea,
+      group,
     };
   },
   components: {
@@ -212,6 +218,7 @@ export default defineComponent({
     ChartEdit,
     navigate,
     editHead,
+    groupEdit,
   },
 });
 </script>
@@ -243,6 +250,7 @@ export default defineComponent({
   width: 240px;
   border-left: 1px solid rgb(223, 223, 223);
   background-color: white;
+  overflow: scroll;
 }
 .canvas-area {
   position: absolute;

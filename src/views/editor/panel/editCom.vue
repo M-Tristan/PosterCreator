@@ -13,6 +13,7 @@
     }"
   >
     <background v-if="pattern == 'show'" :background="background"></background>
+    <d-group v-if="group && pattern == 'edit'" :group="group"></d-group>
     <template v-for="(layer, index) in layers" :key="index">
       <d-shape
         v-if="layer.type == 'shape'"
@@ -46,7 +47,6 @@
       ></d-code>
     </template>
 
-    <d-group v-if="group && pattern == 'edit'" :group="group"></d-group>
     <clipper v-if="clipOper && pattern == 'edit'"></clipper>
   </div>
 </template>

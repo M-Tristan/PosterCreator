@@ -1,5 +1,9 @@
 <template>
-  <div class="item-list" draggable="false" v-if="!module.lock">
+  <div
+    class="item-list"
+    draggable="false"
+    v-if="!module.lock && !module.groupId"
+  >
     <div
       class="item"
       @mousedown.stop="controlshape('left-top')"
