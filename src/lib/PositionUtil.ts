@@ -135,7 +135,6 @@ class PositionUtil {
       if (newposition.left < minLeft) {
         minLeft = newposition.left
       }
-      console.log(maxLeft)
       if (newposition.left > maxLeft) {
 
         maxLeft = newposition.left
@@ -147,7 +146,6 @@ class PositionUtil {
         maxTop = newposition.top
       }
     })
-    console.log(maxLeft, minLeft)
     let centerLeft = (minLeft + maxLeft) / 2
     let centerTop = (minTop + maxTop) / 2
     let positon = PositionUtil.getPositionAtAngleCoordinate(centerLeft, centerTop, -coordinateAngle)

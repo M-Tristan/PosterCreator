@@ -1,7 +1,7 @@
 <template>
   <div
     class="group-content"
-    @mousedown="moduleMove(module)"
+    @mousedown="moveEvent"
     :style="{
       width: module.width + 'px',
       height: module.height + 'px',
@@ -23,7 +23,7 @@
       }deg)`,
     }"
   > -->
-    <regulator :module="module"></regulator>
+    <regulator :module="module" @change="sizeChange"></regulator>
     <rotate :module="module"></rotate>
   </div>
 </template>
@@ -53,59 +53,63 @@ export default defineComponent({
       return props.group;
     });
     const { moduleMove } = operation();
+    const resetOperItems = () => {
+      let layers = {} as any;
+      let moduleCenerPosition = PositionUtil.getCenterPosition(
+        module.value.left,
+        module.value.top,
+        module.value.width,
+        module.value.height
+      );
+      store.state.postInfo.layers.forEach((item) => {
+        layers[item.id] = item;
+      });
+      module.value.operItems = [];
+      module.value.layerIds.forEach((layerId) => {
+        let operItem = layers[layerId];
+        let itemLengthInfo = PositionUtil.getPositionInfoByTwoPoint(
+          moduleCenerPosition,
+          PositionUtil.getCenterPosition(
+            operItem.left,
+            operItem.top,
+            operItem.width,
+            operItem.height
+          )
+        );
+        let innerAngle = itemLengthInfo.angle - module.value.rotate;
+        let groupItem: any = {
+          centerLeft:
+            (itemLengthInfo.length * MathUtil.cos(innerAngle) +
+              module.value.width / 2) /
+            module.value.width,
+          centerTop:
+            (module.value.height / 2 +
+              itemLengthInfo.length * MathUtil.sin(innerAngle)) /
+            module.value.height,
+          height: operItem.height / module.value.height,
+          operItem: operItem,
+          rotate: operItem.rotate - module.value.rotate,
+          width: operItem.width / module.value.width,
+        };
+        if (operItem.type == "text" || operItem.type == "effectText") {
+          groupItem.fontSize = operItem.fontSize / module.value.width;
+          groupItem.letterSpacing = operItem.letterSpacing / module.value.width;
+        }
+        module.value.operItems.push(groupItem);
+      });
+    };
     onMounted(() => {
       if (!module.value.operItems) {
-        let layers = {} as any;
-        let moduleCenerPosition = PositionUtil.getCenterPosition(
-          module.value.left,
-          module.value.top,
-          module.value.width,
-          module.value.height
-        );
-        store.state.postInfo.layers.forEach((item) => {
-          layers[item.id] = item;
-        });
-        module.value.operItems = [];
-        module.value.layerIds.forEach((layerId) => {
-          let operItem = layers[layerId];
-          let itemLengthInfo = PositionUtil.getPositionInfoByTwoPoint(
-            moduleCenerPosition,
-            PositionUtil.getCenterPosition(
-              operItem.left,
-              operItem.top,
-              operItem.width,
-              operItem.height
-            )
-          );
-          let innerAngle = itemLengthInfo.angle - module.value.rotate;
-          console.log(itemLengthInfo);
-          console.log(module.value.rotate);
-          console.log(itemLengthInfo.angle + module.value.rotate);
-          let groupItem: any = {
-            centerLeft:
-              (itemLengthInfo.length * MathUtil.cos(innerAngle) +
-                module.value.width / 2) /
-              module.value.width,
-            centerTop:
-              (module.value.height / 2 +
-                itemLengthInfo.length * MathUtil.sin(innerAngle)) /
-              module.value.height,
-            height: operItem.height / module.value.height,
-            operItem: operItem,
-            rotate: operItem.rotate - module.value.rotate,
-            width: operItem.width / module.value.width,
-          };
-          if (operItem.type == "text" || operItem.type == "effectText") {
-            groupItem.fontSize = operItem.fontSize / module.value.width;
-            groupItem.letterSpacing =
-              operItem.letterSpacing / module.value.width;
-          }
-          module.value.operItems.push(groupItem);
-        });
+        resetOperItems();
       }
-      console.log(module.value);
+      Window.prototype.onanimationend = () => {
+        store.commit("initGroupSize");
+      };
     });
     const resetGroupItem = () => {
+      if (!module.value.operItems) {
+        resetOperItems();
+      }
       module.value.operItems.forEach((item) => {
         item.operItem.rotate = (item.rotate + module.value.rotate) % 360;
         let width = (item.centerLeft - 0.5) * module.value.width;
@@ -131,43 +135,53 @@ export default defineComponent({
         item.operItem.top = centerPosition.top - item.operItem.height / 2;
       });
     };
-    watch(
-      () => module.value.width,
-      (nv, ov) => {
-        module.value.operItems.forEach((item) => {
-          item.operItem.width = item.width * module.value.width;
-          item.operItem.height = item.height * module.value.height;
-          if (
-            item.operItem.type == "text" ||
-            item.operItem.type == "effectText"
-          ) {
-            item.operItem.fontSize = item.fontSize * nv;
-            item.operItem.letterSpacing = item.letterSpacing * nv;
-          }
-        });
-        resetGroupItem();
+    const sizeChange = () => {
+      if (!module.value.operItems) {
+        resetOperItems();
       }
-    );
+      module.value.operItems.forEach((item) => {
+        item.operItem.width = item.width * module.value.width;
+        item.operItem.height = item.height * module.value.height;
+        if (
+          item.operItem.type == "text" ||
+          item.operItem.type == "effectText"
+        ) {
+          item.operItem.fontSize = item.fontSize * module.value.width;
+          item.operItem.letterSpacing = item.letterSpacing * module.value.width;
+        }
+      });
+      resetGroupItem();
+    };
+    const moveEvent = () => {
+      moduleMove(module.value, resetGroupItem);
+      // ();
+    };
+    // watch(
+    //   () => module.value.width,
+    //   (nv, ov) => {
+
+    //   }
+    // );
     watch(
       () => module.value.rotate,
       (nv, ov) => {
         resetGroupItem();
       }
     );
-    watch(
-      () => module.value.left,
-      (nv, ov) => {
-        resetGroupItem();
-      }
-    );
-    watch(
-      () => module.value.top,
-      (nv, ov) => {
-        resetGroupItem();
-      }
-    );
+    // watch(
+    //   () => module.value.left,
+    //   (nv, ov) => {
+    //     resetGroupItem();
+    //   }
+    // );
+    // watch(
+    //   () => module.value.top,
+    //   (nv, ov) => {
+    //     resetGroupItem();
+    //   }
+    // );
 
-    return { module, moduleMove };
+    return { module, moveEvent, sizeChange, resetGroupItem };
   },
 });
 </script>

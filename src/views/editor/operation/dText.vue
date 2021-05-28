@@ -100,13 +100,17 @@ export default defineComponent({
     const module: any = computed(() => {
       return props.text;
     });
-    const { moduleMove } = operation();
+    const { moduleMove, resetGroupItem } = operation();
     const selectModel = () => {
       store.commit("setEditModule", module.value.id);
     };
     const contentInput = ref((null as unknown) as HTMLElement);
     const changeHeight = () => {
       module.value.height = contentInput.value.clientHeight;
+      if (store.state.group) {
+        resetGroupItem(store.state.group);
+        store.commit("initGroupSize");
+      }
     };
     const fontSize = computed(() => {
       return module.value.fontSize;

@@ -21,12 +21,10 @@ export default defineComponent({
       return store.state.group;
     });
     const setGroup = () => {
-      let groupId = uuids4();
-      store.state.group.id = groupId;
-      store.state.group.operItems.forEach((item) => {
-        item.operItem.groupId = groupId;
-      });
-      store.state.group;
+      // store.state.group.id = groupId;
+      // store.state.group.operItems.forEach((item) => {
+      //   item.operItem.groupId = groupId;
+      // });
       store.commit("addGroup");
     };
     const closeGroup = () => {

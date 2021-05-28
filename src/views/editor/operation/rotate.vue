@@ -3,7 +3,7 @@
     class="el-icon-refresh swing-button"
     @mousedown.stop="rotate"
     draggable="false"
-    v-if="!module.lock && !module.groupId"
+    v-if="(!module.lock && !group) || module.type == 'group'"
     :style="{
       transform: `translateX(-50%) scale(${moveScale})`,
       bottom: `${-80 * moveScale}px`,
@@ -31,6 +31,9 @@ export default defineComponent({
     });
     const module: any = computed(() => {
       return props.module;
+    });
+    const group: any = computed(() => {
+      return store.state.group;
     });
     let rotatePositonX = computed(() => {
       return (
@@ -77,7 +80,7 @@ export default defineComponent({
         }
       };
     };
-    return { moveScale, rotate };
+    return { moveScale, rotate, group };
   },
 });
 </script>

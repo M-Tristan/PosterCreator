@@ -107,6 +107,20 @@ export default createStore({
       state.postList = _.cloneDeep(state.backList[state.backList.length - 1].postList)
     },
     pushBack(state) {
+      let editgroup = state.group
+      if (editgroup && editgroup.id) {
+        let group = state.postInfo.groups.find(item => {
+          return item.id == editgroup.id
+        })
+        if (group) {
+          group.height = editgroup.height
+          group.width = editgroup.width
+          group.top = editgroup.top
+          group.left = editgroup.left
+          group.rotate = editgroup.rotate
+        }
+
+      }
       state.backList.push({
         postInfo: _.cloneDeep(state.postInfo),
         postList: _.cloneDeep(state.postList)
@@ -177,10 +191,19 @@ export default createStore({
      * @param state 设置组合
      */
     addGroup(state) {
+      let groupId = uuids4();
       let group = {} as group
       group.type = 'group'
+      state.group.id = groupId
       group.id = state.group.id
-      group.layerIds = state.group.layersIds
+      group.layerIds = state.group.layerIds
+      group.layerIds.forEach(id => {
+        let layer = state.postInfo.layers.find(item => item.id == id)
+        if (layer) {
+          layer.groupId = groupId
+        }
+
+      })
       group.top = state.group.top
       group.left = state.group.left
       group.width = state.group.width
@@ -190,13 +213,14 @@ export default createStore({
     },
     setEditModule(state, moduleId: string) {
       state.editModule = <operItem>state.postInfo.layers.find(item => item.id == moduleId)
-
       if (state.editModule.groupId) {
+        let groupId = state.editModule.groupId
         let group = state.postInfo.groups.find(item => {
-          return item.id = state.editModule.groupId
+          return item.id == state.editModule.groupId
         })
-
-        state.group = { ...group }
+        if (!state.group || state.group.id != groupId) {
+          state.group = { ...group }
+        }
       }
     },
     setEditModuleToBack(state) {
@@ -225,7 +249,7 @@ export default createStore({
       state.postInfo.background.image = image
     },
     batchSelect(state, position) {
-      state.group = { layersIds: new Array<string>(), operItems: new Array<any>(), rotate: 0, type: 'group' }
+      state.group = { layerIds: new Array<string>(), rotate: 0, type: 'group' }
 
       let positionInfo = {
         top: position.top,
@@ -267,14 +291,14 @@ export default createStore({
           if (maxTop < itemPositionInfo.top + itemPositionInfo.height) {
             maxTop = itemPositionInfo.top + itemPositionInfo.height
           }
-          state.group.operItems.push({
-            operItem: item
-          })
-          state.group.layersIds.push(item.id)
+          // state.group.operItems.push({
+          //   operItem: item
+          // })
+          state.group.layerIds.push(item.id)
         }
       })
 
-      if (state.group.layersIds.length == 0) {
+      if (state.group.layerIds.length == 0) {
         state.group = undefined
       } else {
         state.group.left = minLeft
@@ -282,18 +306,35 @@ export default createStore({
         state.group.width = maxLeft - minLeft
         state.group.height = maxTop - minTop
         // state.group.anglePositionInfo = PositionUtil.getGroupPositionInfo(pointList, 340)
-        state.group.operItems.forEach(item => {
-          item.width = item.operItem.width / state.group.width
-          item.height = item.operItem.height / state.group.height
-          item.centerLeft = (item.operItem.left + item.operItem.width / 2 - state.group.left) / state.group.width
-          item.centerTop = (item.operItem.top + item.operItem.height / 2 - state.group.top) / state.group.height
-          item.rotate = item.operItem.rotate
-          if (item.operItem.type == 'text' || item.operItem.type == 'effectText') {
-            item.fontSize = item.operItem.fontSize / state.group.width
-            item.letterSpacing = item.operItem.letterSpacing / state.group.width
-          }
-        })
+        // state.group.operItems.forEach(item => {
+        //   item.width = item.operItem.width / state.group.width
+        //   item.height = item.operItem.height / state.group.height
+        //   item.centerLeft = (item.operItem.left + item.operItem.width / 2 - state.group.left) / state.group.width
+        //   item.centerTop = (item.operItem.top + item.operItem.height / 2 - state.group.top) / state.group.height
+        //   item.rotate = item.operItem.rotate
+        //   if (item.operItem.type == 'text' || item.operItem.type == 'effectText') {
+        //     item.fontSize = item.operItem.fontSize / state.group.width
+        //     item.letterSpacing = item.operItem.letterSpacing / state.group.width
+        //   }
+        // })
       }
+    },
+    initGroupSize(state) {
+      let pointList: { left: number, top: number }[] = []
+      state.group.operItems.forEach(operItem => {
+        let item = operItem.operItem
+        let res = PositionUtil.getPosition(item.left + item.width / 2, item.top + item.height / 2, item.width, item.height, item.rotate)
+        pointList.push(res.leftTop)
+        pointList.push(res.leftBottom)
+        pointList.push(res.rightTop)
+        pointList.push(res.rightBottom)
+      })
+      let anglePositionInfo = PositionUtil.getGroupPositionInfo(pointList, state.group.rotate)
+      state.group.width = anglePositionInfo.width
+      state.group.height = anglePositionInfo.height
+      state.group.top = anglePositionInfo.top
+      state.group.left = anglePositionInfo.left
+      state.group.operItems = undefined
     },
     lock(state) {
       state.editModule.lock = true

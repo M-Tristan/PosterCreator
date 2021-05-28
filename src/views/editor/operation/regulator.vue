@@ -2,7 +2,7 @@
   <div
     class="item-list"
     draggable="false"
-    v-if="!module.lock && !module.groupId"
+    v-if="(!module.lock && !group) || module.type == 'group'"
   >
     <div
       class="item"
@@ -114,6 +114,9 @@ export default defineComponent({
     });
     const module: any = computed(() => {
       return props.module;
+    });
+    const group: any = computed(() => {
+      return store.state.group;
     });
     // module.value.rotate = 0
     let cursor = computed(() => {
@@ -246,6 +249,7 @@ export default defineComponent({
             module.value.letterSpacing =
               (letterSpacing * module.value.height) / height;
           }
+          emit("change");
         };
       } else if (direction == "right-middle") {
         window.onmousemove = (event: MouseEvent) => {
@@ -272,6 +276,7 @@ export default defineComponent({
           ) {
             emit("changeHeight");
           }
+          emit("change");
         };
       } else if (direction == "right-top") {
         window.onmousemove = (event: MouseEvent) => {
@@ -300,6 +305,7 @@ export default defineComponent({
             module.value.letterSpacing =
               (letterSpacing * module.value.height) / height;
           }
+          emit("change");
         };
       } else if (direction == "middle-down") {
         window.onmousemove = (event: MouseEvent) => {
@@ -330,6 +336,7 @@ export default defineComponent({
             oriLeft + ((module.value.height - height) * sin) / 2;
           module.value.top =
             oriTop - ((module.value.height - height) * (1 + cos)) / 2;
+          emit("change");
         };
       } else if (direction == "left-top") {
         window.onmousemove = (event: MouseEvent) => {
@@ -358,6 +365,7 @@ export default defineComponent({
             module.value.letterSpacing =
               (letterSpacing * module.value.height) / height;
           }
+          emit("change");
         };
       } else if (direction == "left-middle") {
         window.onmousemove = (event: MouseEvent) => {
@@ -384,6 +392,7 @@ export default defineComponent({
           ) {
             emit("changeHeight");
           }
+          emit("change");
         };
       } else if (direction == "left-down") {
         window.onmousemove = (event: MouseEvent) => {
@@ -412,6 +421,7 @@ export default defineComponent({
             module.value.letterSpacing =
               (letterSpacing * module.value.height) / height;
           }
+          emit("change");
         };
       }
 
@@ -428,7 +438,7 @@ export default defineComponent({
         module.value.top = Math.round(module.value.top);
       };
     };
-    return { cursor, moveScale, controlshape };
+    return { cursor, moveScale, controlshape, group };
   },
 });
 </script>
