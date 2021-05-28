@@ -27,7 +27,9 @@ export default {
 <style lang="scss" scoped>
 .text-item{
   font-size: 20px;
+  width: 100%;
   cursor: pointer;
+ 
   &:hover{
     color: rgb(0, 162, 255);
   }
