@@ -1,68 +1,63 @@
 <template>
-  <div class='chart' @click='selectChart'>
-    <div class='mask'></div>
-    <div class='chart-content'> 
-      <div ref='dom' style="width: 280px;height:280px;">
-
-      </div>
+  <div class="chart" @click="selectChart">
+    <div class="mask"></div>
+    <div class="chart-content">
+      <div ref="dom" style="width: 280px; height: 280px"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
-import * as echarts from 'echarts'
-import {pie,bar} from './common/chartsDemo'
-import ModuleUtil from '@/lib/ModuleUtil'
-import { useStore } from 'vuex'
-import { operItem } from '@/interface/module'
+import { defineComponent, onMounted, ref } from "vue";
+import * as echarts from "echarts";
+import { pie, bar } from "./common/chartsDemo";
+import ModuleUtil from "@/lib/ModuleUtil";
+import { useStore } from "vuex";
+import { operItem } from "@/interface/module";
 export default defineComponent({
-  props:{
-    type:{
-      type:String,
-      default:'pie'
-    }
+  props: {
+    type: {
+      type: String,
+      default: "pie",
+    },
   },
-  setup (props) {
-    const store = useStore()
+  setup(props) {
+    const store = useStore();
     onMounted(() => {
-      let chartDom = dom.value
+      let chartDom = dom.value;
       var myChart = echarts.init(chartDom);
-      let option:any = pie;
-      switch(props.type){
-        case 'pie':
-            option = pie;
-            break
-        case 'bar':
-            option = bar;
-            break
+      let option: any = pie;
+      switch (props.type) {
+        case "pie":
+          option = pie;
+          break;
+        case "bar":
+          option = bar;
+          break;
       }
-      
+
       myChart.setOption(option);
-     
-      
-     
-    })
-    let dom = ref(null as unknown as HTMLElement)
-    const selectChart = async() => {
-      let chartInfo = <operItem> await ModuleUtil.getChartInfo(props.type)
-       store.commit('addChart',chartInfo)
-       store.commit('setEditModule',chartInfo.id)
-    }
-    return {dom,selectChart}
-  }
-})
+    });
+    let dom = ref((null as unknown) as HTMLElement);
+    const selectChart = async () => {
+      let chartInfo = <operItem>await ModuleUtil.getChartInfo(props.type);
+      store.commit("addChart", chartInfo);
+      store.commit("setEditModule", chartInfo.id);
+    };
+    return { dom, selectChart };
+  },
+});
 </script>
 
 <style scoped>
-.chart{
+.chart {
   display: inline-block;
   float: left;
   width: 140px;
   height: 140px;
   position: relative;
 }
-.mask{
+.mask {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -71,9 +66,8 @@ export default defineComponent({
   z-index: 99;
   cursor: pointer;
 }
-.chart-content{
-  transform: scale(0.5,0.5);
-  transform-origin:0 0;
-  
+.chart-content {
+  transform: scale(0.5, 0.5);
+  transform-origin: 0 0;
 }
 </style>

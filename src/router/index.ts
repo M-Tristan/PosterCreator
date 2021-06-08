@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: { name: 'edit' } 
+    redirect: { name: 'edit' }
   },
   {
     path: '/about',

@@ -1,57 +1,57 @@
 <template>
-  <div class='mask-demo' @click='selectMask'>
-    <canvas ref='canvasDom' width="100" height="100"></canvas>
+  <div class="mask-demo" @click="selectMask">
+    <canvas ref="canvasDom" width="100" height="100"></canvas>
   </div>
 </template>
 
 <script lang="ts">
-import { useStore } from 'vuex'
-import { computed, defineComponent, onMounted, ref } from 'vue'
-import operation from '../operation/common/operation'
+import { useStore } from "vuex";
+import { computed, defineComponent, onMounted, ref } from "vue";
+import operation from "../operation/common/operation";
 
 export default defineComponent({
-  props:{
-    src:{
-      type:String,
-      default:''
-    }
+  props: {
+    src: {
+      type: String,
+      default: "",
+    },
   },
-  setup (props) {
-    const store = useStore()
-    const { pushBack } = operation()
-    const canvasDom = ref(null as unknown as HTMLCanvasElement)
-    const editModule:any= computed(()=>{
-      return store.state.editModule
-    })
-    onMounted(()=>{
-     let image = new Image()
-     image.src = props.src
-     image.onload = function(){
-       draw(image)
-     }
-    })
-    function draw(image){
-      let canvas = canvasDom.value
-      let ctx = <CanvasRenderingContext2D >canvas.getContext('2d')
-      ctx.fillStyle="rgb(0, 153, 255)";
-	    ctx.fillRect(0,0,100,100);
-      ctx.globalCompositeOperation="destination-in";
-      ctx.drawImage(image,0,0,100,100);	
+  setup(props) {
+    const store = useStore();
+    const { pushBack } = operation();
+    const canvasDom = ref((null as unknown) as HTMLCanvasElement);
+    const editModule: any = computed(() => {
+      return store.state.editModule;
+    });
+    onMounted(() => {
+      let image = new Image();
+      image.src = props.src;
+      image.onload = function () {
+        draw(image);
+      };
+    });
+    function draw(image) {
+      let canvas = canvasDom.value;
+      let ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
+      ctx.fillStyle = "rgb(0, 153, 255)";
+      ctx.fillRect(0, 0, 100, 100);
+      ctx.globalCompositeOperation = "destination-in";
+      ctx.drawImage(image, 0, 0, 100, 100);
     }
     const selectMask = () => {
       editModule.value.mask = {
-        type:'normal',
-        src:props.src
-      }
-      pushBack()
-    }
-    return {canvasDom,selectMask}
-  }
-})
+        type: "normal",
+        src: props.src,
+      };
+      pushBack();
+    };
+    return { canvasDom, selectMask };
+  },
+});
 </script>
 
 <style scoped>
-.mask-demo{
+.mask-demo {
   width: 100px;
   height: 100px;
   display: flex;
@@ -62,5 +62,4 @@ export default defineComponent({
   margin-right: 10px;
   margin-bottom: 10px;
 }
-
 </style>

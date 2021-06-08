@@ -66,52 +66,81 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from 'vue'
-import { useStore } from 'vuex'
-import PositionUtil from '@/lib/PositionUtil'
-import MathUtil from '@/lib/MathUtil'
-import clipperRegulator from './clipperRegulator.vue'
-import _ from 'lodash'
-import operation from './common/operation'
+import { computed, defineComponent, reactive, ref } from "vue";
+import { useStore } from "vuex";
+import PositionUtil from "@/lib/PositionUtil";
+import MathUtil from "@/lib/MathUtil";
+import clipperRegulator from "./clipperRegulator.vue";
+import _ from "lodash";
+import operation from "./common/operation";
 export default defineComponent({
   setup() {
-    let showBack = ref(false)
-    const store = useStore()
-    const { pushBack } = operation()
-    const editModule: any = reactive(_.cloneDeep(store.state.editModule))
-    const showImage = reactive({ ...editModule })
-    let crop = PositionUtil.getClipInfo(editModule.width,editModule.height,editModule.crop)
-    let imageScale = editModule.width/crop.width
-    showImage.oriTop = showImage.top 
-    showImage.oriLeft = showImage.left 
-    showImage.showTop = crop.top * imageScale
-    showImage.showLeft = crop.left * imageScale
+    let showBack = ref(false);
+    const store = useStore();
+    const { pushBack } = operation();
+    const editModule: any = reactive(_.cloneDeep(store.state.editModule));
+    const showImage = reactive({ ...editModule });
+    let crop = PositionUtil.getClipInfo(
+      editModule.width,
+      editModule.height,
+      editModule.crop
+    );
+    let imageScale = editModule.width / crop.width;
+    showImage.oriTop = showImage.top;
+    showImage.oriLeft = showImage.left;
+    showImage.showTop = crop.top * imageScale;
+    showImage.showLeft = crop.left * imageScale;
 
-    let image = new Image()
-    image.src = store.state.editModule.src
+    let image = new Image();
+    image.src = store.state.editModule.src;
     const nature = reactive({
-      naturalWidth:0,
-      naturalHeight:0
-    })
+      naturalWidth: 0,
+      naturalHeight: 0,
+    });
     image.onload = () => {
-        showImage.showWidth = image.naturalWidth * imageScale
-        showImage.showHeigth = image.naturalHeight * imageScale
-        let innerCenter = PositionUtil.getCenterPosition(showImage.showLeft,showImage.showTop,showImage.width,showImage.height)
-        let hypotenuse = MathUtil.getHypotenuse(innerCenter.left - showImage.showWidth/2 , showImage.showHeigth/2 - innerCenter.top )
-        let innerAngle = 0
-        if(showImage.showHeigth/2 - innerCenter.top != 0){
-          innerAngle = MathUtil.atan(( showImage.showHeigth/2 - innerCenter.top)/(innerCenter.left - showImage.showWidth/2))
-        }
-        if(innerCenter.left - showImage.showWidth/2 < 0){
-          innerAngle+=180
-        }        
-        let showCenter =  PositionUtil.getCenterPosition(showImage.left,showImage.top,showImage.width,showImage.height)
-        let centerPosition = PositionUtil.getPositionbyOther(innerAngle-showImage.rotate,hypotenuse,showCenter)
-        let realPosition = PositionUtil.getPositionByCenter(centerPosition.left,centerPosition.top, showImage.showWidth,showImage.showHeigth)
-        editModule.top = realPosition.top
-        editModule.left = realPosition.left
-        showBack.value = true
-    }
+      showImage.showWidth = image.naturalWidth * imageScale;
+      showImage.showHeigth = image.naturalHeight * imageScale;
+      let innerCenter = PositionUtil.getCenterPosition(
+        showImage.showLeft,
+        showImage.showTop,
+        showImage.width,
+        showImage.height
+      );
+      let hypotenuse = MathUtil.getHypotenuse(
+        innerCenter.left - showImage.showWidth / 2,
+        showImage.showHeigth / 2 - innerCenter.top
+      );
+      let innerAngle = 0;
+      if (showImage.showHeigth / 2 - innerCenter.top != 0) {
+        innerAngle = MathUtil.atan(
+          (showImage.showHeigth / 2 - innerCenter.top) /
+            (innerCenter.left - showImage.showWidth / 2)
+        );
+      }
+      if (innerCenter.left - showImage.showWidth / 2 < 0) {
+        innerAngle += 180;
+      }
+      let showCenter = PositionUtil.getCenterPosition(
+        showImage.left,
+        showImage.top,
+        showImage.width,
+        showImage.height
+      );
+      let centerPosition = PositionUtil.getPositionbyOther(
+        innerAngle - showImage.rotate,
+        hypotenuse,
+        showCenter
+      );
+      let realPosition = PositionUtil.getPositionByCenter(
+        centerPosition.left,
+        centerPosition.top,
+        showImage.showWidth,
+        showImage.showHeigth
+      );
+      editModule.top = realPosition.top;
+      editModule.left = realPosition.left;
+      showBack.value = true;
+    };
     const buttonInfo = computed(() => {
       return PositionUtil.getPosition(
         showImage.left + showImage.width / 2,
@@ -119,37 +148,37 @@ export default defineComponent({
         showImage.width,
         showImage.height,
         showImage.rotate
-      )
-    })
+      );
+    });
     const ensureClip = () => {
-      let image = new Image()
-      image.src = showImage.src
+      let image = new Image();
+      image.src = showImage.src;
       image.onload = () => {
-         let imageEdit = store.state.editModule
-        let rateW = crop.width/editModule.width
-        let rateY = crop.height/editModule.height
+        let imageEdit = store.state.editModule;
+        let rateW = crop.width / editModule.width;
+        let rateY = crop.height / editModule.height;
         imageEdit.crop = {
-                            width: showImage.width*rateW,
-                            height: showImage.height*rateY,
-                            left: showImage.showLeft*rateW,
-                            top: showImage.showTop*rateY,
-                          }
-        imageEdit.top = showImage.top
-        imageEdit.left = showImage.left
-        imageEdit.width = showImage.width
-        imageEdit.height = showImage.height
-        let clipOper = store.state.clipOper
-        store.commit('setClipOper', !clipOper);
-        pushBack()
-      }
-    }
- 
-    return { editModule, showImage, buttonInfo,ensureClip,showBack}
+          width: showImage.width * rateW,
+          height: showImage.height * rateY,
+          left: showImage.showLeft * rateW,
+          top: showImage.showTop * rateY,
+        };
+        imageEdit.top = showImage.top;
+        imageEdit.left = showImage.left;
+        imageEdit.width = showImage.width;
+        imageEdit.height = showImage.height;
+        let clipOper = store.state.clipOper;
+        store.commit("setClipOper", !clipOper);
+        pushBack();
+      };
+    };
+
+    return { editModule, showImage, buttonInfo, ensureClip, showBack };
   },
   components: {
     clipperRegulator,
   },
-})
+});
 </script>
 <style lang="scss" scoped>
 .clipper {

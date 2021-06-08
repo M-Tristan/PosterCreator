@@ -1,40 +1,43 @@
 <template>
-  <div class='navigate' :style="{
-    height:`${navigateHeight}px`
-  }">
-    <image-item :postInfo='postInfo' :width="100"></image-item>
+  <div
+    class="navigate"
+    :style="{
+      height: `${navigateHeight}px`,
+    }"
+  >
+    <image-item :postInfo="postInfo" :width="100"></image-item>
   </div>
 </template>
 
 <script lang="ts">
-import { useStore } from 'vuex'
-import { computed, defineComponent } from 'vue'
-import ImageItem from '../panel/ImageItem.vue'
+import { useStore } from "vuex";
+import { computed, defineComponent } from "vue";
+import ImageItem from "../panel/ImageItem.vue";
 export default defineComponent({
-  components:{
-    ImageItem
+  components: {
+    ImageItem,
   },
-  setup () {
-     const store = useStore()
-     let postInfo = computed(()=>{
-      return  store.state.postInfo
-    })
-    const navigateHeight = computed(()=>{
-      let rate = 100/postInfo.value.canvas.width
-      return postInfo.value.canvas.height*rate+40
-    })
+  setup() {
+    const store = useStore();
+    let postInfo = computed(() => {
+      return store.state.postInfo;
+    });
+    const navigateHeight = computed(() => {
+      let rate = 100 / postInfo.value.canvas.width;
+      return postInfo.value.canvas.height * rate + 40;
+    });
 
-    return {postInfo,navigateHeight}
-  }
-})
+    return { postInfo, navigateHeight };
+  },
+});
 </script>
 
 <style scoped>
-.navigate{
+.navigate {
   position: absolute;
-text-align: center;
-padding-top: 20px;
-padding-left: 30px;
+  text-align: center;
+  padding-top: 20px;
+  padding-left: 30px;
   right: 240px;
   width: 160px;
   bottom: 100px;

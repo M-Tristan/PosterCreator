@@ -175,15 +175,15 @@ const plugins = [
   ElNotification,
 ]
 
-function installElement(app:App<Element>):void{
-    components.forEach(component => {
-        app.component(component.name, component)
-      })
-      
-      plugins.forEach(plugin => {
-        app.use(plugin)
-      })
-      
+function installElement(app: App<Element>): void {
+  components.forEach(component => {
+    app.component(component.name, component)
+  })
+
+  plugins.forEach(plugin => {
+    app.use(plugin)
+  })
+
 }
 export default installElement
 

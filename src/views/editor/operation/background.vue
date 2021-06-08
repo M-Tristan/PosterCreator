@@ -1,36 +1,42 @@
 <template>
-  <div class='background' :style="{
-      backgroundColor:background.color
-    }">
-    <img class='backImage' :style="{
-      width:`${background.image.width}px`,
-      height:`${background.image.height}px`,
-      left:`-${background.image.left}px`,
-      top:`-${background.image.top}px`,
-    }" draggable="false" v-if="background.image" :src='background.image.src' />
+  <div
+    class="background"
+    :style="{
+      backgroundColor: background.color,
+    }"
+  >
+    <img
+      class="backImage"
+      :style="{
+        width: `${background.image.width}px`,
+        height: `${background.image.height}px`,
+        left: `-${background.image.left}px`,
+        top: `-${background.image.top}px`,
+      }"
+      draggable="false"
+      v-if="background.image"
+      :src="background.image.src"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 export default defineComponent({
-   props:{
-    background:{
-      type:Object,
-      default:new Object()
-    }
+  props: {
+    background: {
+      type: Object,
+      default: new Object(),
+    },
   },
-  setup () {
-     
-    return {
-
-    }
-  }
-})
+  setup() {
+    return {};
+  },
+});
 </script>
 
 <style lang="scss" scoped>
-.background{
+.background {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -38,7 +44,7 @@ export default defineComponent({
   top: 0;
   pointer-events: none;
 }
-.backImage{
+.backImage {
   position: absolute;
 }
 </style>
