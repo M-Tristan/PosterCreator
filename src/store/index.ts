@@ -305,18 +305,7 @@ export default createStore({
         state.group.top = minTop
         state.group.width = maxLeft - minLeft
         state.group.height = maxTop - minTop
-        // state.group.anglePositionInfo = PositionUtil.getGroupPositionInfo(pointList, 340)
-        // state.group.operItems.forEach(item => {
-        //   item.width = item.operItem.width / state.group.width
-        //   item.height = item.operItem.height / state.group.height
-        //   item.centerLeft = (item.operItem.left + item.operItem.width / 2 - state.group.left) / state.group.width
-        //   item.centerTop = (item.operItem.top + item.operItem.height / 2 - state.group.top) / state.group.height
-        //   item.rotate = item.operItem.rotate
-        //   if (item.operItem.type == 'text' || item.operItem.type == 'effectText') {
-        //     item.fontSize = item.operItem.fontSize / state.group.width
-        //     item.letterSpacing = item.operItem.letterSpacing / state.group.width
-        //   }
-        // })
+    
       }
     },
     initGroupSize(state) {

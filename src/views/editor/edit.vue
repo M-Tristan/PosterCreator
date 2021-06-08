@@ -55,6 +55,7 @@ import ChartEdit from "./edit/chartEdit.vue";
 import navigate from "./edit/navigate.vue";
 import editHead from "./edit/editHead.vue";
 import groupEdit from "./edit/groupEdit.vue";
+import EditModule from "./lib/EditModule";
 export default defineComponent({
   setup() {
     const batchPosition = reactive({
@@ -64,6 +65,7 @@ export default defineComponent({
       height: 0,
     });
     const showBatchMask = ref(false);
+    const editInfo = ref(EditModule.postInfo)
     onMounted(() => {
       store.commit("setEditSize", {
         width: canvasArea.value.offsetWidth,
@@ -128,7 +130,7 @@ export default defineComponent({
       return store.state.scale;
     });
     let canvas = computed(() => {
-      return store.state.postInfo.canvas;
+      return editInfo.value.canvas
     });
     let editSize = computed(() => {
       return store.state.editSize;

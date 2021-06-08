@@ -93,24 +93,7 @@ export default defineComponent({
     let background = computed(() => {
       return store.state.postInfo.background;
     });
-    // let codes = computed(()=>{
-    //   return store.state.postInfo.codes
-    // })
-    // let texts = computed(()=>{
-    //   return store.state.postInfo.texts
-    // })
-    // let images = computed(()=>{
-    //   return store.state.postInfo.images
-    // })
-    // let charts = computed(()=>{
-    //   return store.state.postInfo.charts
-    // })
-    //  let shapes = computed(()=>{
-    //   return store.state.postInfo.shapes
-    // })
-    //  let effectTexts = computed(()=>{
-    //   return store.state.postInfo.effectTexts
-    // })
+  
     let layers = computed(() => {
       return store.state.postInfo.layers;
     });
