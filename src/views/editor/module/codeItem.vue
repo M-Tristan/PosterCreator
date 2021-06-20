@@ -10,6 +10,7 @@ import * as QRCode from "qrcode";
 import ModuleUtil from "@/lib/ModuleUtil";
 import { useStore } from "vuex";
 import { operItem } from "@/interface/module";
+
 export default defineComponent({
   props: {
     options: {

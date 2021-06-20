@@ -94,13 +94,14 @@ export default defineComponent({
 }
 .module-material {
   z-index: 2000;
-  width: 280px;
+  width: 300px;
   height: 100%;
   position: absolute;
   top: 0;
   left: 100%;
   border-right: 1px solid rgb(235, 235, 235);
-
+  overflow-y: scroll;
+  overflow-x: hidden;
   background-color: rgb(255, 255, 255);
 }
 .module-item {
