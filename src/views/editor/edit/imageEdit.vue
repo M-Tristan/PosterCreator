@@ -249,11 +249,12 @@
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import maskImageList from "@/lib/MaskList";
 import maskDemo from "./maskDemo.vue";
 import operation from "../operation/common/operation";
 import LockMask from "./lockMask.vue";
+import { getImageList } from "@/api/api";
 export default defineComponent({
   components: {
     maskDemo,
@@ -268,9 +269,12 @@ export default defineComponent({
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
-    const maskList: any = computed(() => {
-      return maskImageList;
-    });
+    const maskList = ref([])
+    onMounted(async ()=>{
+      let res = await getImageList({type:'mask'})
+      maskList.value = res.map(item=>item.image_url)
+      console.log(maskList.value)
+    })
     const borderRadiusMax = computed(() => {
       if (editModule.value.width > editModule.value.height) {
         return editModule.value.height / 2;
