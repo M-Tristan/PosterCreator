@@ -34,7 +34,14 @@
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent, onBeforeUpdate, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  defineComponent,
+  onBeforeUpdate,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import regulator from "./regulator.vue";
 import rotate from "./rotate.vue";
 import * as echarts from "echarts";
@@ -72,12 +79,13 @@ export default defineComponent({
       let chartDom = chart.value;
       myChart = echarts.init(chartDom);
       myChart.setOption(module.value.option);
+      console.log(myChart);
     };
     const store = useStore();
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
-    let chart = ref((null as unknown) as HTMLElement);
+    let chart = ref(null as unknown as HTMLElement);
     const module: any = computed(() => {
       return props.chart;
     });

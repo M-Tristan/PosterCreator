@@ -44,6 +44,22 @@
           {{ module.text }}
         </textPath>
       </text>
+      <text
+        :style="{
+          fontSize: `${module.fontSize}px`,
+          fontWeight: `${module.bold ? 900 : 400}`,
+          textDecoration: `${module.textDecoration}`,
+          fontStyle: `${module.italic ? 'italic' : 'normal'}`,
+          opacity: module.opacity,
+
+          fontFamily: module.fontFamily,
+        }"
+        :fill="module.color"
+      >
+        <textPath :xlink:href="`#${module.id}`" :textLength="textLength">
+          {{ module.text }}
+        </textPath>
+      </text>
     </svg>
     <lock
       :module="module"
@@ -86,7 +102,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const pathDom = ref((null as unknown) as SVGPathElement);
+    const pathDom = ref(null as unknown as SVGPathElement);
 
     const store = useStore();
     const editModule: any = computed(() => {

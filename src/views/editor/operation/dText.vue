@@ -14,6 +14,29 @@
     }"
   >
     <div
+      class="Strokecontent"
+      :style="{
+        fontSize: `${module.fontSize}px`,
+        transform: `scale(${fontScale})`,
+        color: `${pattern == 'show' ? module.color : 'rgba(0,0,0,0)'}`,
+        caretColor: module.color,
+        width: `${module.width / fontScale}px`,
+        fontWeight: `${module.bold ? 900 : 400}`,
+        textDecoration: `${module.textDecoration}`,
+        fontStyle: `${module.italic ? 'italic' : 'normal'}`,
+        lineHeight: `${module.lineHeight}`,
+        letterSpacing: `${module.letterSpacing}px`,
+        opacity: module.opacity,
+        textShadow: textShadow,
+        textStroke: `${pattern == 'edit' ? 0 : module.strokeWidth}px ${
+          module.strokeColor
+        }`,
+        fontFamily: module.fontFamily,
+      }"
+    >
+      {{ module.text }}
+    </div>
+    <div
       class="content"
       :contenteditable="contenteditable"
       @input="contentChange"
@@ -33,9 +56,7 @@
         letterSpacing: `${module.letterSpacing}px`,
         opacity: module.opacity,
         textShadow: textShadow,
-        textStroke: `${pattern == 'edit' ? 0 : module.strokeWidth}px ${
-          module.strokeColor
-        }`,
+
         fontFamily: module.fontFamily,
       }"
     >
@@ -104,7 +125,7 @@ export default defineComponent({
     const selectModel = () => {
       store.commit("setEditModule", module.value.id);
     };
-    const contentInput = ref((null as unknown) as HTMLElement);
+    const contentInput = ref(null as unknown as HTMLElement);
     const changeHeight = () => {
       module.value.height = contentInput.value.clientHeight;
       if (store.state.group) {
@@ -204,5 +225,13 @@ export default defineComponent({
   &:focus {
     outline: none;
   }
+}
+.Strokecontent {
+  word-break: break-word;
+  white-space: normal;
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  transform-origin: 0px 0px;
 }
 </style>

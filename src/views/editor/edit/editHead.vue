@@ -85,7 +85,7 @@
       </div>
     </div>
     <div class="download">
-      <i class="icon iconfont icon-xiazai"></i>
+      <i class="icon iconfont icon-xiazai" @click="download"></i>
     </div>
   </div>
 </template>
@@ -94,7 +94,7 @@
 import { useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import operation from "../operation/common/operation";
-
+import DesignToCanvas from "@/lib/designToCanvas";
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -135,6 +135,9 @@ export default defineComponent({
     const deletelayer = () => {
       store.commit("delete");
     };
+    const download = () => {
+      DesignToCanvas.downLoadByIndex(0);
+    };
     return {
       backList,
       nextList,
@@ -147,6 +150,7 @@ export default defineComponent({
       lock,
       unlock,
       deletelayer,
+      download,
     };
   },
 });

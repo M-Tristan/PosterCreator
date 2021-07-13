@@ -93,7 +93,7 @@ export default defineComponent({
     let background = computed(() => {
       return store.state.postInfo.background;
     });
-  
+
     let layers = computed(() => {
       return store.state.postInfo.layers;
     });
