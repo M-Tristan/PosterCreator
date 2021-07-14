@@ -180,7 +180,7 @@ class DesignToCanvas {
     left:${module.left}px;
     top: ${module.top}px;
     transform: rotate(${module.rotate ? module.rotate : 0}deg);
-    zIndex: ${module.zindex};
+    z-index: ${module.zindex};
     `
     let backDom = ''
     let codeBase64 = ''
@@ -228,7 +228,7 @@ class DesignToCanvas {
     left: ${module.left}px;
     top: ${module.top}px;
     transform: rotate(${module.rotate ? module.rotate : 0}deg);
-    zIndex: ${module.zindex};
+    z-index: ${module.zindex};
     position: absolute;
     display: inline-block;
     `
@@ -249,7 +249,7 @@ class DesignToCanvas {
     left: ${module.left}px;
     top: ${module.top}px;
     transform: rotate(${module.rotate ? module.rotate : 0}deg);
-    zIndex: ${module.zindex};
+    z-index: ${module.zindex};
     position: absolute;
     display: inline-block;
     `
@@ -303,7 +303,7 @@ class DesignToCanvas {
     height:${module.height}px;
     left: ${module.left}px;
     top: ${module.top}px;
-    zIndex: ${module.zindex};
+    z-index: ${module.zindex};
     transform: rotate(${module.rotate ? module.rotate : 0}deg);
     `
     let textStyle = `
@@ -455,9 +455,16 @@ class DesignToCanvas {
     // document.body.appendChild(image)
     var link = document.createElement('a');
     link.href = imageBase64 as string;
-    link.download = '测试.png';
+    link.download = `图片${new Date().getTime()}.png`;
     link.click()
 
+  }
+  static async downLoadALL() {
+    let length = store.state.postList.length
+    let index = 0
+    while (index < length) {
+      await DesignToCanvas.downLoadByIndex(index++)
+    }
   }
 }
 

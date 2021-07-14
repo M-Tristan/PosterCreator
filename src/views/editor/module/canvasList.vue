@@ -38,6 +38,7 @@ export default defineComponent({
       };
       store.commit("addCanvas", canvas);
       store.commit("initBack");
+      store.commit("pushBack");
     };
     const selectPostByIndex = (index) => {
       store.commit("selectPostByIndex", index);

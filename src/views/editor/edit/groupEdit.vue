@@ -28,10 +28,7 @@ export default defineComponent({
       store.commit("addGroup");
     };
     const closeGroup = () => {
-      store.state.group.id = undefined;
-      store.state.group.operItems.forEach((item) => {
-        item.groupId = undefined;
-      });
+      store.commit("closeGroup");
     };
     return { setGroup, closeGroup, group };
   },

@@ -42,6 +42,94 @@
       <i class="el-icon-film modelu-icon"></i>
       <span class="module-name">导航器</span>
     </div>
+
+    <el-popover placement="right" :width="300" trigger="click">
+      <template #reference>
+        <div class="tips-area">
+          <i class="icon iconfont icon-caidan"></i>
+          <span class="module-name">快捷键</span>
+        </div>
+      </template>
+      <div>
+        <el-row :gutter="20">
+          <el-col :span="6">移动</el-col>
+          <el-col :span="18">↑↓←→</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">快速移动</el-col>
+          <el-col :span="18">shlft+↑↓←→</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">复制</el-col>
+          <el-col :span="18">Ctrl+C</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">粘贴</el-col>
+          <el-col :span="18">Ctrl+V</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">剪切</el-col>
+          <el-col :span="18">Ctrl+X</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">撤销</el-col>
+          <el-col :span="18">Ctrl+Z</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">重做</el-col>
+          <el-col :span="18">Ctrl+Shlft+Z</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">删除</el-col>
+          <el-col :span="18">Delete/Backspace</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">全选</el-col>
+          <el-col :span="18">Ctrl+A</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">多选</el-col>
+          <el-col :span="18">Ctrl/Shlft+点选</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">成组</el-col>
+          <el-col :span="18">Ctrl+G</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">拆分组</el-col>
+          <el-col :span="18">Ctrl+Shlft+G</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">上移一层</el-col>
+          <el-col :span="18">Ctrl+]</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">移到顶层</el-col>
+          <el-col :span="18">Ctrl+Shlft+]</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">下移一层</el-col>
+          <el-col :span="18">Ctrl+[</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">移到底层</el-col>
+          <el-col :span="18">Ctrl+Shlft+[</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">适应窗口</el-col>
+          <el-col :span="18">Ctrl+0</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">画布放大</el-col>
+          <el-col :span="18">Ctrl++/Ctrl+滚轮</el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6">画布缩小</el-col>
+          <el-col :span="18">Ctrl+-/Ctrl+滚轮</el-col>
+        </el-row>
+      </div>
+    </el-popover>
+
     <div class="module-material">
       <background-list v-if="moduleId == 5"></background-list>
       <image-list v-if="moduleId == 2"></image-list>
@@ -56,7 +144,6 @@
 <script lang="ts">
 import {
   ComponentInternalInstance,
-  ComponentPublicInstance,
   defineComponent,
   getCurrentInstance,
   ref,
@@ -133,6 +220,23 @@ export default defineComponent({
     position: absolute;
     top: 0;
     right: 0;
+  }
+}
+
+.tips-area {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 12px;
+  i {
+    font-size: 30px;
   }
 }
 </style>

@@ -43,7 +43,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     let t: NodeJS.Timeout;
-    let value = ref(Number(props.modelValue));
+    let value = ref(Math.round(Number(props.modelValue) * 100) / 100);
     const add = () => {
       t = setInterval(() => {
         if (value.value >= props.max) {
@@ -53,7 +53,7 @@ export default defineComponent({
         emit("update:modelValue", value.value);
       }, 40);
     };
-    let input = ref((null as unknown) as HTMLInputElement);
+    let input = ref(null as unknown as HTMLInputElement);
     const reduce = () => {
       t = setInterval(() => {
         if (value.value <= props.min) {
@@ -91,7 +91,7 @@ export default defineComponent({
     watch(
       () => props.modelValue,
       (val) => {
-        value.value = Number(val);
+        value.value = Math.round(Number(val) * 100) / 100;
       }
     );
     return { value, add, closeInter, reduce, handleChange, input, upperCase };

@@ -1,7 +1,6 @@
 <template>
   <div
     class="code-content"
-    @click="selectModel"
     @mousedown="moduleMove(module)"
     :style="{
       width: module.width + 'px',
@@ -66,7 +65,7 @@ export default defineComponent({
 
   setup(props) {
     const store = useStore();
-    let code = ref((null as unknown) as HTMLElement);
+    let code = ref(null as unknown as HTMLElement);
     onMounted(() => {
       draw();
     });
@@ -95,7 +94,6 @@ export default defineComponent({
         }
       );
     };
-    // console.log(props.code)
 
     const editModule: any = computed(() => {
       return store.state.editModule;

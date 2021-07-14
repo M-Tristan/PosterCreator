@@ -38,11 +38,12 @@ export default defineComponent({
 
       myChart.setOption(option);
     });
-    let dom = ref((null as unknown) as HTMLElement);
+    let dom = ref(null as unknown as HTMLElement);
     const selectChart = async () => {
       let chartInfo = <operItem>await ModuleUtil.getChartInfo(props.type);
       store.commit("addChart", chartInfo);
       store.commit("setEditModule", chartInfo.id);
+      store.commit("pushBack");
     };
     return { dom, selectChart };
   },

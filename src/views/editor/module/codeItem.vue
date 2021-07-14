@@ -20,7 +20,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
-    let code = ref((null as unknown) as HTMLElement);
+    let code = ref(null as unknown as HTMLElement);
     onMounted(() => {
       QRCode.toCanvas("二维码编辑", props.options, (err: any, canvas: any) => {
         code.value.append(canvas);
@@ -36,6 +36,7 @@ export default defineComponent({
       });
       store.commit("addCode", codeInfo);
       store.commit("setEditModule", codeInfo.id);
+      store.commit("pushBack");
     };
     return { code, addCode };
   },

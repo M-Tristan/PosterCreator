@@ -9,7 +9,7 @@
             'iconfont',
             'icon-chexiaoyou',
             'icon-history',
-            { disabled: backList.length < 1 },
+            { disabled: backList.length <= 1 },
           ]"
           @click="back"
         ></i>
@@ -30,7 +30,7 @@
         placement="bottom"
         :width="200"
         trigger="click"
-        v-if="!editModule.lock"
+        v-if="canDelete"
       >
         <template #reference>
           <div class="positionAjust">位置调整</div>
@@ -48,12 +48,12 @@
           底部对齐
         </div>
       </el-popover>
-      <div class="space" v-if="!editModule.lock">|</div>
+      <div class="space" v-if="canDelete">|</div>
       <el-popover
         placement="bottom"
         :width="100"
         trigger="click"
-        v-if="!editModule.lock"
+        v-if="canDelete"
       >
         <template #reference>
           <div class="layerAjust">
@@ -66,24 +66,20 @@
         <div @click="layerAdjustment('bottom')" class="layer-item">置底</div>
       </el-popover>
 
-      <div
-        class="lockAjust"
-        v-if="!editModule.lock && editModule.type != 'back'"
-        @click="lock"
-      >
+      <div class="lockAjust" v-if="canLock" @click="lock">
         <i class="icon el-icon-unlock"></i>
       </div>
       <div class="lockAjust" v-if="editModule.lock" @click="unlock">
         <i class="icon el-icon-lock"></i>
       </div>
-      <div
-        class="deleteAjust"
-        v-if="editModule.type != 'back' && !editModule.lock"
-        @click="deletelayer"
-      >
+      <div class="deleteAjust" v-if="canDelete" @click="deletelayer">
         <i class="icon el-icon-delete"></i>
       </div>
+      <div class="deleteAjust" v-if="canCopy" @click="copy">
+        <i class="icon el-icon-document-copy"></i>
+      </div>
     </div>
+
     <div class="download">
       <i class="icon iconfont icon-xiazai" @click="download"></i>
     </div>
@@ -106,38 +102,60 @@ export default defineComponent({
       return store.state.nextList;
     });
     const back = () => {
-      if (backList.value.length < 1) {
+      if (backList.value.length <= 1) {
         return;
       }
       store.commit("back");
+      store.commit("setEditModuleToBack");
     };
     const next = () => {
       if (nextList.value.length < 1) {
         return;
       }
       store.commit("next");
+      store.commit("setEditModuleToBack");
     };
     const positionAjust = (type) => {
       store.commit("positionAdjustment", type);
+      store.commit("pushBack");
     };
     const layerAdjustment = (type) => {
       store.commit("layerAdjustment", type);
+      store.commit("pushBack");
     };
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
     const lock = () => {
       store.commit("lock");
+      store.commit("pushBack");
     };
     const unlock = () => {
       store.commit("unlock");
+      store.commit("pushBack");
     };
     const deletelayer = () => {
       store.commit("delete");
+      store.commit("pushBack");
+    };
+    const copy = () => {
+      store.commit("copy");
+      store.commit("paste");
+      store.commit("pushBack");
     };
     const download = () => {
-      DesignToCanvas.downLoadByIndex(0);
+      DesignToCanvas.downLoadALL();
     };
+    const canCopy = computed(() => {
+      return store.getters.canCopy;
+    });
+    const canDelete = computed(() => {
+      return store.getters.canDelete;
+    });
+    const canLock = computed(() => {
+      return store.getters.canLock;
+    });
+
     return {
       backList,
       nextList,
@@ -151,6 +169,10 @@ export default defineComponent({
       unlock,
       deletelayer,
       download,
+      canCopy,
+      copy,
+      canDelete,
+      canLock,
     };
   },
 });

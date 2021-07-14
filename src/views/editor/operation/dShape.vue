@@ -1,7 +1,6 @@
 <template>
   <div
     class="shape-content"
-    @click="selectModel"
     @mousedown="moduleMove(module)"
     :style="{
       width: module.width + 'px',
@@ -86,7 +85,6 @@ export default defineComponent({
     };
     function drawPolygon() {
       let points = PositionUtil.getShapesPoints(module.value.sides, 250);
-      console.log(module.value);
       let canvas = shape.value;
       let ctx = <CanvasRenderingContext2D>canvas.getContext("2d");
       ctx.clearRect(0, 0, 500, 500);
@@ -175,7 +173,7 @@ export default defineComponent({
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
-    let shape = ref((null as unknown) as HTMLCanvasElement);
+    let shape = ref(null as unknown as HTMLCanvasElement);
     const { moduleMove } = operation();
     const selectModel = () => {
       store.commit("setEditModule", module.value.id);

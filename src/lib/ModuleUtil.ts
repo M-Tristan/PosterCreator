@@ -16,10 +16,14 @@ class ModuleUtil {
       let image = new Image()
       image.src = src
       image.onload = () => {
+        let postInfo = store.state.postInfo
+        let ratew = postInfo.canvas.width / 3 / image.naturalWidth
+        let rateh = postInfo.canvas.height / 3 / image.naturalHeight
+        let rate = ratew > rateh ? rateh : ratew
         resolve({
           id: uuidv4(),
-          width: image.naturalWidth,
-          height: image.naturalHeight,
+          width: image.naturalWidth * rate,
+          height: image.naturalHeight * rate,
           top: 10,
           left: 10,
           src: src,

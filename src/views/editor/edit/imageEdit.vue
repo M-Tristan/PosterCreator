@@ -269,12 +269,11 @@ export default defineComponent({
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
-    const maskList = ref([])
-    onMounted(async ()=>{
-      let res = await getImageList({type:'mask'})
-      maskList.value = res.map(item=>item.image_url)
-      console.log(maskList.value)
-    })
+    const maskList = ref([]);
+    onMounted(async () => {
+      let res = await getImageList({ type: "mask" });
+      maskList.value = res.map((item) => item.image_url);
+    });
     const borderRadiusMax = computed(() => {
       if (editModule.value.width > editModule.value.height) {
         return editModule.value.height / 2;

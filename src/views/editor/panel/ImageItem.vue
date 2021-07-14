@@ -117,7 +117,7 @@ export default defineComponent({
     //   return store.state.postInfo.effectTexts
     // })
     let layers = computed(() => {
-      return store.state.postInfo.layers;
+      return props.postInfo.layers;
     });
     let canvas = computed(() => {
       return props.postInfo.canvas;

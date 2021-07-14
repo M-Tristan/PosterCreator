@@ -27,10 +27,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { useStore } from "vuex";
 import ModuleUtil from "@/lib/ModuleUtil";
-import {getImageList} from '@/api/api'
+import { getImageList } from "@/api/api";
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -47,23 +54,23 @@ export default defineComponent({
       "brown",
       "aqua",
     ]);
-    onMounted(async ()=>{
-      let res = await getImageList({type:'back'})
-      imageList.value = res.map(item=>item.image_url)
-    })
-    const imageList = ref([
-
-    ]);
+    onMounted(async () => {
+      let res = await getImageList({ type: "back" });
+      imageList.value = res.map((item) => item.image_url);
+    });
+    const imageList = ref([]);
     const selectBack = async (url: string) => {
       store.commit("setEditModuleToBack");
       let imageInfo = await ModuleUtil.getBackImageInfo(url);
       store.commit("addBackImage", imageInfo);
       backModel.value.color = undefined;
+      store.commit("pushBack");
     };
     const selectColor = async (color: string) => {
       store.commit("setEditModuleToBack");
       backModel.value.image = undefined;
       backModel.value.color = color;
+      store.commit("pushBack");
     };
     const backModel = computed(() => {
       return store.state.postInfo.background;

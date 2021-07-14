@@ -23,8 +23,13 @@
       }deg)`,
     }"
   > -->
-    <regulator :module="module" @change="sizeChange"></regulator>
-    <rotate :module="module"></rotate>
+    <lock :module="module"></lock>
+    <regulator
+      :module="module"
+      @change="sizeChange"
+      v-if="!module.lock"
+    ></regulator>
+    <rotate :module="module" v-if="!module.lock"></rotate>
   </div>
 </template>
 
@@ -36,10 +41,12 @@ import rotate from "./rotate.vue";
 import operation from "./common/operation";
 import MathUtil from "@/lib/MathUtil";
 import PositionUtil from "@/lib/PositionUtil";
+import Lock from "./lock.vue";
 export default defineComponent({
   components: {
     regulator,
     rotate,
+    Lock,
   },
   props: {
     group: {
@@ -48,12 +55,21 @@ export default defineComponent({
     },
   },
   setup(props) {
+    let parameter = {
+      groupInfos: <any>[],
+    };
     const store = useStore();
     const module: any = computed(() => {
       return props.group;
     });
     const { moduleMove } = operation();
+
     const resetOperItems = () => {
+      parameter = {
+        groupInfos: [],
+      };
+      let groupIds = <any>[];
+
       let layers = {} as any;
       let moduleCenerPosition = PositionUtil.getCenterPosition(
         module.value.left,
@@ -67,6 +83,9 @@ export default defineComponent({
       module.value.operItems = [];
       module.value.layerIds.forEach((layerId) => {
         let operItem = layers[layerId];
+        if (operItem.groupId && operItem.groupId !== module.value.id) {
+          groupIds.push(operItem.groupId);
+        }
         let itemLengthInfo = PositionUtil.getPositionInfoByTwoPoint(
           moduleCenerPosition,
           PositionUtil.getCenterPosition(
@@ -96,20 +115,37 @@ export default defineComponent({
           groupItem.letterSpacing = operItem.letterSpacing / module.value.width;
         }
         module.value.operItems.push(groupItem);
+        parameter[operItem.id] = groupItem;
+      });
+      groupIds = new Set(groupIds);
+      groupIds.forEach((id) => {
+        const group = store.state.postInfo.groups.find((item) => {
+          return item.id === id;
+        });
+
+        parameter.groupInfos.push({
+          id: id,
+          rotate: group.rotate - module.value.rotate,
+          group: group,
+        });
       });
     };
     onMounted(() => {
       if (!module.value.operItems) {
         resetOperItems();
-      }
-      Window.prototype.onanimationend = () => {
         store.commit("initGroupSize");
-      };
+      }
+      // Window.prototype.onanimationend = () => {
+      //   store.commit("initGroupSize");
+      // };
     });
     const resetGroupItem = () => {
       if (!module.value.operItems) {
         resetOperItems();
       }
+      parameter.groupInfos.forEach((item) => {
+        item.group.rotate = (item.rotate + module.value.rotate) % 360;
+      });
       module.value.operItems.forEach((item) => {
         item.operItem.rotate = (item.rotate + module.value.rotate) % 360;
         let width = (item.centerLeft - 0.5) * module.value.width;
@@ -168,6 +204,22 @@ export default defineComponent({
         resetGroupItem();
       }
     );
+    watch(
+      () => module.value.layerIds,
+      (nv, ov) => {
+        resetOperItems();
+        resetGroupItem();
+      }
+    );
+    watch(
+      () => module.value.id,
+      (nv, ov) => {
+        console.log("module.value.id");
+        resetOperItems();
+        resetGroupItem();
+      }
+    );
+
     // watch(
     //   () => module.value.left,
     //   (nv, ov) => {
@@ -189,7 +241,7 @@ export default defineComponent({
 <style scoped>
 .group-content {
   position: absolute;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   /* background-color: rgba(0, 255, 255, 0.356); */
   z-index: 0;
 }

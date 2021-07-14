@@ -14,22 +14,21 @@ import { defineComponent, onMounted, ref } from "vue";
 import ModuleUtil from "@/lib/ModuleUtil";
 import { useStore } from "vuex";
 import { operItem } from "@/interface/module";
-import {getImageList} from '@/api/api'
+import { getImageList } from "@/api/api";
 export default defineComponent({
   setup() {
     const store = useStore();
-    onMounted(async ()=>{
-      let res = await getImageList({type:'img'})
-      imageList.value = res.map(item=>item.image_url)
-      console.log(res)
-    })
-    const imageList = ref([
-    ]);
+    onMounted(async () => {
+      let res = await getImageList({ type: "img" });
+      imageList.value = res.map((item) => item.image_url);
+    });
+    const imageList = ref([]);
     const selectImage = async (url: string) => {
       let imageInfo = <operItem>await ModuleUtil.getAddImageInfo(url);
 
       store.commit("addImage", imageInfo);
       store.commit("setEditModule", imageInfo.id);
+      store.commit("pushBack");
     };
 
     return { imageList, selectImage };

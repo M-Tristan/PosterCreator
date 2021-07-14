@@ -100,11 +100,12 @@ export default defineComponent({
       ctx.closePath();
       ctx.stroke();
     }
-    let shape = ref((null as unknown) as HTMLCanvasElement);
+    let shape = ref(null as unknown as HTMLCanvasElement);
     const selectShape = async () => {
       let shapeInfo = <operItem>await ModuleUtil.getShapeInfo(props.type);
       store.commit("addShape", shapeInfo);
       store.commit("setEditModule", shapeInfo.id);
+      store.commit("pushBack");
     };
     return { shape, selectShape };
   },

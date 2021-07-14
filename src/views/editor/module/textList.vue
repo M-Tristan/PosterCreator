@@ -16,6 +16,7 @@ export default {
       let textInfo = await ModuleUtil.getAddTextInfo('双击修改文字')
       store.commit('addText', textInfo)
       store.commit('setEditModule', textInfo.id)
+      store.commit('pushBack');
     }
     return {
       addText

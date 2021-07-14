@@ -11,28 +11,30 @@ const operation = () => {
     return 100 / store.state.scale
   })
   const moduleMove = (module: operItem, moveEvent?: Function) => {
-    // console.log(module)
+
     let controlModule = module
     if (controlModule.type != 'group') {
       store.commit("setEditModule", controlModule.id);
       store.state.group = undefined
     }
-
-
-
     if (module.groupId) {
       let editmodule = store.state.postInfo.groups.find(item => {
         return item.id == module.groupId
       })
-      store.state.group = { ...editmodule }
+      store.state.group = editmodule
       module = store.state.group
-
-    }
-    if (store.state.group) {
-      resetGroupItem(module)
+      resetOperItems(module);
       store.commit("initGroupSize");
-
+      resetOperItems(module);
     }
+    if (module.lock) {
+      return
+    }
+    // if (store.state.group) {
+    // resetGroupItem(module)
+    // store.commit("initGroupSize");
+
+    // }
 
     let event = <MouseEvent>window.event
     let oriX = event.clientX
@@ -45,13 +47,10 @@ const operation = () => {
       let Y = event.clientY
       module.left = orileft + (X - oriX) * moveScale.value
       module.top = oritop + (Y - oriY) * moveScale.value
-
       shouldPushBack = true
       if (store.state.group) {
         resetGroupItem(module)
-
       }
-
     }
     window.onmouseup = () => {
       window.onmousemove = null
@@ -62,10 +61,7 @@ const operation = () => {
       module.top = Math.round(module.top)
       if (store.state.group) {
         resetGroupItem(module)
-        store.commit("initGroupSize");
-
       }
-
       if (shouldPushBack) {
         pushBack()
       } else {
@@ -73,14 +69,16 @@ const operation = () => {
           store.state.group = undefined
         }
       }
-
     }
   }
   const pushBack = () => {
     store.commit('pushBack');
   }
+  /**
+   * 初始化组合内图层信息
+   * @param module 
+   */
   const resetOperItems = (module: any) => {
-    console.log(module);
     let layers = {} as any;
     let moduleCenerPosition = PositionUtil.getCenterPosition(
       module.left,
@@ -125,6 +123,10 @@ const operation = () => {
       module.operItems.push(groupItem);
     });
   };
+  /**
+   * 重置图层位置大小
+   * @param module 
+   */
   const resetGroupItem = (module: any) => {
     if (!module.operItems) {
       resetOperItems(module);

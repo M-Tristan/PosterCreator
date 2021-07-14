@@ -1,7 +1,6 @@
 <template>
   <div
     class="text-content"
-    @click="selectModel"
     @mousedown="moveEvent"
     :style="{
       width: module.width + 'px',
@@ -130,7 +129,7 @@ export default defineComponent({
       module.value.height = contentInput.value.clientHeight;
       if (store.state.group) {
         resetGroupItem(store.state.group);
-        store.commit("initGroupSize");
+        // store.commit("initGroupSize");
       }
     };
     const fontSize = computed(() => {
@@ -173,6 +172,7 @@ export default defineComponent({
       module.value.html = contentInput.value.innerHTML;
       module.value.text = contentInput.value.innerText;
       changeHeight();
+      store.commit("initGroupSize");
     };
     const dbClickEvent = () => {
       contenteditable.value = true;

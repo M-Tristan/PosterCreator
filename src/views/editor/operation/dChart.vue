@@ -1,7 +1,6 @@
 <template>
   <div
     class="chart-content"
-    @click="selectModel"
     @mousedown="moduleMove(module)"
     :style="{
       width: module.width + 'px',
@@ -79,7 +78,6 @@ export default defineComponent({
       let chartDom = chart.value;
       myChart = echarts.init(chartDom);
       myChart.setOption(module.value.option);
-      console.log(myChart);
     };
     const store = useStore();
     const editModule: any = computed(() => {

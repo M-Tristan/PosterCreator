@@ -65,13 +65,8 @@ export default defineComponent({
       height: 0,
     });
     const showBatchMask = ref(false);
-    const editInfo = ref(EditModule.postInfo)
-    onMounted(() => {
-      store.commit("setEditSize", {
-        width: canvasArea.value.offsetWidth,
-        height: canvasArea.value.offsetHeight,
-      });
-    });
+    const editInfo = ref(EditModule.postInfo);
+
     window.onresize = () => {
       store.commit("setEditSize", {
         width: canvasArea.value.offsetWidth,
@@ -109,12 +104,16 @@ export default defineComponent({
       }
     });
     const store = useStore();
-    const canvasArea = ref((null as unknown) as HTMLElement);
+    const canvasArea = ref(null as unknown as HTMLElement);
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
 
     onMounted(async () => {
+      store.commit("setEditSize", {
+        width: canvasArea.value.offsetWidth,
+        height: canvasArea.value.offsetHeight,
+      });
       let canvas = {
         width: 800,
         height: 800,
@@ -122,6 +121,7 @@ export default defineComponent({
       store.commit("addCanvas", canvas);
       store.commit("initBack");
       store.commit("setEditModuleToBack");
+      store.commit("pushBack");
     });
     const selectModel = () => {
       store.commit("setEditModuleToBack");
@@ -130,7 +130,7 @@ export default defineComponent({
       return store.state.scale;
     });
     let canvas = computed(() => {
-      return editInfo.value.canvas
+      return editInfo.value.canvas;
     });
     let editSize = computed(() => {
       return store.state.editSize;

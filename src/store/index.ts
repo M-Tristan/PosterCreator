@@ -3,6 +3,7 @@ import { background, canvas, chart, code, image, operItem, shape, text, effectTe
 import { v4 as uuids4 } from 'uuid';
 import PositionUtil from '@/lib/PositionUtil';
 import _ from 'lodash'
+import EditUtil from './EditUtil';
 export default createStore({
   state: {
     postInfo: {
@@ -18,45 +19,38 @@ export default createStore({
     clipOper: false,
     group: undefined as any,
     editSize: { width: 800, height: 800 },
-    scale: 100
+    scale: 100,
+    copyLayers: new Array<any>()
   },
   mutations: {
+    /**
+     * 图层层级调整
+     * @param state 
+     * @param type 
+     */
     layerAdjustment(state, type) {
-      let index = state.editModule.zindex
-      state.editModule.zindex = 1000
-      let changeModule
+      let editModule = state.editModule
       switch (type) {
         case "up":
-          if (index != state.postInfo.layers.length - 1) {
-            state.postInfo.layers[index].zindex = index + 1
-            state.postInfo.layers[index + 1].zindex = index
-          }
+          EditUtil.upper(state, editModule.id)
           break;
         case "down":
-          if (index != 0) {
-            changeModule = state.postInfo.layers[index - 1]
-            state.postInfo.layers[index].zindex = index - 1
-            state.postInfo.layers[index - 1].zindex = index
-          }
+          EditUtil.down(state, editModule.id)
           break;
         case "top":
-          if (index != state.postInfo.layers.length - 1) {
-            state.postInfo.layers[index].zindex = state.postInfo.layers.length - 1
-            state.postInfo.layers[state.postInfo.layers.length - 1].zindex = index
-          }
+          EditUtil.top(state, editModule.id)
           break;
         case "bottom":
-          if (index != 0) {
-            state.postInfo.layers[index].zindex = 0
-            state.postInfo.layers[0].zindex = index
-
-          }
+          EditUtil.bottom(state, editModule.id)
           break;
       }
-      state.postInfo.layers.sort((layero, layert) => {
-        return layero.zindex - layert.zindex
-      })
+
     },
+    /**
+     * 对齐方式调整
+     * @param state 
+     * @param type 
+     */
     positionAdjustment(state, type) {
       let canvas = state.postInfo.canvas
       let range = {
@@ -94,86 +88,146 @@ export default createStore({
           break
       }
     },
+    /**
+     * 重做
+     * @param state 
+     */
     next(state) {
       let postState = state.nextList.pop()
       state.backList.push(postState)
       state.postInfo = _.cloneDeep(postState.postInfo)
       state.postList = _.cloneDeep(postState.postList)
     },
+    /**
+     * 撤销
+     * @param state 
+     */
     back(state) {
       let postState = state.backList.pop()
+      let postIndex = postState.postIndex
       state.nextList.push(postState)
-      state.postInfo = _.cloneDeep(state.backList[state.backList.length - 1].postInfo)
       state.postList = _.cloneDeep(state.backList[state.backList.length - 1].postList)
+      state.postInfo = state.postList[postIndex]
     },
+    /**
+     * 加入历史
+     * @param state 
+     */
     pushBack(state) {
-      let editgroup = state.group
-      if (editgroup && editgroup.id) {
-        let group = state.postInfo.groups.find(item => {
-          return item.id == editgroup.id
-        })
-        if (group) {
-          group.height = editgroup.height
-          group.width = editgroup.width
-          group.top = editgroup.top
-          group.left = editgroup.left
-          group.rotate = editgroup.rotate
-        }
-
-      }
       state.backList.push({
+        postIndex: state.postList.findIndex(post => { return post === state.postInfo }),
         postInfo: _.cloneDeep(state.postInfo),
         postList: _.cloneDeep(state.postList)
       })
       state.nextList = []
     },
-
+    /**
+     * 删除海报
+     * @param state 
+     * @param index 
+     */
     deletePostByIndex(state, index) {
       state.postList.splice(index, 1)
       state.postInfo = state.postList[0]
     },
+    /**
+     * 选择海报
+     * @param state 
+     * @param index 
+     */
     selectPostByIndex(state, index) {
       state.postInfo = state.postList[index]
+      state.editModule = state.postInfo.background
     },
+    /**
+     * 调整放大倍率
+     * @param state 
+     * @param scale 
+     */
     setScale(state, scale) {
       state.scale = scale
     },
+    /**
+     * 调整编辑器尺寸
+     * @param state 
+     * @param size 
+     */
     setEditSize(state, size) {
       state.editSize.width = size.width
       state.editSize.height = size.height
     },
+    /**
+     * 添加图标
+     * @param state 
+     * @param chart 
+     */
     addChart(state, chart: chart) {
       chart.type = 'chart'
       chart.zindex = state.postInfo.layers.length
       state.postInfo.layers.push(chart)
     },
+    /**
+     * 添加变形文字
+     * @param state '
+     * @param effectText 
+     */
     addEffectText(state, effectText: effectText) {
       effectText.type = 'effectText'
     },
+    /**
+     * 添加形状
+     * @param state 
+     * @param shape 
+     */
     addShape(state, shape: shape) {
       shape.type = 'shape'
       shape.zindex = state.postInfo.layers.length
       state.postInfo.layers.push(shape)
     },
+    /**
+     * 添加图片
+     * @param state 
+     * @param image 
+     */
     addImage(state, image: image) {
       image.type = 'image'
       image.zindex = state.postInfo.layers.length
       state.postInfo.layers.push(image)
     },
+    /**
+     * 添加图片
+     * @param state 
+     * @param text 
+     */
     addText(state, text: text) {
       text.type = 'text'
       text.zindex = state.postInfo.layers.length
       state.postInfo.layers.push(text)
     },
+    /**
+     * 添加二维码
+     * @param state 
+     * @param code 
+     */
     addCode(state, code: code) {
       code.type = 'code'
       code.zindex = state.postInfo.layers.length
       state.postInfo.layers.push(code)
     },
+    /**
+     * 添加背景
+     * @param state 
+     * @param back 
+     */
     addBack(state, back: background) {
       back.type = 'back'
       state.postInfo.background = back
     },
+    /**
+     * 添加画布
+     * @param state 
+     * @param canvas 
+     */
     addCanvas(state, canvas: canvas) {
       let postInfo = {
         groups: new Array<group>(),
@@ -202,15 +256,39 @@ export default createStore({
         if (layer) {
           layer.groupId = groupId
         }
-
       })
       group.top = state.group.top
       group.left = state.group.left
       group.width = state.group.width
       group.height = state.group.height
       group.rotate = state.group.rotate
+      state.group = group
       state.postInfo.groups.push(group)
+      EditUtil.adjustLayers(state)
     },
+    /**
+     * 拆分组
+     * @param state 
+     * 
+     */
+    closeGroup(state) {
+      let id = state.group['id']
+      delete state.group['id']
+      state.group.layerIds.forEach(id => {
+        let layer = state.postInfo.layers.find(item => item.id == id)
+        if (layer) {
+          delete layer['groupId']
+        }
+      })
+      state.postInfo.groups = state.postInfo.groups.filter(group => {
+        return group.id !== id
+      })
+    },
+    /**
+     * 设置编辑模块
+     * @param state 
+     * @param moduleId 
+     */
     setEditModule(state, moduleId: string) {
       state.editModule = <operItem>state.postInfo.layers.find(item => item.id == moduleId)
       if (state.editModule.groupId) {
@@ -219,16 +297,29 @@ export default createStore({
           return item.id == state.editModule.groupId
         })
         if (!state.group || state.group.id != groupId) {
-          state.group = { ...group }
+          state.group = group
         }
       }
     },
+    /**
+     * 编辑背景
+     * @param state 
+     */
     setEditModuleToBack(state) {
       state.editModule = state.postInfo.background
     },
+    /**
+     * 图片裁剪操作
+     * @param state 
+     * @param val 
+     */
     setClipOper(state, val: boolean) {
       state.clipOper = val
     },
+    /**
+     * 初始化背景
+     * @param state 
+     */
     initBack(state) {
       state.postInfo.background = {
         id: uuids4(),
@@ -245,9 +336,19 @@ export default createStore({
         }
       }
     },
+    /**
+     * 添加背景图
+     * @param state 
+     * @param image 
+     */
     addBackImage(state, image) {
       state.postInfo.background.image = image
     },
+    /**
+     * 选择背景图
+     * @param state 
+     * @param position 
+     */
     batchSelect(state, position) {
       state.group = { layerIds: new Array<string>(), rotate: 0, type: 'group' }
 
@@ -275,10 +376,7 @@ export default createStore({
         }
 
         if (PositionUtil.getSelectedByPosition(itemPositionInfo, positionInfo)) {
-          // pointList.push(res.leftTop)
-          // pointList.push(res.leftBottom)
-          // pointList.push(res.rightTop)
-          // pointList.push(res.rightBottom)
+          // console.log(item)
           if (minLeft > itemPositionInfo.left) {
             minLeft = itemPositionInfo.left
           }
@@ -291,10 +389,20 @@ export default createStore({
           if (maxTop < itemPositionInfo.top + itemPositionInfo.height) {
             maxTop = itemPositionInfo.top + itemPositionInfo.height
           }
-          // state.group.operItems.push({
-          //   operItem: item
-          // })
-          state.group.layerIds.push(item.id)
+
+          if (item.groupId) {
+
+            let group = state.postInfo.groups.find(group => {
+              return group.id === item.groupId
+            })
+            if (group) {
+              state.group.layerIds = [...state.group.layerIds, ...group.layerIds]
+            }
+          } else {
+            state.group.layerIds.push(item.id)
+
+          }
+
         }
       })
 
@@ -305,9 +413,12 @@ export default createStore({
         state.group.top = minTop
         state.group.width = maxLeft - minLeft
         state.group.height = maxTop - minTop
-    
       }
     },
+    /**
+     * 初始化组合尺寸
+     * @param state 
+     */
     initGroupSize(state) {
       let pointList: { left: number, top: number }[] = []
       state.group.operItems.forEach(operItem => {
@@ -325,23 +436,155 @@ export default createStore({
       state.group.left = anglePositionInfo.left
       state.group.operItems = undefined
     },
+    /**
+     * 做操作
+     * @param state 
+     */
     lock(state) {
-      state.editModule.lock = true
+      if (state.group) {
+        state.group.layerIds.forEach(id => {
+          let layer = state.postInfo.layers.find(item => item.id !== id)
+          if (layer) {
+            layer.lock = true
+          }
+
+        })
+        if (state.group.id) {
+          state.group.lock = true
+        } else {
+          state.group = undefined
+        }
+      } else {
+        state.editModule.lock = true
+
+      }
+
     },
+    /**
+     * 解锁
+     * @param state 
+     */
     unlock(state) {
-      state.editModule.lock = false
+      if (state.group) {
+        state.group.layerIds.forEach(id => {
+          let layer = state.postInfo.layers.find(item => item.id !== id)
+          if (layer) {
+            layer.lock = false
+          }
+
+        })
+        if (state.group.id) {
+          state.group.lock = false
+        } else {
+          state.group = undefined
+        }
+      } else {
+        state.editModule.lock = false
+
+      }
     },
+    /**
+     * 删除
+     * @param state 
+     */
     delete(state) {
-      let index = state.editModule.zindex
-      state.postInfo.layers.splice(index, 1)
-      state.postInfo.layers = [...state.postInfo.layers]
-      state.postInfo.layers.forEach((item, index) => {
-        item.zindex = index
-      })
+      if (state.group) {
+        state.group.layerIds.forEach(id => {
+          state.postInfo.layers = state.postInfo.layers.filter(item => item.id !== id)
+          state.group = undefined
+        })
+      } else {
+        let index = state.editModule.zindex
+        state.postInfo.layers.splice(index, 1)
+        state.postInfo.layers = [...state.postInfo.layers]
+        state.postInfo.layers.forEach((item, index) => {
+          item.zindex = index
+        })
+
+      }
       state.editModule = state.postInfo.background
+
+    },
+    /**
+     * 复制
+     * @param state 
+     */
+    copy(state) {
+      state.copyLayers = []
+
+      if (state.group) {
+
+        state.group.layerIds.forEach(id => {
+          let layer = state.postInfo.layers.find(item => item.id == id)
+
+          if (layer) {
+
+            state.copyLayers.push(_.cloneDeep(layer))
+          }
+        })
+      } else {
+        state.copyLayers.push(_.cloneDeep(state.editModule))
+      }
+    },
+    /**
+     * 粘贴
+     * @param state 
+     */
+    paste(state) {
+      if (state.copyLayers.length > 0) {
+        state.copyLayers.forEach(layer => {
+          let newLayer = _.cloneDeep(layer)
+          newLayer.id = uuids4()
+          newLayer.zindex = state.postInfo.layers.length
+          newLayer.left += 2
+          newLayer.top += 2
+          delete newLayer['groupId']
+          state.postInfo.layers.push(newLayer)
+        })
+      }
+    }
+  },
+  getters: {
+    canCopy(state) {
+      if (state.editModule && state.editModule.lock) {
+        return false
+      }
+      if (state.group && state.group.lock) {
+        return false
+      }
+      if (state.group || (state.editModule && state.editModule.type !== 'back')) {
+
+        return true
+      }
+      return false
+    },
+    canDelete(state) {
+      if (state.editModule && state.editModule.lock) {
+        return false
+      }
+      if (state.group && state.group.lock) {
+        return false
+      }
+      if (state.group || (state.editModule && state.editModule.type !== 'back')) {
+        return true
+      }
+      return false
+    },
+    canLock(state) {
+      if (state.editModule && state.editModule.lock) {
+        return false
+      }
+      if (state.group && state.group.lock) {
+        return false
+      }
+      if (state.group || (state.editModule && state.editModule.type !== 'back')) {
+        return true
+      }
+      return false
     }
   },
   actions: {
+
   },
   modules: {
   }

@@ -1,7 +1,6 @@
 <template>
   <div
     class="effect-text-content"
-    @click="selectModel"
     @mousedown="moduleMove(module)"
     :style="{
       width: module.width + 'px',
