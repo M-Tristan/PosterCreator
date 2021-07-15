@@ -1,8 +1,8 @@
 <template>
   <div
     :class="['editContent', { backgroundImage: pattern == 'show' }]"
-    @mousedown.stop
     draggable="false"
+    @mousedown.stop
     :style="{
       overflow: `${pattern == 'edit' ? 'none' : 'hidden'}`,
       transform: `scale(${scale / 100},${scale / 100}) `,
@@ -13,6 +13,11 @@
     }"
   >
     <background v-if="pattern == 'show'" :background="background"></background>
+    <div
+      class="patchMask"
+      v-if="pattern == 'edit'"
+      @mousedown="patchSelect"
+    ></div>
     <d-group v-if="group && pattern == 'edit'" :group="group"></d-group>
     <template v-for="(layer, index) in layers" :key="index">
       <d-shape
@@ -53,7 +58,7 @@
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
 import dImage from "../operation/dImage.vue";
 import dText from "../operation/dText.vue";
 import clipper from "../operation/clipper.vue";
@@ -81,8 +86,9 @@ export default defineComponent({
       default: "edit",
     },
   },
-  setup() {
+  setup(props, { emit }) {
     const store = useStore();
+
     const scale = computed(() => {
       return store.state.scale;
     });
@@ -118,6 +124,15 @@ export default defineComponent({
       }
       return { left, top };
     });
+    const patchSelect = () => {
+      const event: MouseEvent = <MouseEvent>window.event;
+      emit("patchSelect", {
+        startTop: (event.offsetY / 100) * scale.value + editPosition.value.top,
+        startLeft:
+          (event.offsetX / 100) * scale.value + editPosition.value.left,
+      });
+    };
+
     return {
       // images:images,
       // texts:texts,
@@ -132,6 +147,7 @@ export default defineComponent({
       editPosition,
       scale,
       layers,
+      patchSelect,
       // effectTexts
     };
   },
@@ -177,5 +193,13 @@ export default defineComponent({
       #ccc 0,
       #ccc
     );
+}
+.patchMask {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 </style>

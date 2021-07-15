@@ -4,14 +4,13 @@
     <div class="module-area">
       <module></module>
     </div>
-    <div
-      class="canvas-area"
-      ref="canvasArea"
-      @mousedown="batchStart"
-      @mouseleave="moveOut"
-    >
+    <div class="canvas-area" ref="canvasArea" @mousedown="batchStart">
       <editCom pattern="show" @click.stop></editCom>
-      <editCom pattern="edit" @click.stop></editCom>
+      <editCom
+        pattern="edit"
+        @click.stop
+        @patchSelect="patchSelectTwo"
+      ></editCom>
       <div class="batchMask" v-if="showBatchMask"></div>
       <div
         class="batchContent"
@@ -24,7 +23,7 @@
         }"
       ></div>
     </div>
-    <!-- <navigate></navigate> -->
+
     <zoom @click.stop></zoom>
     <div class="edit-area">
       <group-edit v-if="group"></group-edit>
@@ -138,6 +137,8 @@ export default defineComponent({
     let editPosition = computed(() => {
       let left = 0;
       let top = 0;
+      let width = (canvas.value.width * scale.value) / 100;
+      let height = (canvas.value.height * scale.value) / 100;
       if ((canvas.value.width * scale.value) / 100 < editSize.value.width) {
         left =
           (editSize.value.width - (canvas.value.width * scale.value) / 100) / 2;
@@ -147,31 +148,116 @@ export default defineComponent({
           (editSize.value.height - (canvas.value.height * scale.value) / 100) /
           2;
       }
-      return { left, top };
+      return { left, top, width, height };
     });
+    /**
+     * 批量选择操作
+     */
     const batchStart = () => {
       store.commit("setEditModuleToBack");
       const event: MouseEvent = <MouseEvent>window.event;
-      let startTop = event.offsetY;
-      batchPosition.top = event.offsetY;
+      const targetEle = event.target as HTMLDivElement;
+      let startTop = event.offsetY + (event.target as HTMLDivElement).scrollTop;
+      let startScrollTop = (event.target as HTMLDivElement).scrollTop;
+      let startClientY = event.clientY;
+      batchPosition.top =
+        event.offsetY + (event.target as HTMLDivElement).scrollTop;
       batchPosition.height = 0;
-      let startLeft = event.offsetX;
-      batchPosition.left = event.offsetX;
+      let startLeft =
+        event.offsetX + (event.target as HTMLDivElement).scrollLeft;
+      let startScrollLeft = (event.target as HTMLDivElement).scrollLeft;
+      let startClientX = event.clientX;
+      batchPosition.left =
+        event.offsetX + (event.target as HTMLDivElement).scrollLeft;
       batchPosition.width = 0;
       showBatchMask.value = true;
       window.onmousemove = (event: MouseEvent) => {
-        if (event.offsetY - startTop < 0) {
-          batchPosition.height = startTop - event.offsetY;
+        if (event.clientY - startClientY < 0) {
+          batchPosition.height =
+            startClientY - event.clientY - targetEle.scrollTop + startScrollTop;
           batchPosition.top = startTop - batchPosition.height;
         } else {
-          batchPosition.height = event.offsetY - startTop;
+          batchPosition.height = event.clientY - startClientY;
           batchPosition.top = startTop;
         }
-        if (event.offsetX - startLeft < 0) {
-          batchPosition.width = startLeft - event.offsetX;
+        if (event.clientX - startClientX < 0) {
+          batchPosition.width =
+            startClientX -
+            event.clientX -
+            targetEle.scrollLeft +
+            startScrollLeft;
           batchPosition.left = startLeft - batchPosition.width;
         } else {
-          batchPosition.width = event.offsetX - startLeft;
+          batchPosition.width = event.clientX - startClientX;
+          batchPosition.left = startLeft;
+        }
+      };
+      window.onmouseup = () => {
+        let rate = 100 / scale.value;
+        window.onmousemove = null;
+        window.onmouseup = null;
+        showBatchMask.value = false;
+        batchPosition.left -= editPosition.value.left;
+        batchPosition.top -= editPosition.value.top;
+        if (batchPosition.left >= editPosition.value.width) {
+          return;
+        }
+        if (batchPosition.top >= editPosition.value.height) {
+          return;
+        }
+        if (batchPosition.left + batchPosition.width <= 0) {
+          return;
+        }
+        if (batchPosition.top + batchPosition.height <= 0) {
+          return;
+        }
+
+        batchPosition.left =
+          -(editPosition.value.left - batchPosition.left) * rate;
+        batchPosition.top =
+          -(editPosition.value.top - batchPosition.top) * rate;
+        batchPosition.width *= rate;
+        batchPosition.height *= rate;
+        console.log(batchPosition);
+        store.commit("batchSelect", batchPosition);
+      };
+    };
+    /**
+     * 批量选择操作
+     */
+    const patchSelectTwo = (position) => {
+      store.commit("setEditModuleToBack");
+      const event: MouseEvent = <MouseEvent>window.event;
+      const targetEle = canvasArea.value;
+      let startTop = position.startTop;
+      let startScrollTop = canvasArea.value.scrollTop;
+      let startClientY = event.clientY;
+      batchPosition.top = startTop;
+      batchPosition.height = 0;
+      let startLeft = position.startLeft;
+      let startScrollLeft = canvasArea.value.scrollLeft;
+      let startClientX = event.clientX;
+      batchPosition.left = startLeft;
+      batchPosition.width = 0;
+      showBatchMask.value = true;
+      window.onmousemove = (event: MouseEvent) => {
+        if (event.clientY - startClientY < 0) {
+          batchPosition.height =
+            startClientY - event.clientY - targetEle.scrollTop + startScrollTop;
+          batchPosition.top = startTop - batchPosition.height;
+        } else {
+          batchPosition.height = event.clientY - startClientY;
+          batchPosition.top = startTop;
+        }
+        if (event.clientX - startClientX < 0) {
+          batchPosition.width =
+            startClientX -
+            event.clientX -
+            targetEle.scrollLeft +
+            startScrollLeft;
+          batchPosition.left = startLeft - batchPosition.width;
+        } else {
+          batchPosition.width = event.clientX - startClientX;
           batchPosition.left = startLeft;
         }
       };
@@ -189,11 +275,11 @@ export default defineComponent({
         store.commit("batchSelect", batchPosition);
       };
     };
-    const moveOut = () => {
-      window.onmousemove = null;
-      window.onmouseup = null;
-      showBatchMask.value = false;
-    };
+    // const moveOut = () => {
+    //   window.onmousemove = null;
+    //   window.onmouseup = null;
+    //   showBatchMask.value = false;
+    // };
     let group = computed(() => {
       return store.state.group;
     });
@@ -203,9 +289,10 @@ export default defineComponent({
       batchStart,
       batchPosition,
       showBatchMask,
-      moveOut,
+      // moveOut,
       canvasArea,
       group,
+      patchSelectTwo,
     };
   },
   components: {

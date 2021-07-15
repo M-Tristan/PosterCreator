@@ -202,6 +202,7 @@ class DesignToCanvas {
         module.text,
         {
           margin: 1,
+          width: 1000,
           color: {
             dark: module.colorDark,
             light: module.colorLight,

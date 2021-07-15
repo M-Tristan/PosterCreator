@@ -77,6 +77,7 @@ export default defineComponent({
         module.value.text,
         {
           margin: 1,
+          width: 1000,
           color: {
             dark: props.code.colorDark,
             light: props.code.colorLight,

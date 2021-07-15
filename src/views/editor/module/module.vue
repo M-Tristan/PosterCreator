@@ -43,9 +43,14 @@
       <span class="module-name">导航器</span>
     </div>
 
-    <el-popover placement="right" :width="300" trigger="click">
+    <el-popover
+      placement="right"
+      :width="300"
+      trigger="manual"
+      v-model:visible="visible"
+    >
       <template #reference>
-        <div class="tips-area">
+        <div class="tips-area" @click="visible = !visible">
           <i class="icon iconfont icon-caidan"></i>
           <span class="module-name">快捷键</span>
         </div>
@@ -169,7 +174,8 @@ export default defineComponent({
       moduleId.value = index;
     });
     let moduleId = ref(1);
-    return { moduleId };
+    const visible = ref(false);
+    return { moduleId, visible };
   },
 });
 </script>
