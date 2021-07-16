@@ -23,7 +23,7 @@ export default defineComponent({
       default: new Object(),
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore();
     const { pushBack } = operation();
     const moveScale = computed(() => {
@@ -71,10 +71,12 @@ export default defineComponent({
           deg = 360 - (Math.atan(width / height) / Math.PI) * 180;
         }
         module.value.rotate = Math.round(deg);
+        emit("change");
       };
       window.onmouseup = (event: MouseEvent) => {
         window.onmousemove = null;
         window.onmouseup = null;
+        emit("change");
         if (shouldPushBack) {
           pushBack();
         }

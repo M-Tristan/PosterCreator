@@ -29,13 +29,25 @@
       @change="sizeChange"
       v-if="!module.lock"
     ></regulator>
-    <rotate :module="module" v-if="!module.lock"></rotate>
+    <rotate
+      @change="resetGroupItem"
+      :module="module"
+      v-if="!module.lock"
+    ></rotate>
   </div>
 </template>
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent, onMounted, watch } from "vue";
+import {
+  ComponentInternalInstance,
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onBeforeUnmount,
+  onMounted,
+  watch,
+} from "vue";
 import regulator from "./regulator.vue";
 import rotate from "./rotate.vue";
 import operation from "./common/operation";
@@ -55,6 +67,8 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+
     let parameter = {
       groupInfos: <any>[],
     };
@@ -130,7 +144,12 @@ export default defineComponent({
         });
       });
     };
+
+    onBeforeUnmount(() => {
+      proxy?.$emitter.off("resetOperItems", resetOperItems);
+    });
     onMounted(() => {
+      proxy?.$emitter.on("resetOperItems", resetOperItems);
       if (!module.value.operItems) {
         resetOperItems();
         store.commit("initGroupSize");
@@ -189,21 +208,10 @@ export default defineComponent({
       resetGroupItem();
     };
     const moveEvent = () => {
-      moduleMove(module.value, resetGroupItem);
+      moduleMove(module.value);
       // ();
     };
-    // watch(
-    //   () => module.value.width,
-    //   (nv, ov) => {
 
-    //   }
-    // );
-    watch(
-      () => module.value.rotate,
-      (nv, ov) => {
-        resetGroupItem();
-      }
-    );
     watch(
       () => module.value.layerIds,
       (nv, ov) => {
@@ -214,25 +222,10 @@ export default defineComponent({
     watch(
       () => module.value.id,
       (nv, ov) => {
-        console.log("module.value.id");
         resetOperItems();
         resetGroupItem();
       }
     );
-
-    // watch(
-    //   () => module.value.left,
-    //   (nv, ov) => {
-    //     resetGroupItem();
-    //   }
-    // );
-    // watch(
-    //   () => module.value.top,
-    //   (nv, ov) => {
-    //     resetGroupItem();
-    //   }
-    // );
-
     return { module, moveEvent, sizeChange, resetGroupItem };
   },
 });

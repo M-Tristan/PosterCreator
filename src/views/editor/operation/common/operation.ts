@@ -10,7 +10,7 @@ const operation = () => {
   const moveScale = computed(() => {
     return 100 / store.state.scale
   })
-  const moduleMove = (module: operItem, moveEvent?: Function) => {
+  const moduleMove = (module: operItem) => {
 
     let controlModule = module
     if (controlModule.type != 'group') {

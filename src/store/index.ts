@@ -52,40 +52,89 @@ export default createStore({
      * @param type 
      */
     positionAdjustment(state, type) {
-      let canvas = state.postInfo.canvas
+      function align(Module) {
+        let editModule = Module
+        if (editModule.groupId) {
+          editModule = state.postInfo.groups.find(group => {
+            return group.id === editModule.groupId
+          })
+
+          EditUtil.initGroupParameter(state, editModule)
+        }
+        const res = PositionUtil.getPosition(editModule.left + editModule.width / 2, editModule.top + editModule.height / 2, editModule.width, editModule.height, editModule.rotate)
+        const itemPositionInfo = {
+          top: res.most.minTop,
+          left: res.most.minLeft,
+          width: res.most.maxLeft - res.most.minLeft,
+          height: res.most.maxTop - res.most.minTop
+        }
+        switch (type) {
+          case 'top':
+            editModule.top -= (itemPositionInfo.top - range.top)
+            break
+          case 'left':
+            editModule.left -= (itemPositionInfo.left - range.left)
+            break
+          case 'right':
+            editModule.left -= (itemPositionInfo.left + itemPositionInfo.width - range.left - range.width)
+            break
+          case 'bottom':
+            editModule.top -= (itemPositionInfo.top + itemPositionInfo.height - range.top - range.height)
+            break
+          case 'verticalcenter':
+            editModule.left -= (itemPositionInfo.left + itemPositionInfo.width / 2 - range.left - range.width / 2)
+            break
+          case 'horizontally':
+            editModule.top -= (itemPositionInfo.top + itemPositionInfo.height / 2 - range.top - range.height / 2)
+            break
+          case 'horizontaldistribution':
+            break
+          case 'verticaldistribution':
+            break
+        }
+        if (editModule.type === 'group') {
+          EditUtil.resetGroupItem(state, editModule)
+        }
+      }
+      const canvas = state.postInfo.canvas
+      const layeyinfo: any = {}
+      const layers = state.postInfo.layers
+      layers.forEach(item => {
+        layeyinfo[item.id] = item
+      })
       let range = {
         top: 0,
         left: 0,
         width: canvas.width,
         height: canvas.height
       }
-      let editModule = state.editModule as operItem
-      let res = PositionUtil.getPosition(editModule.left + editModule.width / 2, editModule.top + editModule.height / 2, editModule.width, editModule.height, editModule.rotate)
-      let itemPositionInfo = {
-        top: res.most.minTop,
-        left: res.most.minLeft,
-        width: res.most.maxLeft - res.most.minLeft,
-        height: res.most.maxTop - res.most.minTop
+      const editModuleList = <any>[]
+      if (state.group && !state.group.id) {
+        range = {
+          top: state.group.top,
+          left: state.group.left,
+          width: state.group.width,
+          height: state.group.height
+        }
+        state.group.layerIds.forEach((item: string) => {
+          editModuleList.push(layeyinfo[item])
+        })
+      } else {
+        if (state.editModule.type != 'back') {
+          editModuleList.push(state.editModule)
+        } else {
+          editModuleList.push(layeyinfo[state.group.layerIds[0]])
+        }
+
       }
-      switch (type) {
-        case "top":
-          editModule.top -= (itemPositionInfo.top - range.top)
-          break;
-        case "bottom":
-          editModule.top -= (itemPositionInfo.top + itemPositionInfo.height - range.top - range.height)
-          break;
-        case "left":
-          editModule.left -= (itemPositionInfo.left - range.left)
-          break;
-        case "right":
-          editModule.left -= (itemPositionInfo.left + itemPositionInfo.width - range.left - range.width)
-          break;
-        case "horizontally":
-          editModule.top -= (itemPositionInfo.top + itemPositionInfo.height / 2 - range.height / 2)
-          break;
-        case "verticalcenter":
-          editModule.left -= (itemPositionInfo.left + itemPositionInfo.width / 2 - range.left - range.width / 2)
-          break
+      if (type === 'horizontaldistribution') {
+        EditUtil.horizontaldistribution(state, editModuleList)
+      } else if (type === 'verticaldistribution') {
+        EditUtil.verticaldistribution(state, editModuleList)
+      } else {
+        editModuleList.forEach(item => {
+          align(item)
+        })
       }
     },
     /**
@@ -345,7 +394,7 @@ export default createStore({
       state.postInfo.background.image = image
     },
     /**
-     * 选择背景图
+     * 批量选择
      * @param state 
      * @param position 
      */
@@ -542,6 +591,39 @@ export default createStore({
           state.postInfo.layers.push(newLayer)
         })
       }
+    },
+    /**
+* 初始化对齐操作图层位置，大小
+* @param {*} state
+*/
+    initAlignGroupSize(state) {
+      const pointList = <any>[]
+      const layers = state.postInfo.layers
+      state.group.rotate = 0
+      state.group.layerIds.forEach(id => {
+        let item: any = layers.find(layer => { return layer.id === id })
+        if (!item) {
+          return
+        }
+        if (item.groupId) {
+
+          item = state.postInfo.groups.find(group => {
+            return group.id === item.groupId
+          })
+          EditUtil.initGroupSize(state, item)
+        }
+        const res = PositionUtil.getPosition(item.left + item.width / 2, item.top + item.height / 2, item.width, item.height, item.rotate)
+        pointList.push(res.leftTop)
+        pointList.push(res.leftBottom)
+        pointList.push(res.rightTop)
+        pointList.push(res.rightBottom)
+      })
+      const anglePositionInfo = PositionUtil.getGroupPositionInfo(pointList, state.group.rotate)
+      state.group.width = anglePositionInfo.width
+      state.group.height = anglePositionInfo.height
+      state.group.top = anglePositionInfo.top
+      state.group.left = anglePositionInfo.left
+      // state.group.operItems = undefined
     }
   },
   getters: {
@@ -581,7 +663,30 @@ export default createStore({
         return true
       }
       return false
-    }
+    },
+    /**
+   * 是否能进行分布操作
+   * @param {} state
+   */
+    distribution(state) {
+      const layerInfo: any = {}
+      const moduleIds: any = []
+      const layers = state.postInfo.layers
+      layers.forEach(item => {
+        layerInfo[item.id] = item
+      })
+      if (!state.group || state.group.id) {
+        return false
+      }
+      state.group.layerIds.forEach(item => {
+        if (layerInfo[item].groupId) {
+          moduleIds.push(layerInfo[item].groupId)
+        } else {
+          moduleIds.push(item)
+        }
+      })
+      return [...new Set(moduleIds)].length > 2
+    },
   },
   actions: {
 
