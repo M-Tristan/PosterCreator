@@ -1,5 +1,5 @@
 <template>
-  <div class="color-List">
+  <div class="color-List" >
     <div
       class="color-item"
       v-for="(item, index) in colorList"
@@ -7,15 +7,21 @@
       :style="{ backgroundColor: item }"
       @click="selectColor(item)"
     ></div>
-    <div class="color-item">
+    <div>
+      <div class="color-item">
       <el-color-picker
         v-model="backModel.color"
         size="mini"
         show-alpha
       ></el-color-picker>
     </div>
+    </div>
+    
   </div>
-  <div
+
+  <div v-infinite-scroll="search">
+
+    <div
     class="image-item"
     v-for="(url, index) in imageList"
     @click="selectBack(url)"
@@ -24,6 +30,8 @@
     <el-image style="width: 80px; height: 80px" :src="url" fit="contain">
     </el-image>
   </div>
+  </div>
+ 
 </template>
 
 <script lang="ts">
@@ -55,10 +63,16 @@ export default defineComponent({
       "aqua",
     ]);
     onMounted(async () => {
-      let res = await getImageList({ type: "back" });
-      imageList.value = res.map((item) => item.image_url);
+      search()
     });
-    const imageList = ref([]);
+    let pageNo = 1
+    let pageSize = 30
+    const search = async () => {
+      let res = await getImageList({ type: "back",pageNo:pageNo++, pageSize});
+      let list = res.map((item) => item.image_url);
+      imageList.value = [...imageList.value,...list]
+    }
+    const imageList = ref(<any>[]);
     const selectBack = async (url: string) => {
       store.commit("setEditModuleToBack");
       let imageInfo = await ModuleUtil.getBackImageInfo(url);
@@ -77,7 +91,7 @@ export default defineComponent({
     });
 
     // store.commit('setEditModuleToBack')
-    return { imageList, selectBack, colorList, backModel, selectColor };
+    return { imageList, selectBack, colorList, backModel, selectColor,search };
   },
 });
 </script>

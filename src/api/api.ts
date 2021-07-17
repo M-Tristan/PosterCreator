@@ -1,6 +1,6 @@
 import Request from '../lib/Request'
 
-// const http = new Request('http://localhost:3000',10000)
+// const http = new Request('http://localhost:4000',10000)
 const http = new Request('http://42.193.160.135:4000',10000)
 
 

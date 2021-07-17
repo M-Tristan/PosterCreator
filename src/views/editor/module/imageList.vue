@@ -1,5 +1,6 @@
 <template>
-  <div class="image-item" v-for="(url, index) in imageList" :key="index">
+  <div v-infinite-scroll="search">
+    <div class="image-item" v-for="(url, index) in imageList"  :key="index">
     <el-image
       @click="selectImage(url)"
       style="width: 80px; height: 80px"
@@ -7,6 +8,8 @@
       fit="contain"
     ></el-image>
   </div>
+  </div>
+ 
 </template>
 
 <script lang="ts">
@@ -18,11 +21,18 @@ import { getImageList } from "@/api/api";
 export default defineComponent({
   setup() {
     const store = useStore();
+    let pageNo = 1
+    let pageSize = 30
     onMounted(async () => {
-      let res = await getImageList({ type: "img" });
-      imageList.value = res.map((item) => item.image_url);
+      search()
     });
-    const imageList = ref([]);
+
+    const search = async () => {
+      let res = await getImageList({ type: "img",pageNo:pageNo++, pageSize});
+      let list = res.map((item) => item.image_url);
+      imageList.value = [...imageList.value,...list]
+    }
+    const imageList = ref(<any>[]);
     const selectImage = async (url: string) => {
       let imageInfo = <operItem>await ModuleUtil.getAddImageInfo(url);
 
@@ -31,7 +41,7 @@ export default defineComponent({
       store.commit("pushBack");
     };
 
-    return { imageList, selectImage };
+    return { imageList, selectImage ,search};
   },
 });
 </script>
