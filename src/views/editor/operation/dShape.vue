@@ -97,6 +97,7 @@ export default defineComponent({
         }
       });
       ctx.closePath();
+      ctx.lineWidth = 0.01;
       ctx.stroke();
       ctx.fillStyle = module.value.color;
       ctx.fill();
@@ -119,6 +120,7 @@ export default defineComponent({
         }
       });
       ctx.closePath();
+      ctx.lineWidth = 0.01;
       ctx.stroke();
       ctx.fillStyle = module.value.color;
       ctx.fill();
@@ -138,6 +140,7 @@ export default defineComponent({
         true
       );
       ctx.closePath();
+      ctx.lineWidth = 0.01;
       ctx.stroke();
       ctx.fillStyle = module.value.color;
       ctx.fill();
@@ -155,6 +158,7 @@ export default defineComponent({
         ctx.quadraticCurveTo(lastItem.x, lastItem.y, item.x, item.y);
         ctx.quadraticCurveTo(nextItem.x, nextItem.y, 250, 250);
       });
+      ctx.lineWidth = 0.01;
       ctx.stroke();
       ctx.fillStyle = module.value.color;
       ctx.fill();
@@ -165,6 +169,7 @@ export default defineComponent({
       ctx.clearRect(0, 0, 500, 500);
       ctx.beginPath();
       ctx.arc(250, 250, 250, 0, Math.PI * 2, false);
+      ctx.lineWidth = 0.01;
       ctx.stroke();
       ctx.fillStyle = module.value.color;
       ctx.fill();

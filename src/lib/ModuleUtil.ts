@@ -259,7 +259,7 @@ class ModuleUtil {
         opacity: 1,
         lock: false,
         shapeType: type,
-        color: 'rgba(255, 255, 255, 1)'
+        color: 'red'
       }
       if (type == 'polygon') {
         res.sides = 5

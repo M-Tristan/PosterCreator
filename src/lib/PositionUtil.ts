@@ -286,6 +286,7 @@ class PositionUtil {
     return opints
   }
   static getFlowerPointsByNum(num: number, r: number): flowerPoint[] {
+    num += num
     let startRate = 0
     let averageAngle = 360 / num
     let curveR = r / MathUtil.cos(averageAngle / 2)
@@ -294,7 +295,10 @@ class PositionUtil {
     while (index < num) {
       let lastCurPoint = { y: r - curveR * MathUtil.cos(startRate - averageAngle / 2), x: r - curveR * MathUtil.sin(startRate - averageAngle / 2) }
       let nextCurPoint = { y: r - curveR * MathUtil.cos(startRate + averageAngle / 2), x: r - curveR * MathUtil.sin(startRate + averageAngle / 2) }
-      opints.push({ y: r - r * MathUtil.cos(startRate), x: r - r * MathUtil.sin(startRate), lastCurPoint, nextCurPoint })
+      if (index % 2 != 1) {
+        opints.push({ y: r - r * MathUtil.cos(startRate), x: r - r * MathUtil.sin(startRate), lastCurPoint, nextCurPoint })
+      }
+
       startRate += averageAngle
       index++
     }

@@ -54,9 +54,13 @@ import ChartEdit from "./edit/chartEdit.vue";
 import navigate from "./edit/navigate.vue";
 import editHead from "./edit/editHead.vue";
 import groupEdit from "./edit/groupEdit.vue";
-import EditModule from "./lib/EditModule";
 export default defineComponent({
   setup() {
+    const store = useStore();
+    const canvasArea = ref(null as unknown as HTMLElement);
+    const editModule: any = computed(() => {
+      return store.state.editModule;
+    });
     const batchPosition = reactive({
       top: 0,
       left: 0,
@@ -64,7 +68,9 @@ export default defineComponent({
       height: 0,
     });
     const showBatchMask = ref(false);
-    const editInfo = ref(EditModule.postInfo);
+    const editInfo = computed(() => {
+      return store.state.postInfo;
+    });
 
     window.onresize = () => {
       store.commit("setEditSize", {
@@ -102,11 +108,6 @@ export default defineComponent({
         } catch (e) {}
       }
     });
-    const store = useStore();
-    const canvasArea = ref(null as unknown as HTMLElement);
-    const editModule: any = computed(() => {
-      return store.state.editModule;
-    });
 
     onMounted(async () => {
       store.commit("setEditSize", {
@@ -134,7 +135,7 @@ export default defineComponent({
     let editSize = computed(() => {
       return store.state.editSize;
     });
-    let editPosition = computed(() => {
+    const editPosition = computed(() => {
       let left = 0;
       let top = 0;
       let width = (canvas.value.width * scale.value) / 100;
@@ -197,30 +198,72 @@ export default defineComponent({
         window.onmousemove = null;
         window.onmouseup = null;
         showBatchMask.value = false;
-        batchPosition.left -= editPosition.value.left;
-        batchPosition.top -= editPosition.value.top;
-        if (batchPosition.left >= editPosition.value.width) {
-          return;
-        }
-        if (batchPosition.top >= editPosition.value.height) {
-          return;
-        }
-        if (batchPosition.left + batchPosition.width <= 0) {
-          return;
-        }
-        if (batchPosition.top + batchPosition.height <= 0) {
-          return;
-        }
-
         batchPosition.left =
           -(editPosition.value.left - batchPosition.left) * rate;
         batchPosition.top =
           -(editPosition.value.top - batchPosition.top) * rate;
         batchPosition.width *= rate;
         batchPosition.height *= rate;
-        console.log(batchPosition);
         store.commit("batchSelect", batchPosition);
       };
+      // window.onmouseup = () => {
+      //   let rate = 100 / scale.value;
+      //   window.onmousemove = null;
+      //   window.onmouseup = null;
+      //   showBatchMask.value = false;
+      //   batchPosition.left -= editPosition.value.left;
+      //   batchPosition.top -= editPosition.value.top;
+      //   if (batchPosition.left >= editPosition.value.width) {
+      //     return;
+      //   }
+      //   if (batchPosition.top >= editPosition.value.height) {
+      //     return;
+      //   }
+      //   if (batchPosition.left + batchPosition.width <= 0) {
+      //     return;
+      //   }
+      //   if (batchPosition.top + batchPosition.height <= 0) {
+      //     return;
+      //   }
+      //   let selectArea: any = {};
+      //   if (batchPosition.left < 0) {
+      //     selectArea.left = 0;
+      //   } else {
+      //     selectArea.left = batchPosition.left * rate;
+      //   }
+
+      //   if (batchPosition.top < 0) {
+      //     selectArea.top = 0;
+      //   } else {
+      //     selectArea.top = batchPosition.top * rate;
+      //   }
+
+      //   if (
+      //     batchPosition.left + batchPosition.width >
+      //     editPosition.value.width
+      //   ) {
+      //     selectArea.width = editPosition.value.width * rate;
+      //   } else {
+      //     selectArea.width = batchPosition.width * rate;
+      //   }
+
+      //   if (
+      //     batchPosition.top + batchPosition.height >
+      //     editPosition.value.height
+      //   ) {
+      //     selectArea.height = editPosition.value.height * rate;
+      //   } else {
+      //     selectArea.height = batchPosition.height * rate;
+      //   }
+
+      //   // batchPosition.left =
+      //   //   -(editPosition.value.left - batchPosition.left) * rate;
+      //   // batchPosition.top =
+      //   //   -(editPosition.value.top - batchPosition.top) * rate;
+      //   // batchPosition.width *= rate;
+      //   // batchPosition.height *= rate;
+      //   store.commit("batchSelect", selectArea);
+      // };
     };
     /**
      * 批量选择操作
@@ -289,10 +332,13 @@ export default defineComponent({
       batchStart,
       batchPosition,
       showBatchMask,
-      // moveOut,
+      editPosition,
       canvasArea,
       group,
       patchSelectTwo,
+      scale,
+      canvas,
+      editInfo,
     };
   },
   components: {

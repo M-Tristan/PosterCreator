@@ -47,6 +47,20 @@
         <div @click="positionAjust('bottom')" class="position-item">
           底部对齐
         </div>
+        <div v-if="distribution">
+          <div
+            @click="positionAjust('verticaldistribution')"
+            class="position-item"
+          >
+            垂直分布
+          </div>
+          <div
+            @click="positionAjust('horizontaldistribution')"
+            class="position-item"
+          >
+            水平分布
+          </div>
+        </div>
       </el-popover>
       <div class="space" v-if="canDelete">|</div>
       <el-popover
@@ -88,11 +102,17 @@
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent } from "vue";
+import {
+  ComponentInternalInstance,
+  computed,
+  defineComponent,
+  getCurrentInstance,
+} from "vue";
 import operation from "../operation/common/operation";
 import DesignToCanvas from "@/lib/designToCanvas";
 export default defineComponent({
   setup() {
+    const { proxy } = getCurrentInstance() as ComponentInternalInstance;
     const store = useStore();
     const { pushBack } = operation();
     const backList = computed(() => {
@@ -116,8 +136,20 @@ export default defineComponent({
       store.commit("setEditModuleToBack");
     };
     const positionAjust = (type) => {
+      let group = store.state.group;
+      if (group && !group.id) {
+        if (group.rotate !== 0) {
+          store.commit("initAlignGroupSize");
+          proxy?.$emitter.emit("resetOperItems");
+        }
+      }
+
       store.commit("positionAdjustment", type);
-      store.commit("pushBack");
+      if (group && !group.id) {
+        store.commit("initAlignGroupSize");
+        proxy?.$emitter.emit("resetOperItems");
+      }
+      // store.commit("pushBack");
     };
     const layerAdjustment = (type) => {
       store.commit("layerAdjustment", type);
@@ -155,7 +187,9 @@ export default defineComponent({
     const canLock = computed(() => {
       return store.getters.canLock;
     });
-
+    const distribution = computed(() => {
+      return store.getters.distribution;
+    });
     return {
       backList,
       nextList,
@@ -173,6 +207,7 @@ export default defineComponent({
       copy,
       canDelete,
       canLock,
+      distribution,
     };
   },
 });
