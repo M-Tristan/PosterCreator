@@ -10,19 +10,6 @@
       transform: `rotate(${module.rotate ? module.rotate : 0}deg)`,
     }"
   >
-    <!-- <div
-    class="group-content"
-    @mousedown="moduleMove(module)"
-    :style="{
-      width: module.anglePositionInfo.width + 'px',
-      height: module.anglePositionInfo.height + 'px',
-      left: module.anglePositionInfo.left + 'px',
-      top: module.anglePositionInfo.top + 'px',
-      transform: `rotate(${
-        module.anglePositionInfo.rotate ? module.anglePositionInfo.rotate : 0
-      }deg)`,
-    }"
-  > -->
     <lock :module="module"></lock>
     <regulator
       :module="module"
@@ -144,7 +131,6 @@ export default defineComponent({
         });
       });
     };
-
     onBeforeUnmount(() => {
       proxy?.$emitter.off("resetOperItems", resetOperItems);
     });
@@ -216,6 +202,18 @@ export default defineComponent({
       () => module.value.layerIds,
       (nv, ov) => {
         resetOperItems();
+        resetGroupItem();
+      }
+    );
+    watch(
+      () => module.value.left,
+      (nv, ov) => {
+        resetGroupItem();
+      }
+    );
+    watch(
+      () => module.value.top,
+      (nv, ov) => {
         resetGroupItem();
       }
     );

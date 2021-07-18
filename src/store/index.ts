@@ -10,7 +10,8 @@ export default createStore({
       layers: new Array<operItem>(),
       groups: new Array<group>(),
       background: <background>new Object(),
-      canvas: <canvas>new Object()
+      canvas: <canvas>new Object(),
+      watermark: undefined as any
     },
     postList: new Array<any>(),
     backList: new Array<any>(),
@@ -194,6 +195,15 @@ export default createStore({
      * @param scale 
      */
     setScale(state, scale) {
+      if (scale < 1) {
+        scale = 1
+      }
+      if (scale > 400) {
+        scale = 400
+      }
+      if (scale > 10) {
+        scale = Math.floor(scale / 10) * 10
+      }
       state.scale = scale
     },
     /**
@@ -277,12 +287,18 @@ export default createStore({
      * @param state 
      * @param canvas 
      */
-    addCanvas(state, canvas: canvas) {
+    addCanvas(state) {
+      let canvas = { width: 1000, height: 1000 }
+      if (state.postList[0]) {
+        canvas = { ...state.postList[0].canvas }
+      }
+
       let postInfo = {
         groups: new Array<group>(),
         layers: new Array<operItem>(),
         background: <background>new Object(),
-        canvas: <canvas>new Object()
+        canvas: <canvas>new Object(),
+        watermark: undefined
       }
       postInfo.canvas = canvas
       state.postList.push(postInfo)
@@ -492,7 +508,7 @@ export default createStore({
     lock(state) {
       if (state.group) {
         state.group.layerIds.forEach(id => {
-          let layer = state.postInfo.layers.find(item => item.id !== id)
+          let layer = state.postInfo.layers.find(item => item.id === id)
           if (layer) {
             layer.lock = true
           }
@@ -516,7 +532,7 @@ export default createStore({
     unlock(state) {
       if (state.group) {
         state.group.layerIds.forEach(id => {
-          let layer = state.postInfo.layers.find(item => item.id !== id)
+          let layer = state.postInfo.layers.find(item => item.id === id)
           if (layer) {
             layer.lock = false
           }
@@ -576,6 +592,33 @@ export default createStore({
       }
     },
     /**
+     * 
+     * @param state 剪切
+     */
+    shear(state) {
+      state.copyLayers = []
+
+      if (state.group) {
+
+        state.group.layerIds.forEach(id => {
+          let layer = state.postInfo.layers.find(item => item.id == id)
+
+          if (layer) {
+
+            state.copyLayers.push(_.cloneDeep(layer))
+            state.postInfo.layers = state.postInfo.layers.filter(item => { return item != layer })
+          }
+        })
+        state.editModule = state.postInfo.background
+        state.group = undefined
+      } else {
+        state.postInfo.layers = state.postInfo.layers.filter(item => { return item != state.editModule })
+        state.copyLayers.push(_.cloneDeep(state.editModule))
+        state.editModule = state.postInfo.background
+
+      }
+    },
+    /**
      * 粘贴
      * @param state 
      */
@@ -624,6 +667,119 @@ export default createStore({
       state.group.top = anglePositionInfo.top
       state.group.left = anglePositionInfo.left
       // state.group.operItems = undefined
+    },
+    /**
+     * 添加水印
+     * @param state 
+     */
+    addWaterMask(state) {
+      state.postInfo.watermark = {
+        fontSize: 12,
+        space: 4,
+        opacity: 10,
+        rotate: 10,
+        text: 'postcreator',
+        cross: 0
+      }
+    },
+    /**
+     * 去除水印
+     * @param state 
+     */
+    removeWaterMask(state) {
+      state.postInfo.watermark = undefined
+    },
+    /**
+     * 横轴移动
+     * @param state 
+     */
+    moveLeft(state, step) {
+
+
+      if (state.group) {
+        if ((state.group && state.group.lock == true)) {
+          return
+        }
+        state.group.left += step
+      } else {
+        if (state.editModule.type === 'back' || state.editModule.lock) {
+          return
+        }
+        state.editModule.left += step
+      }
+
+
+    },
+    /**
+   * 纵轴移动
+   * @param state 
+   */
+    moveTop(state, step) {
+
+
+      if (state.group) {
+        if ((state.group && state.group.lock == true)) {
+          return
+        }
+        state.group.top += step
+      } else {
+        if (state.editModule.type === 'back' || state.editModule.lock) {
+          return
+        }
+        state.editModule.top += step
+      }
+
+
+    },
+    /**
+     * 全选
+     * @param state 
+     */
+    selectAll(state) {
+      let group: any = { layerIds: new Array<string>(), rotate: 0, type: 'group' }
+
+
+      let minLeft = Number.MAX_SAFE_INTEGER
+      let maxLeft = Number.MIN_SAFE_INTEGER
+      let minTop = Number.MAX_SAFE_INTEGER
+      let maxTop = Number.MIN_SAFE_INTEGER
+      // let pointList: { left: number, top: number }[] = []
+      state.postInfo.layers.forEach(item => {
+        if (item.lock) {
+          return
+        }
+        let res = PositionUtil.getPosition(item.left + item.width / 2, item.top + item.height / 2, item.width, item.height, item.rotate)
+        let itemPositionInfo = {
+          top: res.most.minTop,
+          left: res.most.minLeft,
+          width: res.most.maxLeft - res.most.minLeft,
+          height: res.most.maxTop - res.most.minTop
+        }
+
+        if (minLeft > itemPositionInfo.left) {
+          minLeft = itemPositionInfo.left
+        }
+        if (minTop > itemPositionInfo.top) {
+          minTop = itemPositionInfo.top
+        }
+        if (maxLeft < itemPositionInfo.left + itemPositionInfo.width) {
+          maxLeft = itemPositionInfo.left + itemPositionInfo.width
+        }
+        if (maxTop < itemPositionInfo.top + itemPositionInfo.height) {
+          maxTop = itemPositionInfo.top + itemPositionInfo.height
+        }
+
+        group.layerIds.push(item.id)
+      })
+
+      if (group.layerIds.length != 0) {
+        group.left = minLeft
+        group.top = minTop
+        group.width = maxLeft - minLeft
+        group.height = maxTop - minTop
+        state.group = group
+      }
+
     }
   },
   getters: {
@@ -636,6 +792,12 @@ export default createStore({
       }
       if (state.group || (state.editModule && state.editModule.type !== 'back')) {
 
+        return true
+      }
+      return false
+    },
+    canPast(state) {
+      if (state.copyLayers.length > 0) {
         return true
       }
       return false

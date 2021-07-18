@@ -14,6 +14,7 @@ import { pie, bar } from "./common/chartsDemo";
 import ModuleUtil from "@/lib/ModuleUtil";
 import { useStore } from "vuex";
 import { operItem } from "@/interface/module";
+import EditPositionUtil from "../lib/editPositionUtil";
 export default defineComponent({
   props: {
     type: {
@@ -38,9 +39,12 @@ export default defineComponent({
 
       myChart.setOption(option);
     });
-    let dom = ref(null as unknown as HTMLElement);
+    let dom = ref((null as unknown) as HTMLElement);
     const selectChart = async () => {
       let chartInfo = <operItem>await ModuleUtil.getChartInfo(props.type);
+      let position = EditPositionUtil.getShowEditCenterPosition();
+      chartInfo.top = position.top - chartInfo.height / 2;
+      chartInfo.left = position.left - chartInfo.width / 2;
       store.commit("addChart", chartInfo);
       store.commit("setEditModule", chartInfo.id);
       store.commit("pushBack");

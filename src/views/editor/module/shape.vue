@@ -10,6 +10,7 @@ import PositionUtil from "@/lib/PositionUtil";
 import ModuleUtil from "@/lib/ModuleUtil";
 import { operItem } from "@/interface/module";
 import { useStore } from "vuex";
+import EditPositionUtil from "../lib/editPositionUtil";
 export default defineComponent({
   props: {
     type: {
@@ -100,9 +101,12 @@ export default defineComponent({
       ctx.closePath();
       ctx.stroke();
     }
-    let shape = ref(null as unknown as HTMLCanvasElement);
+    let shape = ref((null as unknown) as HTMLCanvasElement);
     const selectShape = async () => {
       let shapeInfo = <operItem>await ModuleUtil.getShapeInfo(props.type);
+      let position = EditPositionUtil.getShowEditCenterPosition();
+      shapeInfo.top = position.top - shapeInfo.height / 2;
+      shapeInfo.left = position.left - shapeInfo.width / 2;
       store.commit("addShape", shapeInfo);
       store.commit("setEditModule", shapeInfo.id);
       store.commit("pushBack");

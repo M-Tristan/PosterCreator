@@ -140,6 +140,16 @@ export interface group {
   type: string
 }
 
+export interface watermark {
+  fontSize: number,
+  opacity: number,
+  rotate: number,
+  space: number,
+  text: string,
+  cross: number
+
+}
+
 export interface canvas {
   width: number,
   height: number

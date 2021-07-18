@@ -10,7 +10,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "echarts": "^5.1.1",
-    "element-plus": "^1.0.2-beta.35",
+    "element-plus": "^1.0.2-beta.55",
     "qrcode": "^1.4.4",
     "tiny-emitter": "^2.1.0",
     "uuid": "^3.4.0",

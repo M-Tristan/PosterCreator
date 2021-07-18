@@ -32,11 +32,7 @@ export default defineComponent({
       return store.state.postList;
     });
     const addCanvas = () => {
-      let canvas = {
-        width: 800,
-        height: 800,
-      };
-      store.commit("addCanvas", canvas);
+      store.commit("addCanvas");
       store.commit("initBack");
       store.commit("pushBack");
     };

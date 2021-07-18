@@ -98,6 +98,9 @@
       <i class="icon iconfont icon-xiazai" @click="download"></i>
     </div>
   </div>
+  <el-dialog title="生成中..." v-model="downloadDialog" width="70%" center>
+    <el-progress :percentage="percentage"></el-progress>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -107,6 +110,7 @@ import {
   computed,
   defineComponent,
   getCurrentInstance,
+  ref,
 } from "vue";
 import operation from "../operation/common/operation";
 import DesignToCanvas from "@/lib/designToCanvas";
@@ -176,7 +180,22 @@ export default defineComponent({
       store.commit("pushBack");
     };
     const download = () => {
-      DesignToCanvas.downLoadALL();
+      percentage.value = 0;
+      downloadDialog.value = true;
+      let t = setInterval(() => {
+        percentage.value += 1;
+        if (percentage.value == 99) {
+          clearInterval(t);
+        }
+      }, 50);
+      setTimeout(async () => {
+        await DesignToCanvas.downLoadALL();
+        clearInterval(t);
+        percentage.value = 100;
+        setTimeout(() => {
+          downloadDialog.value = false;
+        }, 1000);
+      });
     };
     const canCopy = computed(() => {
       return store.getters.canCopy;
@@ -190,6 +209,8 @@ export default defineComponent({
     const distribution = computed(() => {
       return store.getters.distribution;
     });
+    const downloadDialog = ref(false);
+    const percentage = ref(0);
     return {
       backList,
       nextList,
@@ -208,16 +229,19 @@ export default defineComponent({
       canDelete,
       canLock,
       distribution,
+      downloadDialog,
+      percentage,
     };
   },
 });
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 * {
   box-sizing: border-box;
 }
 .edit-head {
+  user-select: none;
   width: 100%;
   height: 50px;
   background-color: rgb(0, 225, 255);
@@ -249,6 +273,7 @@ export default defineComponent({
   width: 100px;
   line-height: 50px;
   color: white;
+  user-select: none;
 }
 
 .icon-history {
@@ -268,6 +293,7 @@ export default defineComponent({
   float: left;
   height: 50px;
   width: 300px;
+  user-select: none;
 }
 .positionAjust {
   float: left;
@@ -279,6 +305,7 @@ export default defineComponent({
   cursor: pointer;
   padding: 5px;
   font-weight: 900;
+  user-select: none;
   &:hover {
     background-color: #8f8f8f5d;
   }
@@ -291,6 +318,7 @@ export default defineComponent({
   color: white;
   cursor: pointer;
   padding: 5px;
+  user-select: none;
   // font-weight: 900;
   &:hover {
     background-color: #8f8f8f5d;
@@ -307,6 +335,7 @@ export default defineComponent({
   color: white;
   cursor: pointer;
   padding: 5px;
+  user-select: none;
   // font-weight: 900;
   &:hover {
     background-color: #8f8f8f5d;
@@ -323,6 +352,7 @@ export default defineComponent({
   color: white;
   cursor: pointer;
   padding: 5px;
+  user-select: none;
   // font-weight: 900;
   &:hover {
     background-color: #8f8f8f5d;
@@ -339,6 +369,7 @@ export default defineComponent({
   line-height: 40px;
   cursor: pointer;
   font-weight: 900;
+  user-select: none;
   &:hover {
     background-color: #8f8f8f32;
   }
@@ -351,6 +382,7 @@ export default defineComponent({
   line-height: 40px;
   cursor: pointer;
   font-weight: 900;
+  user-select: none;
   &:hover {
     background-color: #8f8f8f32;
   }
@@ -361,6 +393,7 @@ export default defineComponent({
   width: 10px;
   line-height: 50px;
   float: left;
+  user-select: none;
 }
 .download {
   width: 50px;
@@ -368,6 +401,7 @@ export default defineComponent({
   line-height: 50px;
   cursor: pointer;
   color: white;
+  user-select: none;
   .icon {
     font-size: 30px;
   }

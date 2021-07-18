@@ -111,7 +111,7 @@ export default defineComponent({
       nature.naturalHeight = image.naturalHeight;
       draw();
     };
-    let imageCanvas = ref(null as unknown as HTMLCanvasElement);
+    let imageCanvas = ref((null as unknown) as HTMLCanvasElement);
     const draw = () => {
       if (props.pattern == "edit") {
         return;

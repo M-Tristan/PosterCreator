@@ -35,9 +35,18 @@
       <i class="iconfont icon-background modelu-icon"></i>
       <span class="module-name">背景</span>
     </div>
+
     <div
-      :class="['module-item', { active: moduleId == 5 }]"
+      :class="['module-item', { active: moduleId == 6 }]"
       @click="moduleId = 6"
+    >
+      <i class="el-icon-s-check modelu-icon"></i>
+      <span class="module-name">水印</span>
+    </div>
+
+    <div
+      :class="['module-item', { active: moduleId == 7 }]"
+      @click="moduleId = 7"
     >
       <i class="el-icon-film modelu-icon"></i>
       <span class="module-name">导航器</span>
@@ -55,7 +64,11 @@
           <span class="module-name">快捷键</span>
         </div>
       </template>
-      <div>
+      <div
+        class="none-select"
+        @mouseenter="visible = true"
+        @mouseleave="visible = false"
+      >
         <el-row :gutter="20">
           <el-col :span="6">移动</el-col>
           <el-col :span="18">↑↓←→</el-col>
@@ -141,7 +154,8 @@
       <text-list v-if="moduleId == 1"></text-list>
       <qr-code-list v-if="moduleId == 3"></qr-code-list>
       <material-list v-if="moduleId == 4"></material-list>
-      <canvas-list v-if="moduleId == 6"></canvas-list>
+      <watermarkList v-if="moduleId == 6"></watermarkList>
+      <canvas-list v-if="moduleId == 7"></canvas-list>
     </div>
   </div>
 </template>
@@ -159,6 +173,7 @@ import QrCodeList from "./qrCodeList.vue";
 import textList from "./textList.vue";
 import materialList from "./materialList.vue";
 import canvasList from "./canvasList.vue";
+import watermarkList from "./watermarkList.vue";
 export default defineComponent({
   components: {
     backgroundList,
@@ -167,6 +182,7 @@ export default defineComponent({
     QrCodeList,
     materialList,
     canvasList,
+    watermarkList,
   },
   setup() {
     const { proxy } = getCurrentInstance() as ComponentInternalInstance;
@@ -184,6 +200,10 @@ export default defineComponent({
 .module {
   position: relative;
   height: 100%;
+  user-select: none;
+}
+.none-select {
+  user-select: none;
 }
 .module-material {
   z-index: 2000;

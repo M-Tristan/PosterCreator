@@ -23,11 +23,22 @@ export default defineComponent({
       if (scale.value >= 400) {
         return;
       }
+      if (scale.value < 10) {
+        store.commit("setScale", scale.value + 1);
+        return;
+      }
       store.commit("setScale", scale.value + 10);
     };
 
     const reduce = () => {
+      if (scale.value <= 1) {
+        return;
+      }
+      if (scale.value < 20 && scale.value > 10) {
+        store.commit("setScale", 10);
+      }
       if (scale.value <= 10) {
+        store.commit("setScale", scale.value - 1);
         return;
       }
       store.commit("setScale", scale.value - 10);

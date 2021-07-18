@@ -62,15 +62,19 @@ class ModuleUtil {
 
   }
   static getAddTextInfo(text: string) {
+    let canvas = store.state.postInfo.canvas
+    let ratew = canvas.width / 500
+    let rateh = canvas.height / 500
+    let rate = ratew > rateh ? rateh : ratew
     return new Promise((resolve, reject) => {
       resolve({
         id: uuidv4(),
-        width: 140,
-        height: 26,
+        width: 140 * rate,
+        height: 26 * rate,
         top: 10,
         left: 10,
         rotate: 0,
-        fontSize: 20,
+        fontSize: 20 * rate,
         fontFamily: 'SourceHanSansCN-Regular',
         color: 'rgba(0,0,0,1)',
         text: text,
@@ -90,11 +94,15 @@ class ModuleUtil {
     })
   }
   static getAddCodeInfo(code: codeBaseInfo) {
+    let canvas = store.state.postInfo.canvas
+    let width = canvas.width / 3
+    let height = canvas.height / 3
+    let length = width > height ? height : width
     return new Promise((resolve, reject) => {
       resolve({
         id: uuidv4(),
-        width: 200,
-        height: 200,
+        width: length,
+        height: length,
         top: 10,
         left: 10,
         rotate: 0,
@@ -183,6 +191,10 @@ class ModuleUtil {
   }
 
   static getChartInfo(type) {
+    let canvas = store.state.postInfo.canvas
+    let width = canvas.width / 3
+    let height = canvas.height / 3
+    let length = width > height ? height : width
     return new Promise((resolve, reject) => {
       let option
       if (type == 'pie') {
@@ -235,8 +247,8 @@ class ModuleUtil {
       }
       resolve({
         id: uuidv4(),
-        width: 300,
-        height: 300,
+        width: length,
+        height: length,
         top: 10,
         left: 10,
         rotate: 0,
@@ -248,11 +260,15 @@ class ModuleUtil {
     })
   }
   static getShapeInfo(type) {
+    let canvas = store.state.postInfo.canvas
+    let width = canvas.width / 3
+    let height = canvas.height / 3
+    let length = width > height ? height : width
     return new Promise((resolve, reject) => {
       let res: any = {
         id: uuidv4(),
-        width: 300,
-        height: 300,
+        width: length,
+        height: length,
         top: 10,
         left: 10,
         rotate: 0,

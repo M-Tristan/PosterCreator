@@ -40,7 +40,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+} from "vue";
 import editCom from "./panel/editCom.vue";
 import module from "./module/module.vue";
 import zoom from "./edit/zoom.vue";
@@ -54,10 +62,25 @@ import ChartEdit from "./edit/chartEdit.vue";
 import navigate from "./edit/navigate.vue";
 import editHead from "./edit/editHead.vue";
 import groupEdit from "./edit/groupEdit.vue";
+import Shortcutkey from "./lib/Shortcutkey";
+import EditPositionUtil from "./lib/editPositionUtil";
 export default defineComponent({
   setup() {
+    EditPositionUtil.setPositionFunction(function() {
+      return {
+        canvasArea: {
+          left: canvasArea.value.offsetLeft,
+          top: canvasArea.value.offsetTop,
+          scrollLeft: canvasArea.value.scrollLeft,
+          scrollTop: canvasArea.value.scrollTop,
+          width: canvasArea.value.offsetWidth,
+          height: canvasArea.value.offsetHeight,
+        },
+        edit: editPosition.value,
+      };
+    });
     const store = useStore();
-    const canvasArea = ref(null as unknown as HTMLElement);
+    const canvasArea = ref((null as unknown) as HTMLElement);
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
@@ -71,7 +94,11 @@ export default defineComponent({
     const editInfo = computed(() => {
       return store.state.postInfo;
     });
-
+    const cutkey = new Shortcutkey();
+    cutkey.initShortcutkey();
+    onBeforeUnmount(() => {
+      cutkey.destoryShortcutkey();
+    });
     window.onresize = () => {
       store.commit("setEditSize", {
         width: canvasArea.value.offsetWidth,
@@ -110,14 +137,25 @@ export default defineComponent({
     });
 
     onMounted(async () => {
-      store.commit("setEditSize", {
+      let canvasSize = {
         width: canvasArea.value.offsetWidth,
         height: canvasArea.value.offsetHeight,
-      });
-      let canvas = {
-        width: 800,
-        height: 800,
       };
+      store.commit("setEditSize", canvasSize);
+      let canvas = {
+        width: 1000,
+        height: 1000,
+      };
+      let rateW = (canvasSize.width - 40) / canvas.width;
+      let rateH = (canvasSize.height - 40) / canvas.height;
+      let rate = rateW > rateH ? rateH : rateW;
+      if (rate * 100 < 1) {
+        rate = 0.01;
+      }
+      if (rate * 100 > 400) {
+        rate = 4;
+      }
+      store.commit("setScale", Math.floor(rate * 100));
       store.commit("addCanvas", canvas);
       store.commit("initBack");
       store.commit("setEditModuleToBack");
@@ -367,6 +405,7 @@ export default defineComponent({
   left: 50%;
   transform: translateX(-50%);
   overflow: hidden;
+  user-select: none;
 }
 
 .module-area {
@@ -376,6 +415,7 @@ export default defineComponent({
   left: 0px;
   width: 65px;
   border-right: 1px solid rgb(223, 223, 223);
+  user-select: none;
 }
 .edit-area {
   position: absolute;

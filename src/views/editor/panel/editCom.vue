@@ -51,14 +51,17 @@
         :code="layer"
       ></d-code>
     </template>
-
+    <water-mask
+      v-if="pattern == 'show' && watermark"
+      :watermark="watermark"
+    ></water-mask>
     <clipper v-if="clipOper && pattern == 'edit'"></clipper>
   </div>
 </template>
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent, onMounted } from "vue";
+import { computed, defineComponent } from "vue";
 import dImage from "../operation/dImage.vue";
 import dText from "../operation/dText.vue";
 import clipper from "../operation/clipper.vue";
@@ -68,6 +71,7 @@ import DChart from "../operation/dChart.vue";
 import DShape from "../operation/dShape.vue";
 import DGroup from "../operation/dGroup.vue";
 import dEffectText from "../operation/dEffectText.vue";
+import waterMask from "../operation/waterMask.vue";
 export default defineComponent({
   components: {
     dImage,
@@ -79,6 +83,7 @@ export default defineComponent({
     DShape,
     DGroup,
     dEffectText,
+    waterMask,
   },
   props: {
     pattern: {
@@ -88,7 +93,9 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const store = useStore();
-
+    let watermark = computed(() => {
+      return store.state.postInfo.watermark;
+    });
     const scale = computed(() => {
       return store.state.scale;
     });
@@ -134,11 +141,6 @@ export default defineComponent({
     };
 
     return {
-      // images:images,
-      // texts:texts,
-      // codes:codes,
-      // charts:charts,
-      // shapes:shapes,
       background: background,
       group,
       clipOper,
@@ -148,7 +150,7 @@ export default defineComponent({
       scale,
       layers,
       patchSelect,
-      // effectTexts
+      watermark,
     };
   },
 });

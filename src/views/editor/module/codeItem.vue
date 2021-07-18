@@ -10,7 +10,7 @@ import * as QRCode from "qrcode";
 import ModuleUtil from "@/lib/ModuleUtil";
 import { useStore } from "vuex";
 import { operItem } from "@/interface/module";
-
+import EditPositionUtil from "../lib/editPositionUtil";
 export default defineComponent({
   props: {
     options: {
@@ -20,7 +20,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
-    let code = ref(null as unknown as HTMLElement);
+    let code = ref((null as unknown) as HTMLElement);
     onMounted(() => {
       QRCode.toCanvas("二维码编辑", props.options, (err: any, canvas: any) => {
         code.value.append(canvas);
@@ -34,6 +34,9 @@ export default defineComponent({
         colorLight: props.options.color.light,
         backImage: props.options.backImage,
       });
+      let position = EditPositionUtil.getShowEditCenterPosition();
+      codeInfo.top = position.top - codeInfo.height / 2;
+      codeInfo.left = position.left - codeInfo.width / 2;
       store.commit("addCode", codeInfo);
       store.commit("setEditModule", codeInfo.id);
       store.commit("pushBack");

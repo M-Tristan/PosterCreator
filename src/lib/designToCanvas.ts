@@ -429,17 +429,73 @@ class DesignToCanvas {
     return dom
 
   }
+  static async getwaterMaskDom(watermark) {
+    const getWaterMak = () => {
+      let toolCanvas: HTMLCanvasElement = document.createElement("canvas");
+      let toolCtx: CanvasRenderingContext2D = toolCanvas.getContext(
+        "2d"
+      ) as CanvasRenderingContext2D;
+      if (!watermark) {
+        return "";
+      }
+      let fontSize = watermark.fontSize;
+      let space = watermark.space;
+      let rotate = watermark.rotate;
+      toolCtx.font = `${fontSize}px Arial`;
+      let text = watermark.text;
+      let length = toolCtx.measureText(text).width;
+      let cross = ((length + space) * watermark.cross) / 100;
+      let canvas = document.createElement("canvas");
+      canvas.setAttribute("height", String((fontSize + space) * 2));
+      canvas.setAttribute("width", String((length + space) * 2));
+      let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+      ctx.save();
+      // ctx.rotate((90 * Math.PI) / 180);
+      for (let i = -10; i < 10; i++) {
+        for (let k = -10; k < 10; k++) {
+          let crossValue = 0;
+          if (k % 2 == 0) {
+            crossValue = cross;
+          }
+          ctx.restore();
+          ctx.save();
+          ctx.textBaseline = "top";
+          ctx.font = `${fontSize}px Arial`;
+          ctx.translate(
+            i * (length + space) + crossValue,
+            k * (fontSize + space)
+          );
+          ctx.rotate((rotate * Math.PI) / 180);
+          ctx.fillText(text, 0, 0);
+        }
+      }
+      return canvas.toDataURL();
+    };
+    let imageDate = getWaterMak()
+    if (!watermark) {
+      return ""
+    }
+    let style = `width: 100%;
+                  height: 100%;
+                  position: absolute;
+                  z-index: 9000;
+                  top: 0;
+                  left: 0;
+                  background-image: url(${imageDate});
+                   opacity: ${watermark.opacity / 100}`
+    // console.log(`<div style="${style}">/div>`)
+    return `<div style="${style}"></div>`
+  }
   static async getSvgByIndex(index) {
     let post = _.cloneDeep(store.state.postList[index])
     let canvas = post.canvas
     let backDom = await DesignToCanvas.getBackDom(post.background)
     let layerDom = await DesignToCanvas.getLayerDom(post.layers)
+    let waterMask = await DesignToCanvas.getwaterMaskDom(post.watermark)
     const svg = `<svg  width='${canvas.width}' height='${canvas.height}' xmlns='http://www.w3.org/2000/svg'><foreignObject x='0' y='0' width='${canvas.width}' height='${canvas.height}'><div xmlns='http://www.w3.org/1999/xhtml'>
-    ${backDom}${layerDom}
+    ${backDom}${layerDom}${waterMask}
     </div></foreignObject></svg>`
-    // const dom = document.createElement('div')
-    // dom.innerHTML = svg
-    // let svgDom = new XMLSerializer().serializeToString(dom.children[0])
+
 
     return svg
   }
@@ -451,9 +507,7 @@ class DesignToCanvas {
     let svgInfo = new XMLSerializer().serializeToString(dom.children[0])
     svgInfo = svgInfo.replace(/#/g, '%23').replace(/\n/g, '%0A')
     let imageBase64 = await ImageUtil.toBase64(`data:image/svg+xml;charset=utf-8,${svgInfo}`)
-    // let image = new Image()
-    // image.src = imageBase64 as string
-    // document.body.appendChild(image)
+
     var link = document.createElement('a');
     link.href = imageBase64 as string;
     link.download = `图片${new Date().getTime()}.png`;
@@ -461,12 +515,16 @@ class DesignToCanvas {
 
   }
   static async downLoadALL() {
+
+    // let load = ElLoading.service({ fullscreen: true, text: '图片生成中', background: 'rgba(0, 0, 0, 0.1)', spinner: 'el-icon-loading', })
     let length = store.state.postList.length
     let index = 0
     while (index < length) {
       await DesignToCanvas.downLoadByIndex(index++)
     }
+
   }
+
 }
 
 
