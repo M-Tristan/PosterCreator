@@ -6,6 +6,7 @@ class Shortcutkey {
 
 
     }
+    scrollDom: any
     keyEvent(event: KeyboardEvent) {
         let shiftKey = event.shiftKey
         let ctrlKey = event.ctrlKey
@@ -173,12 +174,14 @@ class Shortcutkey {
             }
         }
     }
-    mousewheelEvent(event: any) {
+    mousewheelEvent(event) {
 
         let ctrlKey = event.ctrlKey
         if (event.wheelDelta > 0) {
-            event.returnValue = false;
+
+
             if (ctrlKey) {
+                event.preventDefault()
                 let scale = store.state.scale
                 if (scale >= 400) {
                     return;
@@ -192,8 +195,9 @@ class Shortcutkey {
                 return false
             }
         } else {
-            event.returnValue = false;
+
             if (ctrlKey) {
+                event.preventDefault()
                 let scale = store.state.scale
                 if (scale <= 1) {
                     return;
@@ -211,13 +215,15 @@ class Shortcutkey {
         }
 
     }
-    initShortcutkey() {
+
+    initShortcutkey(dom: HTMLElement) {
+        this.scrollDom = dom
         window.addEventListener('keydown', this.keyEvent)
-        window.addEventListener('mousewheel', this.mousewheelEvent, { passive: false });
+        dom.addEventListener('mousewheel', this.mousewheelEvent);
     }
     destoryShortcutkey() {
         window.removeEventListener('keydown', this.keyEvent)
-        window.removeEventListener('keydown', this.mousewheelEvent)
+        this.scrollDom.removeEventListener('keydown', this.mousewheelEvent)
     }
 }
 

@@ -95,7 +95,7 @@ export default defineComponent({
       return store.state.postInfo;
     });
     const cutkey = new Shortcutkey();
-    cutkey.initShortcutkey();
+
     onBeforeUnmount(() => {
       cutkey.destoryShortcutkey();
     });
@@ -141,6 +141,7 @@ export default defineComponent({
         width: canvasArea.value.offsetWidth,
         height: canvasArea.value.offsetHeight,
       };
+      cutkey.initShortcutkey(canvasArea.value);
       store.commit("setEditSize", canvasSize);
       let canvas = {
         width: 1000,
