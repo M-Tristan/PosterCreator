@@ -780,6 +780,95 @@ export default createStore({
         state.group = group
       }
 
+    },
+    /**
+     * 多选
+     * @param state 
+     * @param id 
+     */
+    multiplechoice(state, moduleId) {
+      if (state.editModule && state.editModule.type === 'back') {
+        state.editModule = <operItem>state.postInfo.layers.find(item => item.id == moduleId)
+        if (state.editModule.groupId) {
+          let groupId = state.editModule.groupId
+          let group = state.postInfo.groups.find(item => {
+            return item.id == state.editModule.groupId
+          })
+          if (!state.group || state.group.id != groupId) {
+            state.group = group
+          }
+        }
+        return
+      }
+      let layerIds: Array<any> = []
+      let group: any = { layerIds: new Array<string>(), rotate: 0, type: 'group' }
+      let minLeft = Number.MAX_SAFE_INTEGER
+      let maxLeft = Number.MIN_SAFE_INTEGER
+      let minTop = Number.MAX_SAFE_INTEGER
+      let maxTop = Number.MIN_SAFE_INTEGER
+      if (state.group) {
+        layerIds = [moduleId, ...state.group.layerIds]
+      } else {
+        layerIds = [moduleId, state.editModule.id]
+      }
+      let layerMap: any = {}
+      state.postInfo.layers.forEach(item => {
+        layerMap[item.id] = item
+      })
+      layerIds.forEach(id => {
+        if (layerMap[id]?.lock) {
+          return
+        }
+        let item = layerMap[id]
+        let res = PositionUtil.getPosition(item.left + item.width / 2, item.top + item.height / 2, item.width, item.height, item.rotate)
+        let itemPositionInfo = {
+          top: res.most.minTop,
+          left: res.most.minLeft,
+          width: res.most.maxLeft - res.most.minLeft,
+          height: res.most.maxTop - res.most.minTop
+        }
+
+        if (minLeft > itemPositionInfo.left) {
+          minLeft = itemPositionInfo.left
+        }
+        if (minTop > itemPositionInfo.top) {
+          minTop = itemPositionInfo.top
+        }
+        if (maxLeft < itemPositionInfo.left + itemPositionInfo.width) {
+          maxLeft = itemPositionInfo.left + itemPositionInfo.width
+        }
+        if (maxTop < itemPositionInfo.top + itemPositionInfo.height) {
+          maxTop = itemPositionInfo.top + itemPositionInfo.height
+        }
+        if (item.groupId) {
+
+          let itemgroup = state.postInfo.groups.find(group => {
+            return group.id === item.groupId
+          })
+          if (itemgroup) {
+            group.layerIds = [...group.layerIds, ...itemgroup.layerIds]
+          }
+        } else {
+          group.layerIds.push(item.id)
+
+        }
+
+
+      })
+      group.layerIds = [...new Set(group.layerIds)]
+      if (group.layerIds.length != 0) {
+        if (group.layerIds.length === 1) {
+          state.editModule = layerMap[group.layerIds[0]]
+          state.group = undefined
+          return
+        }
+        group.left = minLeft
+        group.top = minTop
+        group.width = maxLeft - minLeft
+        group.height = maxTop - minTop
+        state.group = group
+      }
+
     }
   },
   getters: {

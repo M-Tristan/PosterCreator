@@ -11,8 +11,13 @@ const operation = () => {
     return 100 / store.state.scale
   })
   const moduleMove = (module: operItem) => {
-
+    let event = <MouseEvent>window.event
     let controlModule = module
+    if (event.ctrlKey || event.shiftKey) {
+      store.commit("multiplechoice", controlModule.id);
+      return
+    }
+
     if (controlModule.type != 'group') {
       store.commit("setEditModule", controlModule.id);
       store.state.group = undefined
@@ -36,7 +41,7 @@ const operation = () => {
 
     // }
 
-    let event = <MouseEvent>window.event
+
     let oriX = event.clientX
     let oriY = event.clientY
     let orileft = module.left
