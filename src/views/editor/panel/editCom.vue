@@ -56,12 +56,13 @@
       :watermark="watermark"
     ></water-mask>
     <clipper v-if="clipOper && pattern == 'edit'"></clipper>
+    <back-cliper :background="background" v-if="backClip"></back-cliper>
   </div>
 </template>
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import dImage from "../operation/dImage.vue";
 import dText from "../operation/dText.vue";
 import clipper from "../operation/clipper.vue";
@@ -70,6 +71,7 @@ import Background from "../operation/background.vue";
 import DChart from "../operation/dChart.vue";
 import DShape from "../operation/dShape.vue";
 import DGroup from "../operation/dGroup.vue";
+import backCliper from "../operation/backCliper.vue";
 import dEffectText from "../operation/dEffectText.vue";
 import waterMask from "../operation/waterMask.vue";
 export default defineComponent({
@@ -84,6 +86,7 @@ export default defineComponent({
     DGroup,
     dEffectText,
     waterMask,
+    backCliper,
   },
   props: {
     pattern: {
@@ -140,6 +143,9 @@ export default defineComponent({
       });
     };
 
+    const backClip = computed(() => {
+      return store.state.backClip;
+    });
     return {
       background: background,
       group,
@@ -151,6 +157,7 @@ export default defineComponent({
       layers,
       patchSelect,
       watermark,
+      backClip,
     };
   },
 });

@@ -95,7 +95,7 @@
           </div>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="滤镜" name="3">
+      <el-collapse-item title="调整" name="3">
         <div class="oper-item">
           <div class="oper-name">亮度</div>
           <div class="oper-input">

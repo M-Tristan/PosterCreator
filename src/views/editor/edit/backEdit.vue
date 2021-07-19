@@ -37,9 +37,15 @@
         </div>
       </div>
     </div>
-    <div class="button-area">
+    <div class="button-area" v-if="!backClip">
       <el-button type="primary" @click="setBack">设置背景</el-button>
-      <el-button type="primary" v-if="editModule.image">背景裁剪</el-button>
+      <el-button type="primary" v-if="editModule.image" @click="clipBackground"
+        >背景裁剪</el-button
+      >
+    </div>
+    <div class="button-area" v-if="backClip">
+      <el-button type="primary" @click="confirmclip">确认裁剪</el-button>
+      <el-button type="primary" @click="cancelClip">取消裁剪</el-button>
     </div>
   </div>
 </template>
@@ -68,11 +74,27 @@ export default defineComponent({
     const setBack = () => {
       proxy?.$emitter.emit("selectModule", 5);
     };
+    const backClip = computed(() => {
+      return store.state.backClip;
+    });
+    const clipBackground = () => {
+      store.commit("setBackClip", true);
+    };
+    const cancelClip = () => {
+      store.commit("setBackClip", false);
+    };
+    const confirmclip = () => {
+      proxy?.$emitter.emit("comformClip");
+    };
     return {
       editModule,
       canvas,
       pushBack,
       setBack,
+      backClip,
+      clipBackground,
+      cancelClip,
+      confirmclip,
     };
   },
 });

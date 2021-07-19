@@ -18,12 +18,29 @@ export default createStore({
     nextList: new Array<any>(),
     editModule: <any>new Object(),//当前编辑模块
     clipOper: false,
+    backClip: false,
     group: undefined as any,
     editSize: { width: 800, height: 800 },
     scale: 100,
     copyLayers: new Array<any>()
   },
   mutations: {
+    /**
+     * 
+     * @param state 保存背景信息
+     * @param info 
+     */
+    setbackInfo(state, info) {
+      state.postInfo.background = info
+    },
+    /**
+     * 背景裁切操作
+     * @param state 
+     * @param status 
+     */
+    setBackClip(state, status) {
+      state.backClip = status
+    },
     /**
      * 图层层级调整
      * @param state 
@@ -391,14 +408,6 @@ export default createStore({
         type: 'back',
         color: `white`,
         opacity: 1,
-        image: {
-          width: 0,
-          height: 0,
-          top: 0,
-          left: 0,
-          src: '',
-          blur: 0
-        }
       }
     },
     /**

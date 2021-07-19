@@ -48,6 +48,7 @@ import {
   onMounted,
   reactive,
   ref,
+  watch,
 } from "vue";
 import editCom from "./panel/editCom.vue";
 import module from "./module/module.vue";
@@ -66,7 +67,7 @@ import Shortcutkey from "./lib/Shortcutkey";
 import EditPositionUtil from "./lib/editPositionUtil";
 export default defineComponent({
   setup() {
-    EditPositionUtil.setPositionFunction(function() {
+    EditPositionUtil.setPositionFunction(function () {
       return {
         canvasArea: {
           left: canvasArea.value.offsetLeft,
@@ -80,7 +81,7 @@ export default defineComponent({
       };
     });
     const store = useStore();
-    const canvasArea = ref((null as unknown) as HTMLElement);
+    const canvasArea = ref(null as unknown as HTMLElement);
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
@@ -245,64 +246,6 @@ export default defineComponent({
         batchPosition.height *= rate;
         store.commit("batchSelect", batchPosition);
       };
-      // window.onmouseup = () => {
-      //   let rate = 100 / scale.value;
-      //   window.onmousemove = null;
-      //   window.onmouseup = null;
-      //   showBatchMask.value = false;
-      //   batchPosition.left -= editPosition.value.left;
-      //   batchPosition.top -= editPosition.value.top;
-      //   if (batchPosition.left >= editPosition.value.width) {
-      //     return;
-      //   }
-      //   if (batchPosition.top >= editPosition.value.height) {
-      //     return;
-      //   }
-      //   if (batchPosition.left + batchPosition.width <= 0) {
-      //     return;
-      //   }
-      //   if (batchPosition.top + batchPosition.height <= 0) {
-      //     return;
-      //   }
-      //   let selectArea: any = {};
-      //   if (batchPosition.left < 0) {
-      //     selectArea.left = 0;
-      //   } else {
-      //     selectArea.left = batchPosition.left * rate;
-      //   }
-
-      //   if (batchPosition.top < 0) {
-      //     selectArea.top = 0;
-      //   } else {
-      //     selectArea.top = batchPosition.top * rate;
-      //   }
-
-      //   if (
-      //     batchPosition.left + batchPosition.width >
-      //     editPosition.value.width
-      //   ) {
-      //     selectArea.width = editPosition.value.width * rate;
-      //   } else {
-      //     selectArea.width = batchPosition.width * rate;
-      //   }
-
-      //   if (
-      //     batchPosition.top + batchPosition.height >
-      //     editPosition.value.height
-      //   ) {
-      //     selectArea.height = editPosition.value.height * rate;
-      //   } else {
-      //     selectArea.height = batchPosition.height * rate;
-      //   }
-
-      //   // batchPosition.left =
-      //   //   -(editPosition.value.left - batchPosition.left) * rate;
-      //   // batchPosition.top =
-      //   //   -(editPosition.value.top - batchPosition.top) * rate;
-      //   // batchPosition.width *= rate;
-      //   // batchPosition.height *= rate;
-      //   store.commit("batchSelect", selectArea);
-      // };
     };
     /**
      * 批量选择操作
@@ -357,14 +300,20 @@ export default defineComponent({
         store.commit("batchSelect", batchPosition);
       };
     };
-    // const moveOut = () => {
-    //   window.onmousemove = null;
-    //   window.onmouseup = null;
-    //   showBatchMask.value = false;
-    // };
+
     let group = computed(() => {
       return store.state.group;
     });
+    watch(
+      () => {
+        return editModule.value.type;
+      },
+      (nv, ov) => {
+        if (nv !== "back") {
+          store.commit("setBackClip", false);
+        }
+      }
+    );
     return {
       selectModel,
       editModule,
