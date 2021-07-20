@@ -59,6 +59,7 @@ export default defineComponent({
         if (value.value <= props.min) {
           return;
         }
+
         value.value = Number((value.value - props.step).toFixed(2));
 
         emit("update:modelValue", value.value);
@@ -71,6 +72,12 @@ export default defineComponent({
     const handleChange = () => {
       let inputValue = input.value.value;
       value.value = Number(inputValue);
+      if (value.value < props.min) {
+        value.value = props.min;
+      }
+      if (value.value > props.max) {
+        value.value = props.max;
+      }
       emit("update:modelValue", value.value);
     };
     const upperCase = () => {

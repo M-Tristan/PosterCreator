@@ -10,7 +10,7 @@
           v-model="canvas.width"
           @finishChange="pushBack"
           :min="100"
-          :max="10000"
+          :max="15000"
         ></input-number>
         <span>宽</span>
       </div>
@@ -19,7 +19,7 @@
           v-model="canvas.height"
           @finishChange="pushBack"
           :min="100"
-          :max="10000"
+          :max="15000"
         ></input-number>
         <span>高</span>
       </div>
