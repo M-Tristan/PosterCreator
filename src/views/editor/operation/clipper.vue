@@ -93,10 +93,10 @@ export default defineComponent({
 
     let image = new Image();
     image.src = store.state.editModule.src;
-    const nature = reactive({
-      naturalWidth: 0,
-      naturalHeight: 0,
-    });
+    // const nature = reactive({
+    //   naturalWidth: 0,
+    //   naturalHeight: 0,
+    // });
     image.onload = () => {
       showImage.showWidth = image.naturalWidth * imageScale;
       showImage.showHeigth = image.naturalHeight * imageScale;

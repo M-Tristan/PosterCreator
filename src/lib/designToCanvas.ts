@@ -10,7 +10,69 @@ let fontMap = {}
 fontList.forEach(item => {
   fontMap[item.fontFamily] = item
 })
+
+function getAndEncode(url) {
+  var TIMEOUT = 30000
+  return new Promise(function (resolve) {
+    var request = new XMLHttpRequest()
+    request.onreadystatechange = done
+    request.ontimeout = timeout
+    request.responseType = 'blob'
+    request.timeout = TIMEOUT
+    request.open('GET', url, true)
+    request.send()
+    function done() {
+      if (request.readyState !== 4) return
+      if (request.status !== 200) {
+        resolve("")
+      }
+      /**
+       * 读取文件信息
+       */
+      var encoder = new FileReader() as any
+      encoder.onloadend = function () {
+        var content = encoder.result.split(/,/)[1]
+        resolve(content)
+
+      }
+      console.log(request.response)
+      // console.log(URL.createObjectURL(request.response))
+      encoder.readAsDataURL(request.response)
+    }
+    function timeout() {
+      resolve("")
+    }
+  })
+}
 class DesignToCanvas {
+  /**
+   * 加载字体
+   */
+  static async loadFont(index) {
+    let postInfo = _.cloneDeep(store.state.postList[index])
+    let fontInfoList = <any>[]
+
+    postInfo.layers.forEach(layer => {
+      if (layer.type === 'text') {
+        fontInfoList.push(fontMap[layer.fontFamily])
+      }
+    })
+    fontInfoList = [...new Set(fontInfoList)]
+    let fontface = ''
+    for (let index = 0; index < fontInfoList.length; index++) {
+      let info = fontInfoList[index]
+      let res = await getAndEncode(info.url)
+      fontface += `@font-face {
+        font-family: ${info.fontFamily};
+        src:url("data:application/font-woff;base64,${res}")
+    }`
+    }
+    // fontInfoList.forEach(async (info) => {
+
+    // });
+    return `<style>${fontface}</style>`
+
+  }
   static async getBackDom(background) {
     let style = `width: 100%;
     height: 100%;
@@ -492,8 +554,10 @@ class DesignToCanvas {
     let backDom = await DesignToCanvas.getBackDom(post.background)
     let layerDom = await DesignToCanvas.getLayerDom(post.layers)
     let waterMask = await DesignToCanvas.getwaterMaskDom(post.watermark)
+    let fonts = await DesignToCanvas.loadFont(index)
+    // let fonts = ''
     const svg = `<svg  width='${canvas.width}' height='${canvas.height}' xmlns='http://www.w3.org/2000/svg'><foreignObject x='0' y='0' width='${canvas.width}' height='${canvas.height}'><div xmlns='http://www.w3.org/1999/xhtml'>
-    ${backDom}${layerDom}${waterMask}
+    ${backDom}${layerDom}${waterMask}${fonts}
     </div></foreignObject></svg>`
 
 
