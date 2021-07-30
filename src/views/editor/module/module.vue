@@ -28,6 +28,13 @@
       <i class="el-icon-star-off modelu-icon"></i>
       <span class="module-name">素材</span>
     </div>
+    <!-- <div
+      :class="['module-item', { active: moduleId == 8 }]"
+      @click="moduleId = 8"
+    >
+      <i class="icon iconfont icon-vector modelu-icon"></i>
+      <span class="module-name">矢量图</span>
+    </div> -->
     <div
       :class="['module-item', { active: moduleId == 5 }]"
       @click="moduleId = 5"
@@ -156,6 +163,7 @@
       <material-list v-if="moduleId == 4"></material-list>
       <watermarkList v-if="moduleId == 6"></watermarkList>
       <canvas-list v-if="moduleId == 7"></canvas-list>
+      <svg-list v-if="moduleId == 8"></svg-list>
     </div>
   </div>
 </template>
@@ -174,6 +182,7 @@ import textList from "./textList.vue";
 import materialList from "./materialList.vue";
 import canvasList from "./canvasList.vue";
 import watermarkList from "./watermarkList.vue";
+import svgList from "./svgList.vue";
 export default defineComponent({
   components: {
     backgroundList,
@@ -183,6 +192,7 @@ export default defineComponent({
     materialList,
     canvasList,
     watermarkList,
+    svgList,
   },
   setup() {
     const { proxy } = getCurrentInstance() as ComponentInternalInstance;

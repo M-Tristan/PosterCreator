@@ -311,7 +311,10 @@
           </div>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="位置" name="5">
+      <el-collapse-item title="贴图" name="5">
+        <text-back-image></text-back-image>
+      </el-collapse-item>
+      <el-collapse-item title="位置" name="6">
         <div class="oper-item">
           <div class="oper-name">旋转角度</div>
           <div class="oper-input">
@@ -373,8 +376,9 @@ import operation from "../operation/common/operation";
 import ModuleUtil from "@/lib/ModuleUtil";
 import fontList from "@/lib/fontList";
 import lockMask from "./lockMask.vue";
+import TextBackImage from "./textBackImage.vue";
 export default defineComponent({
-  components: { lockMask },
+  components: { lockMask, TextBackImage },
   setup() {
     const store = useStore();
     const { pushBack } = operation();

@@ -104,7 +104,7 @@ export default defineComponent({
   height: 80px;
   margin: 5px;
   float: left;
-  border: 1px solid rgb(230, 230, 230);
+  box-shadow: 0 0 8px rgba(161, 161, 161, 0.664);
   cursor: pointer;
   &:hover {
     transform: scale(1.1);

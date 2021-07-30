@@ -15,22 +15,25 @@
     <div
       class="Strokecontent"
       :style="{
-        fontSize: `${module.fontSize}px`,
-        transform: `scale(${fontScale})`,
-        color: `${pattern == 'show' ? module.color : 'rgba(0,0,0,0)'}`,
-        caretColor: module.color,
-        width: `${module.width / fontScale}px`,
-        fontWeight: `${module.bold ? 900 : 400}`,
-        textDecoration: `${module.textDecoration}`,
-        fontStyle: `${module.italic ? 'italic' : 'normal'}`,
-        lineHeight: `${module.lineHeight}`,
-        letterSpacing: `${module.letterSpacing}px`,
-        opacity: module.opacity,
-        textShadow: textShadow,
-        textStroke: `${pattern == 'edit' ? 0 : module.strokeWidth}px ${
-          module.strokeColor
-        }`,
-        fontFamily: module.fontFamily,
+        ...{
+          fontSize: `${module.fontSize}px`,
+          transform: `scale(${fontScale})`,
+          color: `${pattern == 'show' ? module.color : 'rgba(0,0,0,0)'}`,
+          caretColor: module.color,
+          width: `${module.width / fontScale}px`,
+          fontWeight: `${module.bold ? 900 : 400}`,
+          textDecoration: `${module.textDecoration}`,
+          fontStyle: `${module.italic ? 'italic' : 'normal'}`,
+          lineHeight: `${module.lineHeight}`,
+          letterSpacing: `${module.letterSpacing}px`,
+          opacity: module.opacity,
+          textShadow: textShadow,
+          textStroke: `${pattern == 'edit' ? 0 : module.strokeWidth}px ${
+            module.strokeColor
+          }`,
+          fontFamily: module.fontFamily,
+        },
+        ...backImageStyle,
       }"
     >
       {{ module.text }}
@@ -43,20 +46,23 @@
       @blur="contenteditable = false"
       ref="contentInput"
       :style="{
-        fontSize: `${module.fontSize}px`,
-        transform: `scale(${fontScale})`,
-        color: `${pattern == 'show' ? module.color : 'rgba(0,0,0,0)'}`,
-        caretColor: module.color,
-        width: `${module.width / fontScale}px`,
-        fontWeight: `${module.bold ? 900 : 400}`,
-        textDecoration: `${module.textDecoration}`,
-        fontStyle: `${module.italic ? 'italic' : 'normal'}`,
-        lineHeight: `${module.lineHeight}`,
-        letterSpacing: `${module.letterSpacing}px`,
-        opacity: module.opacity,
-        textShadow: textShadow,
+        ...{
+          fontSize: `${module.fontSize}px`,
+          transform: `scale(${fontScale})`,
+          color: `${pattern == 'show' ? module.color : 'rgba(0,0,0,0)'}`,
+          caretColor: module.color,
+          width: `${module.width / fontScale}px`,
+          fontWeight: `${module.bold ? 900 : 400}`,
+          textDecoration: `${module.textDecoration}`,
+          fontStyle: `${module.italic ? 'italic' : 'normal'}`,
+          lineHeight: `${module.lineHeight}`,
+          letterSpacing: `${module.letterSpacing}px`,
+          opacity: module.opacity,
+          textShadow: textShadow,
 
-        fontFamily: module.fontFamily,
+          fontFamily: module.fontFamily,
+        },
+        ...backImageStyle,
       }"
     >
       {{ module.text }}
@@ -126,10 +132,12 @@ export default defineComponent({
     };
     const contentInput = ref(null as unknown as HTMLElement);
     const changeHeight = () => {
+      if (props.pattern != "edit") {
+        return;
+      }
       module.value.height = contentInput.value.clientHeight;
       if (store.state.group) {
         resetGroupItem(store.state.group);
-        // store.commit("initGroupSize");
       }
     };
     const fontSize = computed(() => {
@@ -140,6 +148,18 @@ export default defineComponent({
     });
     const letterSpacing = computed(() => {
       return module.value.letterSpacing;
+    });
+    const backImageStyle = computed(() => {
+      if (module.value.backImage && props.pattern == "show") {
+        return {
+          backgroundImage: `url('${module.value.backImage}')`,
+          backgroundRepeat: `no-repeat`,
+          backgroundSize: `cover`,
+          WebkitTextFillColor: `transparent`,
+          WebkitBackgroundClip: `text`,
+        };
+      }
+      return {};
     });
     const fontScale = computed(() => {
       let fontSize = module.value.fontSize;
@@ -172,7 +192,9 @@ export default defineComponent({
       module.value.html = contentInput.value.innerHTML;
       module.value.text = contentInput.value.innerText;
       changeHeight();
-      store.commit("initGroupSize");
+      if (store.state.group) {
+        store.commit("initGroupSize");
+      }
     };
     const dbClickEvent = () => {
       contenteditable.value = true;
@@ -207,6 +229,7 @@ export default defineComponent({
       contenteditable,
       dbClickEvent,
       moveEvent,
+      backImageStyle,
     };
   },
 });

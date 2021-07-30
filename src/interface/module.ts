@@ -90,7 +90,8 @@ export interface text extends operItem {
   textShadowList?: Array<textShadow>,
   strokeWidth: number,
   strokeColor: string,
-  deformation?: deformation
+  deformation?: deformation,
+  backImage?: string
 }
 
 export interface effectText extends operItem {
@@ -146,7 +147,8 @@ export interface watermark {
   rotate: number,
   space: number,
   text: string,
-  cross: number
+  cross: number,
+  color: string
 
 }
 

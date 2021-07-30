@@ -688,7 +688,8 @@ export default createStore({
         opacity: 10,
         rotate: 10,
         text: 'postcreator',
-        cross: 0
+        cross: 0,
+        color: 'rgba(0, 0, 0, 1)'
       }
     },
     /**
@@ -876,6 +877,12 @@ export default createStore({
         group.width = maxLeft - minLeft
         group.height = maxTop - minTop
         state.group = group
+      }
+
+    },
+    setTextBack(state, src) {
+      if (state.editModule.type === 'text') {
+        state.editModule.backImage = src
       }
 
     }

@@ -38,6 +38,7 @@ export default defineComponent({
       let rotate = watermark.value.rotate;
       toolCtx.font = `${fontSize}px Arial`;
       let text = watermark.value.text;
+      let color = watermark.value.color;
       let length = toolCtx.measureText(text).width;
       let cross = ((length + space) * watermark.value.cross) / 100;
       let canvas = document.createElement("canvas");
@@ -61,6 +62,7 @@ export default defineComponent({
             k * (fontSize + space)
           );
           ctx.rotate((rotate * Math.PI) / 180);
+          ctx.fillStyle = color;
           ctx.fillText(text, 0, 0);
         }
       }
@@ -78,6 +80,7 @@ export default defineComponent({
         computed(() => watermark.value.opacity),
         computed(() => watermark.value.rotate),
         computed(() => watermark.value.cross),
+        computed(() => watermark.value.color),
       ],
       () => {
         imageDate.value = getWaterMak();

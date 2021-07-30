@@ -35,7 +35,7 @@ function getAndEncode(url) {
         resolve(content)
 
       }
-      console.log(request.response)
+      // console.log(request.response)
       // console.log(URL.createObjectURL(request.response))
       encoder.readAsDataURL(request.response)
     }
@@ -53,7 +53,7 @@ class DesignToCanvas {
     let fontInfoList = <any>[]
 
     postInfo.layers.forEach(layer => {
-      if (layer.type === 'text') {
+      if (layer.type === 'text' || layer.type === 'effectText') {
         fontInfoList.push(fontMap[layer.fontFamily])
       }
     })
@@ -199,7 +199,7 @@ class DesignToCanvas {
     caret-color:  ${module.color};
     width: ${module.width / fontScale}px;
     font-weight: ${module.bold ? 900 : 400};
-    text-decoration: ${module.textDecoration};
+  
     font-style: ${module.italic ? 'italic' : 'normal'};
     line-height: ${module.lineHeight};
     letter-spacing: ${module.letterSpacing}px;
@@ -208,12 +208,23 @@ class DesignToCanvas {
     -webkit-text-stroke:${module.strokeWidth}px ${module.strokeColor};
     text-stroke: ${module.strokeWidth}px ${module.strokeColor};
     font-family: ${module.fontFamily}`
-    let contentStyle = `word-break: break-word;
+    let backImageStyle = ``
+
+    if (module.backImage) {
+      let imageBase64 = await ImageUtil.toBase64(module.backImage)
+      backImageStyle = `background-image:url('${imageBase64}');
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-text-fill-color:transparent;
+      -webkit-background-clip: text;`
+    }
+    let contentStyle = backImageStyle + `word-break: break-word;
     white-space: normal;
     position: relative;
     left: 0;
     transform-origin: 0px 0px;
     font-size: ${module.fontSize}px;
+    
     transform: scale(${fontScale});
     color: ${module.color};
     caret-color: ${module.color};
@@ -503,6 +514,7 @@ class DesignToCanvas {
       let fontSize = watermark.fontSize;
       let space = watermark.space;
       let rotate = watermark.rotate;
+      let color = watermark.color;
       toolCtx.font = `${fontSize}px Arial`;
       let text = watermark.text;
       let length = toolCtx.measureText(text).width;
@@ -528,6 +540,7 @@ class DesignToCanvas {
             k * (fontSize + space)
           );
           ctx.rotate((rotate * Math.PI) / 180);
+          ctx.fillStyle = color;
           ctx.fillText(text, 0, 0);
         }
       }

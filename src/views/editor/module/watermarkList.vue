@@ -53,8 +53,19 @@
           <el-slider v-model="watermark.cross"></el-slider
         ></el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="6"><div class="tips">颜色</div></el-col>
+        <el-col :span="18">
+          <el-color-picker
+            color-format="hex"
+            v-model="watermark.color"
+            size="mini"
+            :show-alpha="false"
+          ></el-color-picker>
+        </el-col>
+      </el-row>
 
-      <el-button round style="width:100%" @click="removeWaterMask"
+      <el-button round style="width: 100%" @click="removeWaterMask"
         >去除水印</el-button
       >
     </div>
