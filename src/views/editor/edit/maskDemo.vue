@@ -19,7 +19,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
     const { pushBack } = operation();
-    const canvasDom = ref((null as unknown) as HTMLCanvasElement);
+    const canvasDom = ref(null as unknown as HTMLCanvasElement);
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
@@ -43,7 +43,6 @@ export default defineComponent({
         type: "normal",
         src: props.src,
       };
-      pushBack();
     };
     return { canvasDom, selectMask };
   },

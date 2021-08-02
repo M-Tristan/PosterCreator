@@ -57,14 +57,18 @@
       <el-collapse-item title="投影" name="2">
         <div class="oper-item">
           <div class="oper-name">投影颜色</div>
-
           <div class="oper-input">
-            <el-color-picker
-              @change="pushBack"
-              v-model="editModule.dropshadowColor"
-              size="mini"
-              show-alpha
-            ></el-color-picker>
+            <div class="color-area">
+              <color-picker
+                v-model="editModule.dropshadowColor"
+                size="mini"
+                show-alpha
+                :style="{
+                  backgroundColor: editModule.dropshadowColor,
+                }"
+              >
+              </color-picker>
+            </div>
           </div>
         </div>
         <div class="oper-item">
@@ -250,15 +254,16 @@
 <script lang="ts">
 import { useStore } from "vuex";
 import { computed, defineComponent, onMounted, ref } from "vue";
-import maskImageList from "@/lib/MaskList";
 import maskDemo from "./maskDemo.vue";
 import operation from "../operation/common/operation";
 import LockMask from "./lockMask.vue";
 import { getImageList } from "@/api/api";
+import ColorPicker from "@/components/color-picker/index";
 export default defineComponent({
   components: {
     maskDemo,
     LockMask,
+    ColorPicker,
   },
   setup() {
     const store = useStore();
@@ -341,5 +346,12 @@ export default defineComponent({
   &::-webkit-scrollbar {
     width: 0;
   }
+}
+.color-area {
+  width: 90%;
+  height: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(175, 175, 175);
 }
 </style>

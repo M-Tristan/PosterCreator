@@ -16,21 +16,26 @@
         <div class="oper-item">
           <div class="oper-name">颜色</div>
           <div class="oper-input">
-            <el-color-picker
-              @change="pushBack"
-              color-format="hex"
-              v-model="editModule.colorLight"
-              size="mini"
-              :show-alpha="false"
-            ></el-color-picker>
-            <el-color-picker
-              @change="pushBack"
-              color-format="hex"
-              v-if="!editModule.backImage"
-              v-model="editModule.colorDark"
-              size="mini"
-              :show-alpha="false"
-            ></el-color-picker>
+            <div class="block-color">
+              <color-picker
+                v-model="editModule.colorLight"
+                color-format="hex"
+                :show-alpha="false"
+                :style="{
+                  backgroundColor: editModule.colorLight,
+                }"
+              ></color-picker>
+            </div>
+            <div class="block-color" v-if="!editModule.backImage">
+              <color-picker
+                v-model="editModule.colorDark"
+                color-format="hex"
+                :show-alpha="false"
+                :style="{
+                  backgroundColor: editModule.colorDark,
+                }"
+              ></color-picker>
+            </div>
           </div>
         </div>
       </el-collapse-item>
@@ -107,9 +112,9 @@ import { useStore } from "vuex";
 import { computed, defineComponent, ref } from "vue";
 import operation from "../operation/common/operation";
 import lockMask from "./lockMask.vue";
-
+import ColorPicker from "@/components/color-picker/index";
 export default defineComponent({
-  components: { lockMask },
+  components: { lockMask, ColorPicker },
   setup() {
     const store = useStore();
     const { pushBack } = operation();
@@ -161,5 +166,12 @@ export default defineComponent({
 .code-content {
   width: 90%;
   overflow: hidden;
+}
+.block-color {
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(175, 175, 175);
 }
 </style>

@@ -35,11 +35,6 @@ const operation = () => {
     if (module.lock) {
       return
     }
-    // if (store.state.group) {
-    // resetGroupItem(module)
-    // store.commit("initGroupSize");
-
-    // }
 
 
     let oriX = event.clientX
@@ -67,16 +62,15 @@ const operation = () => {
       if (store.state.group) {
         resetGroupItem(module)
       }
-      if (shouldPushBack) {
-        pushBack()
-      } else {
-        if (!controlModule.groupId && controlModule.type != 'group') {
-          store.state.group = undefined
-        }
+
+      if (!controlModule.groupId && controlModule.type != 'group') {
+        store.state.group = undefined
       }
+
     }
   }
   const pushBack = () => {
+    console.log(123)
     store.commit('pushBack');
   }
   /**

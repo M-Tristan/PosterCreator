@@ -56,16 +56,24 @@
       <el-row :gutter="20">
         <el-col :span="6"><div class="tips">颜色</div></el-col>
         <el-col :span="18">
-          <el-color-picker
-            color-format="hex"
-            v-model="watermark.color"
-            size="mini"
-            :show-alpha="false"
-          ></el-color-picker>
+          <div class="color-area">
+            <color-picker
+              v-model="watermark.color"
+              size="mini"
+              show-alpha
+              :style="{
+                backgroundColor: watermark.color,
+              }"
+            >
+            </color-picker>
+          </div>
         </el-col>
       </el-row>
 
-      <el-button round style="width: 100%" @click="removeWaterMask"
+      <el-button
+        round
+        style="width: 100%; margin-top: 20px"
+        @click="removeWaterMask"
         >去除水印</el-button
       >
     </div>
@@ -75,7 +83,11 @@
 <script lang="ts">
 import { useStore } from "vuex";
 import { computed } from "vue";
+import ColorPicker from "@/components/color-picker/index";
 export default {
+  components: {
+    ColorPicker,
+  },
   setup() {
     const store = useStore();
     let watermark = computed(() => {
@@ -111,5 +123,12 @@ export default {
 }
 .editArea {
   padding: 20px;
+}
+.color-area {
+  width: 90%;
+  height: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(175, 175, 175);
 }
 </style>

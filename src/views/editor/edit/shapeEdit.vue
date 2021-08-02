@@ -5,12 +5,17 @@
         <div class="oper-item">
           <div class="oper-name">颜色</div>
           <div class="oper-input">
-            <el-color-picker
-              @change="pushBack"
-              v-model="editModule.color"
-              size="mini"
-              show-alpha
-            ></el-color-picker>
+            <div class="color-area">
+              <color-picker
+                v-model="editModule.color"
+                size="mini"
+                show-alpha
+                :style="{
+                  backgroundColor: editModule.color,
+                }"
+              >
+              </color-picker>
+            </div>
           </div>
         </div>
         <div class="oper-item" v-if="editModule.sectorAngle">
@@ -118,9 +123,9 @@ import { useStore } from "vuex";
 import { computed, defineComponent, ref } from "vue";
 import operation from "../operation/common/operation";
 import lockMask from "./lockMask.vue";
-
+import ColorPicker from "@/components/color-picker/index";
 export default defineComponent({
-  components: { lockMask },
+  components: { lockMask, ColorPicker },
   setup() {
     const store = useStore();
     const { pushBack } = operation();
@@ -158,5 +163,19 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+}
+.block-color {
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(175, 175, 175);
+}
+.color-area {
+  width: 90%;
+  height: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(175, 175, 175);
 }
 </style>

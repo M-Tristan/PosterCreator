@@ -169,7 +169,6 @@ export default defineComponent({
         imageEdit.height = showImage.height;
         let clipOper = store.state.clipOper;
         store.commit("setClipOper", !clipOper);
-        pushBack();
       };
     };
 

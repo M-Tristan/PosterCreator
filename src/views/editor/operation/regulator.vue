@@ -6,7 +6,7 @@
   >
     <div
       class="item"
-     @mousedown.stop="controlshape('left-top')" 
+      @mousedown.stop="controlshape('left-top')"
       :style="{
         cursor: cursor.leftTop,
         left: 0 + 'px',
@@ -428,9 +428,6 @@ export default defineComponent({
       window.onmouseup = () => {
         window.onmousemove = null;
         window.onmouseup = null;
-        if (shouldPushBack) {
-          pushBack();
-        }
 
         module.value.left = Math.round(module.value.left);
         module.value.height = Math.round(module.value.height);

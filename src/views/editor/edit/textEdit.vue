@@ -16,12 +16,17 @@
         <div class="oper-item">
           <div class="oper-name">颜色</div>
           <div class="oper-input">
-            <el-color-picker
-              @change="pushBack"
-              v-model="editModule.color"
-              size="mini"
-              show-alpha
-            ></el-color-picker>
+            <div class="color-area">
+              <color-picker
+                v-model="editModule.color"
+                size="mini"
+                show-alpha
+                :style="{
+                  backgroundColor: editModule.color,
+                }"
+              >
+              </color-picker>
+            </div>
           </div>
         </div>
         <div class="oper-item">
@@ -141,12 +146,16 @@
         <div class="oper-item">
           <div class="oper-name">描边</div>
           <div class="oper-input">
-            <el-color-picker
-              @change="pushBack"
-              v-model="editModule.strokeColor"
-              size="mini"
-              show-alpha
-            ></el-color-picker>
+            <div class="block-color">
+              <color-picker
+                v-model="editModule.strokeColor"
+                show-alpha
+                :style="{
+                  backgroundColor: editModule.strokeColor,
+                }"
+              ></color-picker>
+            </div>
+
             <div class="strokeWidth">
               <input-number
                 @finishChange="pushBack"
@@ -172,12 +181,15 @@
               :key="index"
             >
               <div class="item">
-                <el-color-picker
-                  @change="pushBack"
-                  v-model="shadow.color"
-                  size="mini"
-                  show-alpha
-                ></el-color-picker>
+                <div class="block-color">
+                  <color-picker
+                    v-model="shadow.color"
+                    show-alpha
+                    :style="{
+                      backgroundColor: shadow.color,
+                    }"
+                  ></color-picker>
+                </div>
               </div>
               <div class="item">
                 <input-number
@@ -314,7 +326,16 @@
       <el-collapse-item title="贴图" name="5">
         <text-back-image></text-back-image>
       </el-collapse-item>
-      <el-collapse-item title="位置" name="6">
+      <el-collapse-item title="渐变" name="6">
+        <!-- <el-popover width="300" placement="bottom-start" trigger="click"> -->
+        <!-- <colorpicker v-model="editModule.color"></colorpicker> -->
+        <!-- <color-picker></color-picker>
+          <template #reference>
+            <el-button>颜色</el-button>
+          </template>
+        </el-popover> -->
+      </el-collapse-item>
+      <el-collapse-item title="位置" name="7">
         <div class="oper-item">
           <div class="oper-name">旋转角度</div>
           <div class="oper-input">
@@ -377,8 +398,10 @@ import ModuleUtil from "@/lib/ModuleUtil";
 import fontList from "@/lib/fontList";
 import lockMask from "./lockMask.vue";
 import TextBackImage from "./textBackImage.vue";
+import ColorPicker from "@/components/color-picker/index";
+// import Colorpicker from "@/components/colorpicker/colorpicker.vue";
 export default defineComponent({
-  components: { lockMask, TextBackImage },
+  components: { lockMask, TextBackImage, ColorPicker },
   setup() {
     const store = useStore();
     const { pushBack } = operation();
@@ -394,36 +417,6 @@ export default defineComponent({
       }
     };
     const fonts = ref(fontList);
-    watch(
-      () => editModule.value.textDecoration,
-      () => {
-        pushBack();
-      }
-    );
-    watch(
-      () => editModule.value.textAlign,
-      () => {
-        pushBack();
-      }
-    );
-    watch(
-      () => editModule.value.textAlign,
-      () => {
-        pushBack();
-      }
-    );
-    watch(
-      () => editModule.value.bold,
-      () => {
-        pushBack();
-      }
-    );
-    watch(
-      () => editModule.value.italic,
-      () => {
-        pushBack();
-      }
-    );
     const addTextShadow = () => {
       if (editModule.value.textShadowList.length == 0) {
         editModule.value.textShadowList.push({
@@ -585,5 +578,26 @@ export default defineComponent({
 }
 .shapeActive {
   background-color: rgb(5, 161, 251);
+}
+.color-area {
+  width: 90%;
+  height: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(175, 175, 175);
+}
+.stroke-color {
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(175, 175, 175);
+}
+.block-color {
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgb(175, 175, 175);
 }
 </style>
