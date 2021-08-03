@@ -883,8 +883,35 @@ export default createStore({
     setTextBack(state, src) {
       if (state.editModule.type === 'text') {
         state.editModule.backImage = src
+        delete state.editModule.gradient
+        delete state.editModule.gradientAngle
       }
 
+    },
+    /**
+    * 
+    * @param state 添加文字渐变
+    */
+    addTextGradient(state) {
+      let editModule = state.editModule
+      if (editModule.type !== 'text') {
+        return
+      }
+      delete editModule.backImage
+      editModule.gradient = [{ offset: 0, color: editModule.color }, { offset: 1, color: 'rgb(255,255,255)' }]
+      editModule.gradientAngle = 90
+    },
+    /**
+    * 
+    * @param state 删除文字渐变
+    */
+    removeTextGradient(state) {
+      let editModule = state.editModule
+      if (editModule.type !== 'text') {
+        return
+      }
+      delete editModule.gradient
+      delete editModule.gradientAngle
     }
   },
   getters: {
@@ -954,6 +981,7 @@ export default createStore({
       })
       return [...new Set(moduleIds)].length > 2
     },
+
   },
   actions: {
 

@@ -15,23 +15,11 @@
     <div
       class="Strokecontent"
       :style="{
+        ...commonStyle,
         ...{
-          fontSize: `${module.fontSize}px`,
-          transform: `scale(${fontScale})`,
-          color: `${pattern == 'show' ? module.color : 'rgba(0,0,0,0)'}`,
-          caretColor: module.color,
-          width: `${module.width / fontScale}px`,
-          fontWeight: `${module.bold ? 900 : 400}`,
-          textDecoration: `${module.textDecoration}`,
-          fontStyle: `${module.italic ? 'italic' : 'normal'}`,
-          lineHeight: `${module.lineHeight}`,
-          letterSpacing: `${module.letterSpacing}px`,
-          opacity: module.opacity,
-          textShadow: textShadow,
           textStroke: `${pattern == 'edit' ? 0 : module.strokeWidth}px ${
             module.strokeColor
           }`,
-          fontFamily: module.fontFamily,
         },
         ...backImageStyle,
       }"
@@ -46,22 +34,7 @@
       @blur="contenteditable = false"
       ref="contentInput"
       :style="{
-        ...{
-          fontSize: `${module.fontSize}px`,
-          transform: `scale(${fontScale})`,
-          color: `${pattern == 'show' ? module.color : 'rgba(0,0,0,0)'}`,
-          caretColor: module.color,
-          width: `${module.width / fontScale}px`,
-          fontWeight: `${module.bold ? 900 : 400}`,
-          textDecoration: `${module.textDecoration}`,
-          fontStyle: `${module.italic ? 'italic' : 'normal'}`,
-          lineHeight: `${module.lineHeight}`,
-          letterSpacing: `${module.letterSpacing}px`,
-          opacity: module.opacity,
-          textShadow: textShadow,
-
-          fontFamily: module.fontFamily,
-        },
+        ...commonStyle,
         ...backImageStyle,
       }"
     >
@@ -159,6 +132,23 @@ export default defineComponent({
           WebkitBackgroundClip: `text`,
         };
       }
+      if (module.value.gradient && props.pattern == "show") {
+        let gradientList = module.value.gradient;
+        let Gradient = "";
+        gradientList.forEach((item, index) => {
+          Gradient += `${item.color} ${item.offset * 100}%`;
+          if (index < gradientList.length - 1) {
+            Gradient += ",";
+          }
+        });
+        return {
+          backgroundImage: `linear-gradient(${module.value.gradientAngle}deg,${Gradient})`,
+          backgroundRepeat: `no-repeat`,
+          backgroundSize: `cover`,
+          WebkitTextFillColor: `transparent`,
+          WebkitBackgroundClip: `text`,
+        };
+      }
       return {};
     });
     const fontScale = computed(() => {
@@ -215,6 +205,25 @@ export default defineComponent({
         changeHeight();
       });
     });
+    const commonStyle = computed(() => {
+      return {
+        fontSize: `${module.value.fontSize}px`,
+        transform: `scale(${fontScale.value})`,
+        color: `${
+          props.pattern == "show" ? module.value.color : "rgba(0,0,0,0)"
+        }`,
+        caretColor: module.value.color,
+        width: `${module.value.width / fontScale.value}px`,
+        fontWeight: `${module.value.bold ? 900 : 400}`,
+        textDecoration: `${module.value.textDecoration}`,
+        fontStyle: `${module.value.italic ? "italic" : "normal"}`,
+        lineHeight: `${module.value.lineHeight}`,
+        letterSpacing: `${module.value.letterSpacing}px`,
+        opacity: module.value.opacity,
+        textShadow: textShadow.value,
+        fontFamily: module.value.fontFamily,
+      };
+    });
 
     return {
       module,
@@ -230,6 +239,7 @@ export default defineComponent({
       dbClickEvent,
       moveEvent,
       backImageStyle,
+      commonStyle,
     };
   },
 });

@@ -74,6 +74,10 @@ export interface shape extends operItem {
 interface deformation {
   type: string
 }
+export interface gradientStop {
+  offset: number,
+  color: string
+}
 export interface text extends operItem {
   text: string,
   html: string,
@@ -92,6 +96,8 @@ export interface text extends operItem {
   strokeColor: string,
   deformation?: deformation,
   backImage?: string
+  gradient?: Array<gradientStop>,
+  gradientAngle?: number
 }
 
 export interface effectText extends operItem {

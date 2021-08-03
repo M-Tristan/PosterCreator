@@ -25,6 +25,7 @@ export default defineComponent({
       "https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com/14f0a1b4-c455-42c8-b7c7-c0bd041e1c11.jpeg",
       "https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com/f75952ad-7964-4536-8083-170649e5812d.jpeg",
       "https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com/ecc95708-a219-4625-a3a6-07bee5826b90.jpeg",
+      "https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com/90cae961-782f-4681-9d47-9312be7c0d37.jpeg",
     ];
     const selectImage = (src) => {
       store.commit("setTextBack", src);

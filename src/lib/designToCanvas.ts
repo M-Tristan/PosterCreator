@@ -218,6 +218,21 @@ class DesignToCanvas {
       -webkit-text-fill-color:transparent;
       -webkit-background-clip: text;`
     }
+    if (module.gradient) {
+      let gradientList = module.gradient;
+      let Gradient = "";
+      gradientList.forEach((item, index) => {
+        Gradient += `${item.color} ${item.offset * 100}%`;
+        if (index < gradientList.length - 1) {
+          Gradient += ",";
+        }
+      });
+      backImageStyle = `background-image:linear-gradient(${module.gradientAngle}deg,${Gradient});
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-text-fill-color:transparent;
+      -webkit-background-clip: text;`
+    }
     let contentStyle = backImageStyle + `word-break: break-word;
     white-space: normal;
     position: relative;
@@ -237,8 +252,12 @@ class DesignToCanvas {
     opacity: ${module.opacity};
     text-shadow: ${textShadow};
     font-family: ${module.fontFamily}`
+    let StrokeDom = ''
+    if (module.strokeWidth !== 0) {
+      StrokeDom = `<div style="${StrokecontentStyle}">${module.text}</div>`
+    }
     let textDom = `<div style="${style}">
-      <div style="${StrokecontentStyle}">${module.text}</div>
+      ${StrokeDom}
       <div style="${contentStyle}">${module.text}</div>
     </div>`
 

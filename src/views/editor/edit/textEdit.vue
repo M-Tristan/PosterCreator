@@ -323,17 +323,39 @@
           </div>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="贴图" name="5">
+      <el-collapse-item title="贴图" v-if="editModule.type === 'text'" name="5">
         <text-back-image></text-back-image>
       </el-collapse-item>
-      <el-collapse-item title="渐变" name="6">
-        <!-- <el-popover width="300" placement="bottom-start" trigger="click"> -->
-        <!-- <colorpicker v-model="editModule.color"></colorpicker> -->
-        <!-- <color-picker></color-picker>
-          <template #reference>
-            <el-button>颜色</el-button>
-          </template>
-        </el-popover> -->
+      <el-collapse-item title="渐变" v-if="editModule.type === 'text'" name="6">
+        <gradient-bar
+          v-if="editModule.gradient"
+          :gradient="editModule.gradient"
+        ></gradient-bar>
+        <div class="oper-item" v-if="editModule.gradient">
+          <div class="oper-name">角度</div>
+          <div class="oper-input">
+            <input-number
+              :min="0"
+              :max="360"
+              v-model="editModule.gradientAngle"
+            ></input-number>
+          </div>
+        </div>
+
+        <el-button
+          style="width: 90%"
+          round
+          v-if="!editModule.gradient"
+          @click="addTextGradient"
+          >添加渐变</el-button
+        >
+        <el-button
+          style="width: 90%"
+          round
+          v-if="editModule.gradient"
+          @click="removeTextGradient"
+          >取消渐变</el-button
+        >
       </el-collapse-item>
       <el-collapse-item title="位置" name="7">
         <div class="oper-item">
@@ -399,9 +421,10 @@ import fontList from "@/lib/fontList";
 import lockMask from "./lockMask.vue";
 import TextBackImage from "./textBackImage.vue";
 import ColorPicker from "@/components/color-picker/index";
+import GradientBar from "../../../components/gradientBar/gradientBar.vue";
 // import Colorpicker from "@/components/colorpicker/colorpicker.vue";
 export default defineComponent({
-  components: { lockMask, TextBackImage, ColorPicker },
+  components: { lockMask, TextBackImage, ColorPicker, GradientBar },
   setup() {
     const store = useStore();
     const { pushBack } = operation();
@@ -469,6 +492,12 @@ export default defineComponent({
       document.getElementsByTagName("head")[0].appendChild(style);
       item.load = true;
     };
+    const addTextGradient = () => {
+      store.commit("addTextGradient");
+    };
+    const removeTextGradient = () => {
+      store.commit("removeTextGradient");
+    };
     return {
       activeNames,
       editModule,
@@ -479,6 +508,8 @@ export default defineComponent({
       addDeformation,
       fonts,
       selectFont,
+      addTextGradient,
+      removeTextGradient,
     };
   },
 });
