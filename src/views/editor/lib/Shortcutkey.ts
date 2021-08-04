@@ -82,8 +82,9 @@ class Shortcutkey {
 
 
     }
+
     if (keyCode === 8) {
-      if (store.getters.canDelete) {
+      if (store.getters.canDelete && store.state.editModule.type !== 'text') {
         store.commit("delete");
       }
 

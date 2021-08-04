@@ -6,6 +6,7 @@ import fontList from '../lib/fontList'
 import * as QRCode from "qrcode";
 import * as echarts from "echarts";
 import ShapeUtil from './ShapeUtil'
+import FilterUtil from './filterUtil'
 let fontMap = {}
 fontList.forEach(item => {
   fontMap[item.fontFamily] = item
@@ -144,6 +145,108 @@ class DesignToCanvas {
     imageCanvas.setAttribute("height", String(crop.height));
     let ctx = imageCanvas.getContext("2d") as CanvasRenderingContext2D;
     ctx.drawImage(image, -crop.left, -crop.top);
+
+    if (module.filterInfo) {
+      let filterInfo = module.filterInfo;
+      switch (filterInfo.type) {
+        case "blackWhite":
+          FilterUtil.blackWhite(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "reverse":
+          FilterUtil.reverse(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "mosaic":
+          FilterUtil.mosaic(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "removeRed":
+          FilterUtil.removeRed(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "removeGreen":
+          FilterUtil.removeGreen(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "removeBlue":
+          FilterUtil.removeBlue(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "grayscale":
+          FilterUtil.grayscale(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "red":
+          FilterUtil.red(ctx as CanvasRenderingContext2D, imageCanvas);
+          break;
+        case "green":
+          FilterUtil.green(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "blue":
+          FilterUtil.blue(ctx as CanvasRenderingContext2D, imageCanvas);
+          break;
+        case "nostalgia":
+          FilterUtil.nostalgia(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "casting":
+          FilterUtil.casting(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+          break;
+        case "frozen":
+          FilterUtil.frozen(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+
+          break;
+        case "comicStrip":
+          FilterUtil.comicStrip(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+
+          break;
+        case "brown":
+          FilterUtil.brown(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+
+          break;
+        case "darktone":
+          FilterUtil.darktone(
+            ctx as CanvasRenderingContext2D,
+            imageCanvas
+          );
+
+          break;
+
+        default:
+      }
+    }
     if (module.mask != undefined && module.mask != null) {
       ctx.globalCompositeOperation = "destination-in";
       ctx.drawImage(maskImage, 0, 0, crop.width, crop.height);

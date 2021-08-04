@@ -168,11 +168,68 @@
         </div>
       </el-collapse-item>
       <el-collapse-item title="蒙版" name="4">
+        <div class="mask-demo" @click="deleteMask">
+          <svg
+            t="1621497008046"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="2975"
+            width="70"
+            height="70"
+          >
+            <path
+              d="M512 74.666667C270.933333 74.666667 74.666667 270.933333 74.666667 512S270.933333 949.333333 512 949.333333 949.333333 753.066667 949.333333 512 753.066667 74.666667 512 74.666667zM885.333333 512c0 85.333333-29.866667 164.266667-78.933333 228.266667l-533.333333-514.133334c64-55.466667 149.333333-87.466667 238.933333-87.466666 204.8 0 373.333333 168.533333 373.333333 373.333333z m-746.666666 0c0-91.733333 34.133333-174.933333 87.466666-241.066667l535.466667 516.266667c-66.133333 59.733333-153.6 98.133333-251.733333 98.133333-202.666667 0-371.2-168.533333-371.2-373.333333z"
+              p-id="2976"
+            ></path>
+          </svg>
+        </div>
+
         <maskDemo
           v-for="(item, index) in maskList"
           :key="index"
           :src="item"
         ></maskDemo>
+      </el-collapse-item>
+      <el-collapse-item title="滤镜" name="7">
+        <div class="filter-list">
+          <div class="filter-item" @click="removeFilter">
+            <svg
+              t="1621497008046"
+              class="icon"
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="2975"
+              width="70"
+              height="70"
+            >
+              <path
+                d="M512 74.666667C270.933333 74.666667 74.666667 270.933333 74.666667 512S270.933333 949.333333 512 949.333333 949.333333 753.066667 949.333333 512 753.066667 74.666667 512 74.666667zM885.333333 512c0 85.333333-29.866667 164.266667-78.933333 228.266667l-533.333333-514.133334c64-55.466667 149.333333-87.466667 238.933333-87.466666 204.8 0 373.333333 168.533333 373.333333 373.333333z m-746.666666 0c0-91.733333 34.133333-174.933333 87.466666-241.066667l535.466667 516.266667c-66.133333 59.733333-153.6 98.133333-251.733333 98.133333-202.666667 0-371.2-168.533333-371.2-373.333333z"
+                p-id="2976"
+              ></path>
+            </svg>
+          </div>
+          <filter-item type="nostalgia" name="怀旧"></filter-item>
+          <filter-item type="grayscale" name="灰度"></filter-item>
+          <filter-item type="blackWhite" name="黑白"></filter-item>
+          <filter-item type="darktone" name="暗调"></filter-item>
+          <filter-item type="casting" name="熔铸"></filter-item>
+          <filter-item type="brown" name="褐色"></filter-item>
+          <filter-item type="comicStrip" name="连环画"></filter-item>
+          <filter-item type="frozen" name="冰冻"></filter-item>
+          <filter-item type="reverse" name="反转"></filter-item>
+          <filter-item type="mosaic" name="马赛克"></filter-item>
+          <filter-item type="removeRed" name="去红色"></filter-item>
+          <filter-item type="removeGreen" name="去绿色"></filter-item>
+          <filter-item type="removeBlue" name="去蓝色"></filter-item>
+          <filter-item type="red" name="红色"></filter-item>
+          <filter-item type="green" name="绿色"></filter-item>
+          <filter-item type="blue" name="蓝色"></filter-item>
+        </div>
+
+        <!-- <filter-item></filter-item> -->
       </el-collapse-item>
       <!-- <el-collapse-item title="边框" name="3">
    <div class='oper-item'>
@@ -259,11 +316,13 @@ import operation from "../operation/common/operation";
 import LockMask from "./lockMask.vue";
 import { getImageList } from "@/api/api";
 import ColorPicker from "@/components/color-picker/index";
+import filterItem from "@/components/filter/filterItem.vue";
 export default defineComponent({
   components: {
     maskDemo,
     LockMask,
     ColorPicker,
+    filterItem,
   },
   setup() {
     const store = useStore();
@@ -290,6 +349,12 @@ export default defineComponent({
       let clipOper = store.state.clipOper;
       store.commit("setClipOper", !clipOper);
     };
+    const deleteMask = () => {
+      store.commit("removeMask");
+    };
+    const removeFilter = () => {
+      store.commit("removeFilter");
+    };
     return {
       activeNames,
       value,
@@ -299,6 +364,8 @@ export default defineComponent({
       clipImage,
       maskList,
       pushBack,
+      deleteMask,
+      removeFilter,
     };
   },
 });
@@ -353,5 +420,32 @@ export default defineComponent({
   border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 0 4px rgb(175, 175, 175);
+}
+.filter-list {
+  height: 400px;
+  overflow-y: scroll;
+}
+.mask-demo {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.171);
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.filter-item {
+  width: 100px;
+  height: 130px;
+  float: left;
+  margin: 5px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 1px rgb(0, 0, 0);
 }
 </style>

@@ -70,6 +70,7 @@ import rotate from "./rotate.vue";
 import operation from "./common/operation";
 import MathUtil from "@/lib/MathUtil";
 import Lock from "./lock.vue";
+import FilterUtil from "@/lib/filterUtil";
 export default defineComponent({
   props: {
     image: {
@@ -102,6 +103,7 @@ export default defineComponent({
     const store = useStore();
     let image = new Image();
     image.src = module.value.src;
+    image.setAttribute("crossOrigin", "anonymous");
     const nature = {
       naturalWidth: 0,
       naturalHeight: 0,
@@ -111,7 +113,7 @@ export default defineComponent({
       nature.naturalHeight = image.naturalHeight;
       draw();
     };
-    let imageCanvas = ref((null as unknown) as HTMLCanvasElement);
+    let imageCanvas = ref(null as unknown as HTMLCanvasElement);
     const draw = () => {
       if (props.pattern == "edit") {
         return;
@@ -124,11 +126,117 @@ export default defineComponent({
       ctx.drawImage(image, -crop.left, -crop.top);
       if (module.value.mask != undefined && module.value.mask != null) {
         let maskImage = new Image();
-        maskImage.src = module.value.mask.src;
+        maskImage.src = module.value.mask.src.replace(
+          "https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com",
+          "https://lp-canvas-1304910572.file.myqcloud.com/"
+        );
+        maskImage.setAttribute("crossOrigin", "anonymous");
         maskImage.onload = () => {
           ctx.globalCompositeOperation = "destination-in";
           ctx.drawImage(maskImage, 0, 0, crop.width, crop.height);
         };
+      }
+      if (module.value.filterInfo) {
+        let filterInfo = module.value.filterInfo;
+        // console.log(module.value);
+        switch (filterInfo.type) {
+          case "blackWhite":
+            FilterUtil.blackWhite(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "reverse":
+            FilterUtil.reverse(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "mosaic":
+            FilterUtil.mosaic(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "removeRed":
+            FilterUtil.removeRed(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "removeGreen":
+            FilterUtil.removeGreen(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "removeBlue":
+            FilterUtil.removeBlue(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "grayscale":
+            FilterUtil.grayscale(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "red":
+            FilterUtil.red(ctx as CanvasRenderingContext2D, imageCanvas.value);
+            break;
+          case "green":
+            FilterUtil.green(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "blue":
+            FilterUtil.blue(ctx as CanvasRenderingContext2D, imageCanvas.value);
+            break;
+          case "nostalgia":
+            FilterUtil.nostalgia(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "casting":
+            FilterUtil.casting(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+            break;
+          case "frozen":
+            FilterUtil.frozen(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+
+            break;
+          case "comicStrip":
+            FilterUtil.comicStrip(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+
+            break;
+          case "brown":
+            FilterUtil.brown(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+
+            break;
+          case "darktone":
+            FilterUtil.darktone(
+              ctx as CanvasRenderingContext2D,
+              imageCanvas.value
+            );
+
+            break;
+
+          default:
+        }
       }
     };
     const imageSize = computed(() => {
@@ -169,6 +277,16 @@ export default defineComponent({
     );
     watch(
       () => module.value.mask,
+      (nv, ov) => {
+        draw();
+      },
+      {
+        immediate: false,
+        deep: true,
+      }
+    );
+    watch(
+      () => module.value.filterInfo,
       (nv, ov) => {
         draw();
       },

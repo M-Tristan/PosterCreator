@@ -12,6 +12,7 @@ class ModuleUtil {
 
   }
   static getAddImageInfo(src: string) {
+    src = src.replace("https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com", "https://lp-canvas-1304910572.file.myqcloud.com/")
     return new Promise((resolve, reject) => {
       let image = new Image()
       image.src = src

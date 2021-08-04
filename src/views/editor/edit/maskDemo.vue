@@ -1,5 +1,5 @@
 <template>
-  <div class="mask-demo" @click="selectMask">
+  <div :class="['mask-demo', { active: active }]" @click="selectMask">
     <canvas ref="canvasDom" width="100" height="100"></canvas>
   </div>
 </template>
@@ -18,11 +18,12 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
-    const { pushBack } = operation();
-    const canvasDom = ref(null as unknown as HTMLCanvasElement);
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
+    const { pushBack } = operation();
+    const canvasDom = ref(null as unknown as HTMLCanvasElement);
+
     onMounted(() => {
       let image = new Image();
       image.src = props.src;
@@ -44,12 +45,19 @@ export default defineComponent({
         src: props.src,
       };
     };
-    return { canvasDom, selectMask };
+    const active = computed(() => {
+      if (!editModule.value.mask) {
+        return false;
+      }
+
+      return editModule.value.mask.src === props.src;
+    });
+    return { canvasDom, selectMask, active };
   },
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .mask-demo {
   width: 100px;
   height: 100px;
@@ -60,5 +68,8 @@ export default defineComponent({
   float: left;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+.active {
+  background-color: rgb(255, 208, 0);
 }
 </style>

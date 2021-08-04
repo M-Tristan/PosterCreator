@@ -27,6 +27,9 @@ export interface option {
   blur: number,
   color: string
 }
+interface filterInfo {
+  type: string
+}
 export interface image extends operItem {
   src: string,
   blur: number,
@@ -51,6 +54,7 @@ export interface image extends operItem {
     invert: number,
     saturate: number
   },
+  filterInfo?: filterInfo,
   mask?: {
     type: string,
     src?: string

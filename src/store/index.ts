@@ -912,6 +912,15 @@ export default createStore({
       }
       delete editModule.gradient
       delete editModule.gradientAngle
+    },
+    removeMask(state) {
+      delete state.editModule.mask
+    },
+    addFilter(state, type) {
+      state.editModule.filterInfo = { type: type }
+    },
+    removeFilter(state) {
+      delete state.editModule.filterInfo
     }
   },
   getters: {

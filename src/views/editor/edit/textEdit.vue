@@ -225,7 +225,7 @@
           </div>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="变形" name="4">
+      <el-collapse-item title="路径" name="4">
         <div
           :class="['shapeItem', { shapeActive: !editModule.shape }]"
           @click="addDeformation()"

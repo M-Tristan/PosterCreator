@@ -1,8 +1,8 @@
 <template>
   <div v-infinite-scroll="search">
     <div class="image-item" v-for="(url, index) in imageList" :key="index">
+      <!-- @click="selectImage(url)" -->
       <el-image
-        @click="selectImage(url)"
         @mousedown="dragImage(url)"
         style="width: 80px; height: 80px"
         :src="url"
@@ -69,6 +69,12 @@ export default defineComponent({
         dragImageInfo.value.top = event.clientY;
       };
       window.onmouseup = (event: MouseEvent) => {
+        if (showdragImage.value === false) {
+          selectImage(url);
+          window.onmousemove = null;
+          window.onmouseup = null;
+          return;
+        }
         let postion = EditPositionUtil.getCanvasPositionByClientPosition(
           event.clientX,
           event.clientY
@@ -80,9 +86,9 @@ export default defineComponent({
           store.commit("setEditModule", imageInfo.id);
           store.commit("pushBack");
         }
-        showdragImage.value = false;
         window.onmousemove = null;
         window.onmouseup = null;
+        showdragImage.value = false;
       };
     };
     return {
