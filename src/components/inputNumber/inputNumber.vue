@@ -1,6 +1,7 @@
 <template>
   <div class="inputNumber">
     <input
+      @keydown.stop
       ref="input"
       @keyup="upperCase"
       :value="value"
