@@ -11,7 +11,7 @@
       <i
         class="el-icon-delete delete-button"
         v-if="postList.length > 1"
-        @click.stop="deletePostByIndex"
+        @click.stop="deletePostByIndex(index)"
       ></i>
       <image-item :postInfo="postInfo" :width="200"></image-item>
     </div>

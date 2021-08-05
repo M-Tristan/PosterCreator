@@ -703,6 +703,13 @@ class DesignToCanvas {
     let svg = await DesignToCanvas.getSvgByIndex(index)
     let dom = document.createElement('div')
     dom.innerHTML = svg
+    // console.dir(dom.children[0])
+    // let canvas = document.createElement('canvas')
+    // canvas.width = 1000
+    // canvas.height = 1000
+    // let ctx = canvas.getContext("2d")
+    // ctx?.drawImage(dom.children[0] as SVGImageElement, 0, 0, 1000, 1000)
+    // document.body.appendChild(canvas)
     let svgInfo = new XMLSerializer().serializeToString(dom.children[0])
     svgInfo = svgInfo.replace(/#/g, '%23').replace(/\n/g, '%0A')
     let imageBase64 = await ImageUtil.toBase64(`data:image/svg+xml;charset=utf-8,${svgInfo}`)

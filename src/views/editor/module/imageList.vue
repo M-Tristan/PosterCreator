@@ -2,6 +2,7 @@
   <div v-infinite-scroll="search">
     <div class="image-item" v-for="(url, index) in imageList" :key="index">
       <!-- @click="selectImage(url)" -->
+      <!-- @mouseup="dragEnd" -->
       <el-image
         @mousedown="dragImage(url)"
         style="width: 80px; height: 80px"
@@ -50,6 +51,8 @@ export default defineComponent({
     };
     const imageList = ref(<any>[]);
     const selectImage = async (url: string) => {
+      window.onmousemove = null;
+      window.onmouseup = null;
       let imageInfo = <operItem>await ModuleUtil.getAddImageInfo(url);
       let position = EditPositionUtil.getShowEditCenterPosition();
       imageInfo.top = position.top - imageInfo.height / 2;
@@ -91,6 +94,10 @@ export default defineComponent({
         showdragImage.value = false;
       };
     };
+    const dragEnd = () => {
+      window.onmousemove = null;
+      window.onmouseup = null;
+    };
     return {
       imageList,
       selectImage,
@@ -99,6 +106,7 @@ export default defineComponent({
       dragImageInfo,
       showdragImage,
       scale,
+      dragEnd,
     };
   },
 });

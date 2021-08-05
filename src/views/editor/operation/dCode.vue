@@ -69,6 +69,23 @@ export default defineComponent({
     onMounted(() => {
       draw();
     });
+    let useCanvas: HTMLCanvasElement;
+    let codeUrl = "";
+    let codeImage: HTMLImageElement;
+    const resetCode = () => {
+      if (!useCanvas || !codeImage) {
+        return;
+      }
+      let ctx = useCanvas.getContext("2d") as CanvasRenderingContext2D;
+      ctx.clearRect(0, 0, 1000, 1000);
+      ctx.drawImage(codeImage, 0, 0, 1000, 1000);
+      ctx.globalCompositeOperation = "source-in";
+      ctx.fillStyle = props.code.colorLight;
+      ctx.fillRect(0, 0, 1000, 1000);
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.fillStyle = props.code.colorDark;
+      ctx.fillRect(0, 0, 1000, 1000);
+    };
     const draw = () => {
       if (props.pattern == "edit") {
         return;
@@ -79,19 +96,39 @@ export default defineComponent({
           margin: 1,
           width: 1000,
           color: {
-            dark: props.code.colorDark,
-            light: props.code.colorLight,
+            dark: "#FFFFFF00",
+            // dark: props.code.colorDark,
+            // light: "#FFFFFF00",
+            light: "#FFFFFF",
           },
         },
-        (err: any, canvas: any) => {
+        (err: any, canvas: HTMLCanvasElement) => {
           if (err) throw err;
-          code.value.append(canvas);
-          var image = new Image();
-          image.src = canvas.toDataURL("image/png");
-          image.style.width = "100%";
-          image.style.height = "100%";
           code.value.innerHTML = "";
-          code.value.append(image);
+          code.value.append(canvas);
+          canvas.style.width = "100%";
+          canvas.style.height = "100%";
+          useCanvas = canvas;
+          // let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+          // ctx.globalCompositeOperation = "destination-over";
+          // ctx.fillStyle = props.code.colorLight;
+          // ctx.fillRect(0, 0, 1000, 1000);
+          canvas.toBlob((blob) => {
+            URL.revokeObjectURL(codeUrl);
+            codeUrl = URL.createObjectURL(blob);
+            codeImage = new Image();
+            codeImage.src = codeUrl;
+            codeImage.onload = () => {
+              resetCode();
+            };
+          });
+
+          // var image = new Image();
+          // image.src = canvas.toDataURL("image/png");
+          // image.style.width = "100%";
+          // image.style.height = "100%";
+          // code.value.innerHTML = "";
+          // code.value.append(image);
         }
       );
     };
@@ -111,8 +148,11 @@ export default defineComponent({
     const colorLight: any = computed(() => {
       return module.value.colorLight;
     });
-    watch([text, colorDark, colorLight], () => {
+    watch([text], () => {
       draw();
+    });
+    watch([colorDark, colorLight], () => {
+      resetCode();
     });
     watch(
       () => {
