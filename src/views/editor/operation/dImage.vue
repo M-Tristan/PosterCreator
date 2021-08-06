@@ -71,6 +71,7 @@ import operation from "./common/operation";
 import MathUtil from "@/lib/MathUtil";
 import Lock from "./lock.vue";
 import FilterUtil from "@/lib/filterUtil";
+import BaseCache from "@/lib/baseCache";
 export default defineComponent({
   props: {
     image: {
@@ -80,6 +81,10 @@ export default defineComponent({
     pattern: {
       type: String,
       default: "edit",
+    },
+    collect: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
@@ -237,6 +242,9 @@ export default defineComponent({
 
           default:
         }
+      }
+      if (props.collect) {
+        BaseCache.pushModule(module.value.id, imageCanvas.value.toDataURL());
       }
     };
     const imageSize = computed(() => {

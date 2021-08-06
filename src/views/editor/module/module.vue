@@ -162,7 +162,7 @@
       <qr-code-list v-if="moduleId == 3"></qr-code-list>
       <material-list v-if="moduleId == 4"></material-list>
       <watermarkList v-if="moduleId == 6"></watermarkList>
-      <canvas-list v-if="moduleId == 7"></canvas-list>
+      <canvas-list v-show="moduleId == 7"></canvas-list>
       <svg-list v-if="moduleId == 8"></svg-list>
     </div>
   </div>

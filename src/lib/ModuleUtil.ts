@@ -6,6 +6,7 @@ interface codeBaseInfo {
 }
 import { v4 as uuidv4 } from 'uuid';
 import store from './../store/index';
+import BaseCache from './baseCache';
 
 class ModuleUtil {
   constructor() {
@@ -95,10 +96,15 @@ class ModuleUtil {
     })
   }
   static getAddCodeInfo(code: codeBaseInfo) {
+    if (code.backImage) {
+      BaseCache.pushImage(code.backImage)
+    }
+
     let canvas = store.state.postInfo.canvas
     let width = canvas.width / 3
     let height = canvas.height / 3
     let length = width > height ? height : width
+
     return new Promise((resolve, reject) => {
       resolve({
         id: uuidv4(),

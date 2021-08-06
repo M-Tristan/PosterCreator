@@ -46,6 +46,8 @@ import rotate from "./rotate.vue";
 import operation from "./common/operation";
 import * as QRCode from "qrcode";
 import Lock from "./lock.vue";
+import BaseCache from "@/lib/baseCache";
+import _ from "lodash";
 export default defineComponent({
   props: {
     code: {
@@ -55,6 +57,10 @@ export default defineComponent({
     pattern: {
       type: String,
       default: "edit",
+    },
+    collect: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
@@ -72,6 +78,11 @@ export default defineComponent({
     let useCanvas: HTMLCanvasElement;
     let codeUrl = "";
     let codeImage: HTMLImageElement;
+    const debouncePushModule = _.debounce(() => {
+      console.log("debounce");
+      console.log(module.value.id);
+      BaseCache.pushModule(module.value.id, useCanvas.toDataURL());
+    }, 200);
     const resetCode = () => {
       if (!useCanvas || !codeImage) {
         return;
@@ -85,6 +96,9 @@ export default defineComponent({
       ctx.globalCompositeOperation = "destination-over";
       ctx.fillStyle = props.code.colorDark;
       ctx.fillRect(0, 0, 1000, 1000);
+      if (props.collect) {
+        debouncePushModule();
+      }
     };
     const draw = () => {
       if (props.pattern == "edit") {

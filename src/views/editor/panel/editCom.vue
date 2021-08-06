@@ -34,6 +34,7 @@
         v-if="layer.type == 'image'"
         :pattern="pattern"
         :image="layer"
+        :collect="collectData"
       ></d-image>
       <d-text
         v-if="layer.type == 'text'"
@@ -49,6 +50,7 @@
         v-if="layer.type == 'code'"
         :pattern="pattern"
         :code="layer"
+        :collect="collectData"
       ></d-code>
     </template>
     <water-mask
@@ -57,12 +59,22 @@
     ></water-mask>
     <clipper v-if="clipOper && pattern == 'edit'"></clipper>
     <back-cliper :background="background" v-if="backClip"></back-cliper>
+    <color-collect
+      @colorTake="colorTake"
+      v-if="pattern == 'edit' && takeColor"
+    ></color-collect>
   </div>
 </template>
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent, ref } from "vue";
+import {
+  ComponentInternalInstance,
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  ref,
+} from "vue";
 import dImage from "../operation/dImage.vue";
 import dText from "../operation/dText.vue";
 import clipper from "../operation/clipper.vue";
@@ -74,6 +86,7 @@ import DGroup from "../operation/dGroup.vue";
 import backCliper from "../operation/backCliper.vue";
 import dEffectText from "../operation/dEffectText.vue";
 import waterMask from "../operation/waterMask.vue";
+import colorCollect from "./colorCollect.vue";
 export default defineComponent({
   components: {
     dImage,
@@ -87,15 +100,36 @@ export default defineComponent({
     dEffectText,
     waterMask,
     backCliper,
+    colorCollect,
   },
   props: {
     pattern: {
       type: String,
       default: "edit",
     },
+    collectData: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { emit }) {
+    const { proxy } = getCurrentInstance() as ComponentInternalInstance;
     const store = useStore();
+    const takeColor = ref(false);
+    let colorFinish: Function;
+    const colorTake = (color) => {
+      takeColor.value = false;
+      if (colorFinish) {
+        colorFinish(color);
+      }
+    };
+    if (props.pattern === "edit") {
+      proxy?.$emitter.on("takeColor", (value, finishFn) => {
+        takeColor.value = value;
+        colorFinish = finishFn;
+      });
+    }
+
     let watermark = computed(() => {
       return store.state.postInfo.watermark;
     });
@@ -158,6 +192,8 @@ export default defineComponent({
       patchSelect,
       watermark,
       backClip,
+      takeColor,
+      colorTake,
     };
   },
 });

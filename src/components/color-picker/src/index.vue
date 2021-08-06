@@ -35,6 +35,9 @@
               @blur="handleConfirm"
             />
           </span>
+          <div @click="tokeColor" class="pen-area">
+            <img src="~@/assets/straw.png" />
+          </div>
           <!-- <el-button
             size="mini"
             type="text"
@@ -62,8 +65,10 @@
 
 <script lang="ts">
 import {
+  ComponentInternalInstance,
   computed,
   defineComponent,
+  getCurrentInstance,
   inject,
   nextTick,
   onMounted,
@@ -126,6 +131,7 @@ export default defineComponent({
   },
   emits: ["change", "active-change", UPDATE_MODEL_EVENT],
   setup(props, { emit }) {
+    const { proxy } = getCurrentInstance() as ComponentInternalInstance;
     const ELEMENT = useGlobalConfig();
     const elForm = inject(elFormKey, {} as ElFormContext);
     const elFormItem = inject(elFormItemKey, {} as ElFormItemContext);
@@ -279,6 +285,13 @@ export default defineComponent({
       currentColor,
     });
 
+    const tokeColor = () => {
+      proxy?.$emitter.emit("takeColor", true, (value) => {
+        color.value = value;
+        confirmValue();
+      });
+    };
+
     return {
       color,
       colorDisabled,
@@ -297,7 +310,22 @@ export default defineComponent({
       svPanel,
       alpha,
       popper,
+      tokeColor,
     };
   },
 });
 </script>
+<style lang="scss" scoped>
+.pen-area {
+  width: 25px;
+  height: 25px;
+  border: 1px solid rgba(136, 136, 136, 0.5);
+  border-radius: 4px;
+  float: right;
+  cursor: pointer;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>

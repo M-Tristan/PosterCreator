@@ -12,6 +12,7 @@
 </template>
 
 <script lang="ts">
+import BaseCache from "@/lib/baseCache";
 import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import operation from "../operation/common/operation";
@@ -28,6 +29,7 @@ export default defineComponent({
       "https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com/90cae961-782f-4681-9d47-9312be7c0d37.jpeg",
     ];
     const selectImage = (src) => {
+      BaseCache.pushImage(src);
       store.commit("setTextBack", src);
     };
     return { imageList, selectImage };

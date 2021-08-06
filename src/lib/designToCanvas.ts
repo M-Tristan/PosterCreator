@@ -7,6 +7,7 @@ import * as QRCode from "qrcode";
 import * as echarts from "echarts";
 import ShapeUtil from './ShapeUtil'
 import FilterUtil from './filterUtil'
+import BaseCache from './baseCache'
 let fontMap = {}
 fontList.forEach(item => {
   fontMap[item.fontFamily] = item
@@ -61,8 +62,13 @@ class DesignToCanvas {
     fontInfoList = [...new Set(fontInfoList)]
     let fontface = ''
     for (let index = 0; index < fontInfoList.length; index++) {
+
       let info = fontInfoList[index]
-      let res = await getAndEncode(info.url)
+      let res = BaseCache.getFontByFamily(info.fontFamily)
+      if (!res) {
+        res = await getAndEncode(info.url)
+        BaseCache.pushFont(info.fontFamily, info.url)
+      }
       fontface += `@font-face {
         font-family: ${info.fontFamily};
         src:url("data:application/font-woff;base64,${res}")
@@ -74,6 +80,37 @@ class DesignToCanvas {
     return `<style>${fontface}</style>`
 
   }
+  static async loadFontByPost(postInfo) {
+    let fontInfoList = <any>[]
+
+    postInfo.layers.forEach(layer => {
+      if (layer.type === 'text' || layer.type === 'effectText') {
+        fontInfoList.push(fontMap[layer.fontFamily])
+      }
+    })
+    fontInfoList = [...new Set(fontInfoList)]
+    let fontface = ''
+    for (let index = 0; index < fontInfoList.length; index++) {
+
+      let info = fontInfoList[index]
+      let res = BaseCache.getFontByFamily(info.fontFamily)
+      if (!res) {
+        res = await getAndEncode(info.url)
+        BaseCache.pushFont(info.fontFamily, info.url)
+      }
+      fontface += `@font-face {
+        font-family: ${info.fontFamily};
+        src:url("data:application/font-woff;base64,${res}")
+    }`
+    }
+    // fontInfoList.forEach(async (info) => {
+
+    // });
+    return `<style>${fontface}</style>`
+
+  }
+
+
   static async getBackDom(background) {
     let style = `width: 100%;
     height: 100%;
@@ -83,7 +120,12 @@ class DesignToCanvas {
     background-color: ${background.color}`
     let image = ''
     if (background.image && background.image.src) {
-      let imageBase64 = await ImageUtil.toBase64(background.image.src)
+      let imageBase64 = BaseCache.getImageBySrc(background.image.src)
+      if (!imageBase64) {
+        imageBase64 = await ImageUtil.toBase64(background.image.src)
+        BaseCache.pushImage(background.image.src)
+      }
+
       let backStyle = `
       position: absolute;
       width: ${background.image.width}px;
@@ -138,7 +180,14 @@ class DesignToCanvas {
     }
     image.src = module.src.replace("https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com", "https://lp-canvas-1304910572.file.myqcloud.com/")
     await new Promise<void>((res, rej) => { image.onload = () => { res() } })
-
+    let base64 = BaseCache.getModule(module.id)
+    if (base64) {
+      let imageDom = `<img style='${imageStyle}' src='${base64}' />`
+      let dom = `<div style='${style}'>
+      ${imageDom}
+      </div>`
+      return dom
+    }
     let imageCanvas = document.createElement("canvas")
     let crop = module.crop;
     imageCanvas.setAttribute("width", String(crop.width));
@@ -251,7 +300,9 @@ class DesignToCanvas {
       ctx.globalCompositeOperation = "destination-in";
       ctx.drawImage(maskImage, 0, 0, crop.width, crop.height);
     }
-    let imageDom = `<img style='${imageStyle}' src='${imageCanvas.toDataURL()}' />`
+    base64 = imageCanvas.toDataURL()
+    BaseCache.pushModule(module.id, base64)
+    let imageDom = `<img style='${imageStyle}' src='${base64}' />`
     let dom = `<div style='${style}'>
     ${imageDom}
     </div>`
@@ -314,7 +365,12 @@ class DesignToCanvas {
     let backImageStyle = ``
 
     if (module.backImage) {
-      let imageBase64 = await ImageUtil.toBase64(module.backImage)
+      let imageBase64 = BaseCache.getImageBySrc(module.backImage)
+      if (!imageBase64) {
+        imageBase64 = await ImageUtil.toBase64(module.backImage)
+        BaseCache.pushImage(module.backImage)
+      }
+
       backImageStyle = `background-image:url('${imageBase64}');
       background-repeat: no-repeat;
       background-size: cover;
@@ -378,7 +434,7 @@ class DesignToCanvas {
     z-index: ${module.zindex};
     `
     let backDom = ''
-    let codeBase64 = ''
+    let codeBase64 = BaseCache.getModule(module.id)
     if (module.backImage) {
       let backStyle = `
       position: absolute;
@@ -388,28 +444,36 @@ class DesignToCanvas {
       top: 0;
       z-index: -1;
       `
-      let imageBase64 = await ImageUtil.toBase64(module.backImage)
+      let imageBase64 = BaseCache.getImageBySrc(module.backImage)
+      if (!imageBase64) {
+        imageBase64 = await ImageUtil.toBase64(module.backImage)
+        BaseCache.pushImage(module.backImage)
+      }
+
       backDom = `<img style='${backStyle}' src='${imageBase64}'/>`
     }
-
-    await new Promise<void>((res, rej) => {
-      QRCode.toCanvas(
-        module.text,
-        {
-          margin: 1,
-          width: 1000,
-          color: {
-            dark: module.colorDark,
-            light: module.colorLight,
+    if (!codeBase64) {
+      await new Promise<void>((res, rej) => {
+        QRCode.toCanvas(
+          module.text,
+          {
+            margin: 1,
+            width: 1000,
+            color: {
+              dark: module.colorDark,
+              light: module.colorLight,
+            },
           },
-        },
-        (err: any, canvas: any) => {
-          if (err) throw err;
-          codeBase64 = canvas.toDataURL("image/png");
-          res()
-        }
-      );
-    })
+          (err: any, canvas: any) => {
+            if (err) throw err;
+            codeBase64 = canvas.toDataURL("image/png");
+            res()
+          }
+        );
+      })
+
+    }
+
 
     return `<div style='${style}'>
     ${backDom}
@@ -617,7 +681,9 @@ class DesignToCanvas {
         dom += shapeDom
       } else if (layer.type === 'effectText') {
         let effectTextDom = await DesignToCanvas.getEffectTextDom(layer)
-        dom += effectTextDom
+        let div = document.createElement("div")
+        div.innerHTML = effectTextDom
+        dom += new XMLSerializer().serializeToString(div.children[0]).replace(/#/g, '%23').replace(/\n/g, '%0A')
       }
 
     }
@@ -683,26 +749,36 @@ class DesignToCanvas {
     // console.log(`<div style="${style}">/div>`)
     return `<div style="${style}"></div>`
   }
+
   static async getSvgByIndex(index) {
     let post = _.cloneDeep(store.state.postList[index])
+    const svg = await DesignToCanvas.getSvgByPostInfo(post, true)
+
+
+
+    return svg
+  }
+  static async getSvgByPostInfo(post, loadfont?: boolean) {
     let canvas = post.canvas
     let backDom = await DesignToCanvas.getBackDom(post.background)
     let layerDom = await DesignToCanvas.getLayerDom(post.layers)
     let waterMask = await DesignToCanvas.getwaterMaskDom(post.watermark)
-    let fonts = await DesignToCanvas.loadFont(index)
+    let fonts = ''
+    if (loadfont) {
+      fonts = await DesignToCanvas.loadFontByPost(post)
+    }
+
     // let fonts = ''
     const svg = `<svg  width='${canvas.width}' height='${canvas.height}' xmlns='http://www.w3.org/2000/svg'><foreignObject x='0' y='0' width='${canvas.width}' height='${canvas.height}'><div xmlns='http://www.w3.org/1999/xhtml'>
     ${backDom}${layerDom}${waterMask}${fonts}
     </div></foreignObject></svg>`
-
-
     return svg
   }
 
   static async downLoadByIndex(index) {
     let svg = await DesignToCanvas.getSvgByIndex(index)
-    let dom = document.createElement('div')
-    dom.innerHTML = svg
+    // let dom = document.createElement('div')
+    // dom.innerHTML = svg
     // console.dir(dom.children[0])
     // let canvas = document.createElement('canvas')
     // canvas.width = 1000
@@ -710,7 +786,8 @@ class DesignToCanvas {
     // let ctx = canvas.getContext("2d")
     // ctx?.drawImage(dom.children[0] as SVGImageElement, 0, 0, 1000, 1000)
     // document.body.appendChild(canvas)
-    let svgInfo = new XMLSerializer().serializeToString(dom.children[0])
+    // let svgInfo = new XMLSerializer().serializeToString(dom.children[0])
+    let svgInfo = svg
     svgInfo = svgInfo.replace(/#/g, '%23').replace(/\n/g, '%0A')
     let imageBase64 = await ImageUtil.toBase64(`data:image/svg+xml;charset=utf-8,${svgInfo}`)
 

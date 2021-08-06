@@ -5,7 +5,7 @@
       <module></module>
     </div>
     <div class="canvas-area" ref="canvasArea" @mousedown="batchStart">
-      <editCom pattern="show" @click.stop></editCom>
+      <editCom pattern="show" :collectData="true" @click.stop></editCom>
       <editCom
         pattern="edit"
         @click.stop

@@ -422,6 +422,7 @@ import lockMask from "./lockMask.vue";
 import TextBackImage from "./textBackImage.vue";
 import ColorPicker from "@/components/color-picker/index";
 import GradientBar from "../../../components/gradientBar/gradientBar.vue";
+import BaseCache from "@/lib/baseCache";
 // import Colorpicker from "@/components/colorpicker/colorpicker.vue";
 export default defineComponent({
   components: { lockMask, TextBackImage, ColorPicker, GradientBar },
@@ -491,6 +492,7 @@ export default defineComponent({
         ")};font-display: swap";
       document.getElementsByTagName("head")[0].appendChild(style);
       item.load = true;
+      BaseCache.pushFont(fullname, item.url);
     };
     const addTextGradient = () => {
       store.commit("addTextGradient");
