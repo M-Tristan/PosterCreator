@@ -93,10 +93,17 @@
         <i class="icon el-icon-document-copy"></i>
       </div>
     </div>
-
-    <div class="download">
-      <i class="icon iconfont icon-xiazai" @click="download"></i>
-    </div>
+    <el-popover placement="bottom" width="100" trigger="click">
+      <div class="downloadType" @click="download('png')">png</div>
+      <div class="downloadType" @click="download('jpg')">jpg</div>
+      <div class="downloadType" @click="download('pdf')">pdf(文件过大)</div>
+      <template #reference>
+        <div class="download">
+          <!-- @click="download" -->
+          <i class="icon iconfont icon-xiazai"></i>
+        </div>
+      </template>
+    </el-popover>
   </div>
   <el-dialog title="生成中..." v-model="downloadDialog" width="70%" center>
     <el-progress :percentage="percentage"></el-progress>
@@ -179,7 +186,7 @@ export default defineComponent({
       store.commit("paste");
       store.commit("pushBack");
     };
-    const download = () => {
+    const download = (type) => {
       percentage.value = 0;
       downloadDialog.value = true;
       let t = setInterval(() => {
@@ -189,7 +196,7 @@ export default defineComponent({
         }
       }, 50);
       setTimeout(async () => {
-        await DesignToCanvas.downLoadALL();
+        await DesignToCanvas.downLoadALL(type);
         clearInterval(t);
         percentage.value = 100;
         setTimeout(() => {
@@ -407,6 +414,17 @@ export default defineComponent({
   }
   &:hover {
     color: aqua;
+  }
+}
+.downloadType {
+  text-align: center;
+  font-size: 16px;
+  line-height: 25px;
+  color: black;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(98, 198, 255);
+    color: white;
   }
 }
 </style>

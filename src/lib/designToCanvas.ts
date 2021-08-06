@@ -8,6 +8,7 @@ import * as echarts from "echarts";
 import ShapeUtil from './ShapeUtil'
 import FilterUtil from './filterUtil'
 import BaseCache from './baseCache'
+import jsPDF from "jspdf";
 let fontMap = {}
 fontList.forEach(item => {
   fontMap[item.fontFamily] = item
@@ -775,7 +776,7 @@ class DesignToCanvas {
     return svg
   }
 
-  static async downLoadByIndex(index) {
+  static async downLoadByIndex(index, type) {
     let svg = await DesignToCanvas.getSvgByIndex(index)
     // let dom = document.createElement('div')
     // dom.innerHTML = svg
@@ -789,22 +790,49 @@ class DesignToCanvas {
     // let svgInfo = new XMLSerializer().serializeToString(dom.children[0])
     let svgInfo = svg
     svgInfo = svgInfo.replace(/#/g, '%23').replace(/\n/g, '%0A')
-    let imageBase64 = await ImageUtil.toBase64(`data:image/svg+xml;charset=utf-8,${svgInfo}`)
+    let imageBase64 = await ImageUtil.toBase64(`data:image/svg+xml;charset=utf-8,${svgInfo}`, type)
 
     var link = document.createElement('a');
     link.href = imageBase64 as string;
-    link.download = `图片${new Date().getTime()}.png`;
+    link.download = `图片${new Date().getTime()}.${type}`;
     link.click()
 
   }
-  static async downLoadALL() {
+  static async downLoadALL(type: string) {
 
     // let load = ElLoading.service({ fullscreen: true, text: '图片生成中', background: 'rgba(0, 0, 0, 0.1)', spinner: 'el-icon-loading', })
     let length = store.state.postList.length
     let index = 0
-    while (index < length) {
-      await DesignToCanvas.downLoadByIndex(index++)
+
+    if (type === 'pdf') {
+      var doc = new jsPDF('landscape', 'px')
+      while (index < length) {
+        let post = _.cloneDeep(store.state.postList[index])
+        let canvas = post.canvas
+        let svg = await DesignToCanvas.getSvgByIndex(index++)
+        let scale = 1
+        if (canvas.width * canvas.height > 5000 * 5000) {
+          scale = Math.sqrt((5000 * 5000) / (canvas.width * canvas.height))
+        }
+        doc.addPage([canvas.width * scale, canvas.height * scale], 'landscape')
+        let svgInfo = svg
+        svgInfo = svgInfo.replace(/#/g, '%23').replace(/\n/g, '%0A')
+        let image = new Image()
+        image.src = `data:image/svg+xml;charset=utf-8,${svgInfo}`
+        let imageBase64 = await ImageUtil.toBase64(`data:image/svg+xml;charset=utf-8,${svgInfo}`, type, scale) as string
+        doc.addImage(imageBase64, 'PNG', 0, 0, canvas.width * scale, canvas.height * scale);
+
+
+      }
+      doc.deletePage(1)
+      doc.save('a4.pdf')
+
+    } else {
+      while (index < length) {
+        await DesignToCanvas.downLoadByIndex(index++, type)
+      }
     }
+
 
   }
 
