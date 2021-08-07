@@ -118,8 +118,8 @@ export default defineComponent({
       nature.naturalHeight = image.naturalHeight;
       draw();
     };
-    let imageCanvas = ref(null as unknown as HTMLCanvasElement);
-    const draw = () => {
+    let imageCanvas = ref((null as unknown) as HTMLCanvasElement);
+    const draw = async () => {
       if (props.pattern == "edit") {
         return;
       }
@@ -136,10 +136,13 @@ export default defineComponent({
           "https://lp-canvas-1304910572.file.myqcloud.com/"
         );
         maskImage.setAttribute("crossOrigin", "anonymous");
-        maskImage.onload = () => {
-          ctx.globalCompositeOperation = "destination-in";
-          ctx.drawImage(maskImage, 0, 0, crop.width, crop.height);
-        };
+        await new Promise((res, rej) => {
+          maskImage.onload = () => {
+            res("");
+          };
+        });
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.drawImage(maskImage, 0, 0, crop.width, crop.height);
       }
       if (module.value.filterInfo) {
         let filterInfo = module.value.filterInfo;

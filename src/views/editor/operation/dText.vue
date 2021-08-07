@@ -103,7 +103,7 @@ export default defineComponent({
     const selectModel = () => {
       store.commit("setEditModule", module.value.id);
     };
-    const contentInput = ref(null as unknown as HTMLElement);
+    const contentInput = ref((null as unknown) as HTMLElement);
     const changeHeight = () => {
       if (props.pattern != "edit") {
         return;
