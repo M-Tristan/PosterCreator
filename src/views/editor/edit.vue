@@ -65,9 +65,10 @@ import editHead from "./edit/editHead.vue";
 import groupEdit from "./edit/groupEdit.vue";
 import Shortcutkey from "./lib/Shortcutkey";
 import EditPositionUtil from "./lib/editPositionUtil";
+import createQrcode from "@/lib/createQrcode";
 export default defineComponent({
   setup() {
-    EditPositionUtil.setPositionFunction(function () {
+    EditPositionUtil.setPositionFunction(function() {
       return {
         canvasArea: {
           left: canvasArea.value.offsetLeft,
@@ -81,7 +82,7 @@ export default defineComponent({
       };
     });
     const store = useStore();
-    const canvasArea = ref(null as unknown as HTMLElement);
+    const canvasArea = ref((null as unknown) as HTMLElement);
     const editModule: any = computed(() => {
       return store.state.editModule;
     });
@@ -162,6 +163,7 @@ export default defineComponent({
       store.commit("initBack");
       store.commit("setEditModuleToBack");
       store.commit("pushBack");
+      createQrcode.create("12");
     });
     const selectModel = () => {
       store.commit("setEditModuleToBack");

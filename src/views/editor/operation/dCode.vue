@@ -71,7 +71,7 @@ export default defineComponent({
 
   setup(props) {
     const store = useStore();
-    let code = ref(null as unknown as HTMLElement);
+    let code = ref((null as unknown) as HTMLElement);
     onMounted(() => {
       draw();
     });
@@ -104,6 +104,7 @@ export default defineComponent({
       if (props.pattern == "edit") {
         return;
       }
+
       QRCode.toCanvas(
         module.value.text,
         {
@@ -111,8 +112,6 @@ export default defineComponent({
           width: 1000,
           color: {
             dark: "#FFFFFF00",
-            // dark: props.code.colorDark,
-            // light: "#FFFFFF00",
             light: "#FFFFFF",
           },
         },
@@ -123,10 +122,6 @@ export default defineComponent({
           canvas.style.width = "100%";
           canvas.style.height = "100%";
           useCanvas = canvas;
-          // let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-          // ctx.globalCompositeOperation = "destination-over";
-          // ctx.fillStyle = props.code.colorLight;
-          // ctx.fillRect(0, 0, 1000, 1000);
           canvas.toBlob((blob) => {
             URL.revokeObjectURL(codeUrl);
             codeUrl = URL.createObjectURL(blob);
@@ -136,13 +131,6 @@ export default defineComponent({
               resetCode();
             };
           });
-
-          // var image = new Image();
-          // image.src = canvas.toDataURL("image/png");
-          // image.style.width = "100%";
-          // image.style.height = "100%";
-          // code.value.innerHTML = "";
-          // code.value.append(image);
         }
       );
     };
