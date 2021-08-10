@@ -79,8 +79,6 @@ export default defineComponent({
     let codeUrl = "";
     let codeImage: HTMLImageElement;
     const debouncePushModule = _.debounce(() => {
-      console.log("debounce");
-      console.log(module.value.id);
       BaseCache.pushModule(module.value.id, useCanvas.toDataURL());
     }, 200);
     const resetCode = () => {

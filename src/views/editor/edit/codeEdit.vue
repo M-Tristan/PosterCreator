@@ -96,7 +96,7 @@
     width="30%"
     :before-close="handleClose"
   >
-    <el-input type="textarea" v-model="showContent"></el-input>
+    <el-input @keydown.stop type="textarea" v-model="showContent"></el-input>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>

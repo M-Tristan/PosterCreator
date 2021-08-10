@@ -70,7 +70,6 @@ const operation = () => {
     }
   }
   const pushBack = () => {
-    console.log(123)
     store.commit('pushBack');
   }
   /**

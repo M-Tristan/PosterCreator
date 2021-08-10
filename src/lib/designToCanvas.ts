@@ -770,7 +770,7 @@ class DesignToCanvas {
     }
 
     // let fonts = ''
-    const svg = `<svg  width='${canvas.width}' height='${canvas.height}' xmlns='http://www.w3.org/2000/svg'><foreignObject x='0' y='0' width='${canvas.width}' height='${canvas.height}'><div xmlns='http://www.w3.org/1999/xhtml'>
+    const svg = `<svg   width='${canvas.width}' height='${canvas.height}' xmlns='http://www.w3.org/2000/svg'><foreignObject x='0' y='0' width='${canvas.width}' height='${canvas.height}'><div xmlns='http://www.w3.org/1999/xhtml'>
     ${backDom}${layerDom}${waterMask}${fonts}
     </div></foreignObject></svg>`
     return svg
