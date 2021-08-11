@@ -226,6 +226,44 @@ const createQrcode = {
 
     // ctx.fillStyle='black'
     // ctx.fill()
+  },
+  liquid() {
+    //     ctx.save()
+    // ctx.translate(100,100)
+    // ctx.beginPath();
+    // ctx.arc(0,0,50,0,Math.PI*2)
+    // ctx.fillStyle='red'
+    // ctx.fill()
+    // ctx.restore()
+    // ctx.save()
+    // ctx.translate(200,200)
+    // ctx.beginPath();
+    // ctx.arc(0,0,50,0,Math.PI*2)
+    // ctx.fillStyle='red'
+    // ctx.fill()
+    // ctx.restore()
+    // ctx.save()
+    // ctx.translate(100,100)
+    // ctx.beginPath();
+    // ctx.moveTo(0,0)
+    // ctx.lineTo(100,100)
+    // ctx.lineTo(100,50)
+    // ctx.arc(100,0,50,Math.PI/2,Math.PI)
+    // ctx.lineTo(0,0)
+    // ctx.fillStyle='red'
+    // ctx.fill()
+    // ctx.restore()
+    // ctx.save()
+    // ctx.translate(100,100)
+    // ctx.beginPath();
+    // ctx.moveTo(0,0)
+    // ctx.lineTo(100,100)
+    // ctx.lineTo(50,100)
+    // ctx.arc(0,100,50,0,-Math.PI/2,true)
+    // ctx.lineTo(0,0)
+    // ctx.fillStyle='red'
+    // ctx.fill()
+    // ctx.restore()
   }
 
 }
