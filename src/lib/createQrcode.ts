@@ -226,6 +226,81 @@ const createQrcode = {
 
     // ctx.fillStyle='black'
     // ctx.fill()
+
+
+    //   let canvas = document.getElementById("mycanvas");
+    //   let ctx = canvas.getContext("2d");
+    //   ctx.translate(100, 100);
+    //   ctx.beginPath();
+    //   ctx.arc(0, 0, 50, 0, 2 * Math.PI);
+    //   ctx.lineWidth = 10;
+    //   ctx.stroke();
+    //   ctx.beginPath();
+    //   ctx.lineWidth = 1;
+    //   let moveToX = -(50 * 1.5) / 3.5;
+    //   let moveToY = -(50 * 1.5) / 3.5;
+    //   let r = 10;
+    //   ctx.rotate((45 * Math.PI) / 180);
+    //   ctx.moveTo(moveToX + r, moveToY);
+    //   ctx.lineTo(moveToX + (100 * 3) / 7, moveToY);
+    //   // ctx.arc(moveToX+100*3/7-r,moveToY+r,r,-Math.PI/2,0)
+    //   ctx.lineTo(moveToX + (100 * 3) / 7, moveToY + (100 * 3) / 7);
+    //   ctx.lineTo(moveToX, moveToY + (100 * 3) / 7);
+    //   ctx.arc(moveToX + r, moveToY + r, r, Math.PI, (Math.PI * 3) / 2);
+    //   // ctx.lineTo(moveToX+100*3/7,moveToY+100*3/7);
+    //   // ctx.lineTo(moveToX,moveToY+100*3/7);
+    //   // ctx.lineTo(moveToX,moveToY);
+
+    //   ctx.stroke();
+
+    //   ctx.fillStyle = "black";
+    //   ctx.fill();
+
+
+
+
+    // let outR = 20;
+    // ctx.translate(100, 100);
+    // ctx.beginPath();
+    // ctx.moveTo(-50 + outR, -50);
+    // ctx.arc(50 - outR, -50 + outR, outR, -Math.PI / 2, 0);
+    // ctx.arc(50 - outR, 50 - outR, outR, 0, Math.PI / 2);
+    // ctx.arc(-50 + outR, 50 - outR, outR, Math.PI / 2, Math.PI);
+    // ctx.arc(-50 + outR, -50 + outR, outR, Math.PI, (Math.PI * 3) / 2);
+    // ctx.fillStyle = "red";
+    // ctx.fill();
+    // ctx.save();
+    // ctx.beginPath();
+    // ctx.scale(0.7, 0.7);
+    // ctx.moveTo(-50, -50);
+    // ctx.arc(50 - outR, -50 + outR, outR, -Math.PI / 2, 0);
+    // ctx.arc(50 - outR, 50 - outR, outR, 0, Math.PI / 2);
+    // ctx.arc(-50 + outR, 50 - outR, outR, Math.PI / 2, Math.PI);
+    // ctx.arc(-50 + outR, -50 + outR, outR, Math.PI, (Math.PI * 3) / 2);
+    // ctx.globalCompositeOperation = "destination-out";
+    // ctx.fillStyle = "blue";
+    // ctx.fill();
+    // ctx.restore();
+    // ctx.beginPath();
+    // ctx.lineWidth = 1;
+    // let moveToX = -(50 * 1.5) / 3.5;
+    // let moveToY = -(50 * 1.5) / 3.5;
+    // let r = 10;
+    // ctx.rotate((45 * Math.PI) / 180);
+    // ctx.moveTo(moveToX + r, moveToY);
+    // ctx.lineTo(moveToX + (100 * 3) / 7, moveToY);
+    // // ctx.arc(moveToX+100*3/7-r,moveToY+r,r,-Math.PI/2,0)
+    // ctx.lineTo(moveToX + (100 * 3) / 7, moveToY + (100 * 3) / 7);
+    // ctx.lineTo(moveToX, moveToY + (100 * 3) / 7);
+    // ctx.arc(moveToX + r, moveToY + r, r, Math.PI, (Math.PI * 3) / 2);
+    // // ctx.lineTo(moveToX+100*3/7,moveToY+100*3/7);
+    // // ctx.lineTo(moveToX,moveToY+100*3/7);
+    // // ctx.lineTo(moveToX,moveToY);
+
+    // ctx.stroke();
+
+    // ctx.fillStyle = "black";
+    // ctx.fill();
   },
   liquid() {
     //     ctx.save()
