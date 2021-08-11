@@ -163,7 +163,14 @@ export default defineComponent({
       store.commit("initBack");
       store.commit("setEditModuleToBack");
       store.commit("pushBack");
-      // createQrcode.create("12");
+      createQrcode.create("12", {
+        width: 100,
+        color: {
+          dark: "blue",
+          light: "white",
+        },
+        pointType: "circle",
+      });
     });
     const selectModel = () => {
       store.commit("setEditModuleToBack");

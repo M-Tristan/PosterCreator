@@ -111,6 +111,7 @@
             ></input-number>
           </div>
         </div>
+
         <div class="oper-item">
           <div class="oper-name">对比度</div>
           <div class="oper-input">
@@ -118,7 +119,7 @@
               @finishChange="pushBack"
               v-model="editModule.filter.contrast"
               :min="0"
-              :max="200"
+              :max="5000"
             ></input-number>
           </div>
         </div>

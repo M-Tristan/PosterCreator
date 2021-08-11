@@ -1,93 +1,106 @@
-import { number } from "echarts";
+
 import * as QRCode from "qrcode";
+
+interface color {
+  dark: string,
+  light: string,
+}
+interface codeParams {
+  width: number,
+  color: color,
+  pointType: string
+}
 const createQrcode = {
-  size: number,
-  create(text) {
+  size: 0,
+  color: {} as any,
+  points: [] as any,
+  canvas: null as unknown as HTMLCanvasElement,
+  ctx: null as unknown as CanvasRenderingContext2D,
+  pointType: 'rect',
+  create(text: string, option: codeParams) {
     let qrcodeData = QRCode.create(text, {})
+    this.color = option.color
+    this.pointType = option.pointType
     let modules = qrcodeData.modules
-    let points = modules.data
-    let size = modules.size
-    this.size = size
-    let canvas = document.createElement('canvas')
-    canvas.width = size * 10
-    canvas.height = size * 10
-    canvas.style.position = 'fixed'
-    canvas.style.zIndex = '9999'
-    let ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    this.points = modules.data
+    this.size = modules.size
+    this.canvas = document.createElement('canvas') as HTMLCanvasElement
+    this.canvas.width = option.width
+    this.canvas.height = option.width
+    this.canvas.style.position = 'fixed'
+    this.canvas.style.zIndex = '9999'
+    this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D
+    this.render()
+
+  },
+  render() {
+    let ctx = this.ctx
+    ctx.fillStyle = this.color.light
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    this.drawPoints()
+    document.body.appendChild(this.canvas)
+  },
+  drawPoints() {
     let pointIndex = 0
-    ctx.fillStyle = 'white'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    let size = this.size
+    let points = this.points
+    let width = this.canvas.width / this.size
     for (let row = 0; row < size; row++) {
       for (let col = 0; col < size; col++) {
         let point = points[pointIndex++]
         if (point === 1) {
-
-          // ctx.arc(row * 10 + 5, col * 10 + 5, 5, 0, 2 * Math.PI);
-          // this.rect(ctx, row, col)
-          // this.circle(ctx, row, col)
-          this.star(ctx, row, col)
-          ctx.fillStyle = 'red'
-          ctx.fill()
+          switch (this.pointType) {
+            case 'star':
+              this.drawstar(width, col * width, row * width)
+              break;
+            case 'rect':
+              this.drawrect(width, col * width, row * width)
+              break;
+            case 'circle':
+              this.drawcircle(width, col * width, row * width)
+              break;
+          }
         }
-
       }
     }
-    document.body.appendChild(canvas)
   },
-  star(ctx, row, col) {
-    if ((row <= 6 && col <= 6) || (row >= (Number(this.size) - 7) && col <= 6) || (row <= 6 && col >= (Number(this.size) - 7))) {
-      ctx.beginPath();
-      ctx.rect(row * 10, col * 10, 10, 10)
-      ctx.fillStyle = 'red'
-      ctx.fill()
-      return
-    }
+  drawstar(width, left, top) {
+    let ctx = this.ctx
+    let color = this.color.dark
+    ctx.save()
+    ctx.translate(left, top)
     ctx.beginPath();
-    ctx.moveTo(row * 10 + 5, col * 10);
-    // ctx.bezierCurveTo(100, 100, 100, 100, 100, 0);
-    // ctx.bezierCurveTo(100, 100, 100, 100, 200, 100);
-    // ctx.bezierCurveTo(100, 100, 100, 100, 100, 200);
-    // ctx.bezierCurveTo(100, 100, 100, 100, 0, 100);
-    // ctx.bezierCurveTo(row * 10 + 5, col * 10 + 5, row * 10 + 5, col * 10 + 5, row * 10, col * 10 + 5);
-    // ctx.bezierCurveTo(row * 10 + 5, col * 10 + 5, row * 10 + 5, col * 10 + 5, row * 10 + 5, col * 10 + 10);
-    // ctx.bezierCurveTo(row * 10 + 5, col * 10 + 5, row * 10 + 5, col * 10 + 5, row * 10 + 10, col * 10 + 5);
-    // ctx.bezierCurveTo(row * 10 + 5, col * 10 + 5, row * 10 + 5, col * 10 + 5, row * 10 + 5, col * 10);
-
-    ctx.quadraticCurveTo(row * 10 + 5, col * 10 + 5, row * 10, col * 10 + 5);
-    ctx.quadraticCurveTo(row * 10 + 5, col * 10 + 5, row * 10 + 5, col * 10 + 10);
-    ctx.quadraticCurveTo(row * 10 + 5, col * 10 + 5, row * 10 + 10, col * 10 + 5);
-    ctx.quadraticCurveTo(row * 10 + 5, col * 10 + 5, row * 10 + 5, col * 10);
+    ctx.moveTo(width / 2, 0);
+    ctx.quadraticCurveTo(width / 2, width / 2, 0, width / 2);
+    ctx.quadraticCurveTo(width / 2, width / 2, width / 2, width);
+    ctx.quadraticCurveTo(width / 2, width / 2, width, width / 2);
+    ctx.quadraticCurveTo(width / 2, width / 2, width / 2, 0);
     ctx.closePath();
-    // ctx.stroke();
-    ctx.fillStyle = "red";
+    ctx.fillStyle = color
     ctx.fill()
+    ctx.restore()
   },
-  rect(ctx, row, col) {
-
-    if ((row <= 6 && col <= 6) || (row >= (Number(this.size) - 7) && col <= 6) || (row <= 6 && col >= (Number(this.size) - 7))) {
-      ctx.beginPath();
-      ctx.rect(row * 10, col * 10, 10, 10)
-      ctx.fillStyle = 'red'
-      ctx.fill()
-      return
-    }
+  drawrect(width, left, top) {
+    let ctx = this.ctx
+    let color = this.color.dark
+    ctx.save()
+    ctx.translate(left, top)
     ctx.beginPath();
-    ctx.rect(row * 10 + 1.5, col * 10 + 1.5, 8, 8)
-    ctx.fillStyle = 'red'
+    ctx.rect(width * 0.1, width * 0.1, width * 0.8, width * 0.8)
+    ctx.fillStyle = color
     ctx.fill()
+    ctx.restore()
   },
-  circle(ctx, row, col) {
-    if ((row <= 6 && col <= 6) || (row >= (Number(this.size) - 7) && col <= 6) || (row <= 6 && col >= (Number(this.size) - 7))) {
-      ctx.beginPath();
-      ctx.rect(row * 10, col * 10, 10, 10)
-      ctx.fillStyle = 'red'
-      ctx.fill()
-      return
-    }
+  drawcircle(width, left, top) {
+    let ctx = this.ctx
+    let color = this.color.dark
+    ctx.save()
+    ctx.translate(left, top)
     ctx.beginPath();
-    ctx.arc(row * 10 + 5.5, col * 10 + 5.5, 4, 0, 2 * Math.PI);
-    ctx.fillStyle = 'red'
+    ctx.arc(width / 2, width / 2, width / 2, 0, 2 * Math.PI);
+    ctx.fillStyle = color
     ctx.fill()
+    ctx.restore()
   },
   codeEye() {
     // ctx.beginPath();
