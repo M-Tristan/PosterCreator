@@ -48,6 +48,7 @@ import * as QRCode from "qrcode";
 import Lock from "./lock.vue";
 import BaseCache from "@/lib/baseCache";
 import _ from "lodash";
+import createQrcode from "@/lib/createQrcode";
 export default defineComponent({
   props: {
     code: {
@@ -71,7 +72,7 @@ export default defineComponent({
 
   setup(props) {
     const store = useStore();
-    let code = ref((null as unknown) as HTMLElement);
+    let code = ref(null as unknown as HTMLElement);
     onMounted(() => {
       draw();
     });
@@ -102,35 +103,31 @@ export default defineComponent({
       if (props.pattern == "edit") {
         return;
       }
-
-      QRCode.toCanvas(
-        module.value.text,
-        {
-          margin: 1,
+      let canvas = createQrcode
+        .create(module.value.text, {
           width: 1000,
           color: {
-            dark: "#FFFFFF00",
-            light: "#FFFFFF",
+            dark: "#ffffff00",
+            light: "#ffffff",
           },
-        },
-        (err: any, canvas: HTMLCanvasElement) => {
-          if (err) throw err;
-          code.value.innerHTML = "";
-          code.value.append(canvas);
-          canvas.style.width = "100%";
-          canvas.style.height = "100%";
-          useCanvas = canvas;
-          canvas.toBlob((blob) => {
-            URL.revokeObjectURL(codeUrl);
-            codeUrl = URL.createObjectURL(blob);
-            codeImage = new Image();
-            codeImage.src = codeUrl;
-            codeImage.onload = () => {
-              resetCode();
-            };
-          });
-        }
-      );
+          pointType: module.value.pointType,
+          eyeType: module.value.eyeType,
+        })
+        .getCanvas();
+      code.value.innerHTML = "";
+      code.value.append(canvas);
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      useCanvas = canvas;
+      canvas.toBlob((blob) => {
+        URL.revokeObjectURL(codeUrl);
+        codeUrl = URL.createObjectURL(blob);
+        codeImage = new Image();
+        codeImage.src = codeUrl;
+        codeImage.onload = () => {
+          resetCode();
+        };
+      });
     };
 
     const editModule: any = computed(() => {
@@ -142,13 +139,19 @@ export default defineComponent({
     const text: any = computed(() => {
       return module.value.text;
     });
+    const pointType: any = computed(() => {
+      return module.value.pointType;
+    });
+    const eyeType: any = computed(() => {
+      return module.value.eyeType;
+    });
     const colorDark: any = computed(() => {
       return module.value.colorDark;
     });
     const colorLight: any = computed(() => {
       return module.value.colorLight;
     });
-    watch([text], () => {
+    watch([text, pointType, eyeType], () => {
       draw();
     });
     watch([colorDark, colorLight], () => {

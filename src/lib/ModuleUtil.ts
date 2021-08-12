@@ -2,7 +2,9 @@ interface codeBaseInfo {
   text: string,
   colorDark: string,
   colorLight: string,
-  backImage?: string
+  backImage?: string,
+  pointType: string,
+  eyeType: string,
 }
 import { v4 as uuidv4 } from 'uuid';
 import store from './../store/index';

@@ -125,7 +125,9 @@ export interface code extends operItem {
   text: string,
   colorDark: string,
   colorLight: string,
-  backImage?: string
+  backImage?: string,
+  pointType: string,
+  eyeType: string,
 }
 export interface background extends itemBase {
   image?: {

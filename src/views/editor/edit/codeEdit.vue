@@ -39,7 +39,117 @@
           </div>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="位置" name="2">
+      <el-collapse-item title="码点" name="2">
+        <div
+          @click="editModule.pointType = 'normal'"
+          :class="['image-item', { active: editModule.pointType === 'normal' }]"
+        >
+          <svg
+            t="1628748684128"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="1835"
+            width="200"
+            height="200"
+          >
+            <path d="M123 99h800v800H123z" p-id="1836" fill="#333333"></path>
+          </svg>
+        </div>
+        <div
+          class="image-item"
+          @click="editModule.pointType = 'rect'"
+          :class="['image-item', { active: editModule.pointType === 'rect' }]"
+        >
+          <svg
+            t="1628748517355"
+            class="icon icon-item"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="1592"
+            width="200"
+            height="200"
+          >
+            <path d="M64 64h896v896H64z" fill="#333333" p-id="1593"></path>
+          </svg>
+        </div>
+        <div
+          class="image-item"
+          @click="editModule.pointType = 'circle'"
+          :class="['image-item', { active: editModule.pointType === 'circle' }]"
+        >
+          <svg
+            t="1628748744175"
+            class="icon icon-item"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="2937"
+            width="200"
+            height="200"
+          >
+            <path
+              d="M512 512m-512 0a100 100 0 1 0 1024 0 100 100 0 1 0-1024 0Z"
+              p-id="2938"
+              fill="#333333"
+            ></path>
+          </svg>
+        </div>
+        <div
+          class="image-item"
+          @click="editModule.pointType = 'star'"
+          :class="['image-item', { active: editModule.pointType === 'star' }]"
+        >
+          <img src="@/assets/star.jpg" />
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="码眼" name="3">
+        <div
+          @click="editModule.eyeType = 'N-A'"
+          :class="['image-item', { active: editModule.eyeType === 'N-A' }]"
+        >
+          <img src="@/assets/N-A.jpg" />
+        </div>
+        <div
+          @click="editModule.eyeType = 'N-B'"
+          :class="['image-item', { active: editModule.eyeType === 'N-B' }]"
+        >
+          <img src="@/assets/N-B.jpg" />
+        </div>
+        <div
+          @click="editModule.eyeType = 'N-C'"
+          :class="['image-item', { active: editModule.eyeType === 'N-C' }]"
+        >
+          <img src="@/assets/N-C.jpg" />
+        </div>
+        <div
+          @click="editModule.eyeType = 'N-D'"
+          :class="['image-item', { active: editModule.eyeType === 'N-D' }]"
+        >
+          <img src="@/assets/N-D.jpg" />
+        </div>
+        <div
+          @click="editModule.eyeType = 'N-E'"
+          :class="['image-item', { active: editModule.eyeType === 'N-E' }]"
+        >
+          <img src="@/assets/N-E.jpg" />
+        </div>
+        <div
+          @click="editModule.eyeType = 'N-F'"
+          :class="['image-item', { active: editModule.eyeType === 'N-F' }]"
+        >
+          <img src="@/assets/N-F.jpg" />
+        </div>
+        <div
+          @click="editModule.eyeType = 'N-G'"
+          :class="['image-item', { active: editModule.eyeType === 'N-G' }]"
+        >
+          <img src="@/assets/N-G.jpg" />
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="位置" name="4">
         <div class="oper-item">
           <div class="oper-name">旋转角度</div>
           <div class="oper-input">
@@ -173,5 +283,38 @@ export default defineComponent({
   border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 0 4px rgb(175, 175, 175);
+}
+.image-item {
+  width: 100px;
+  height: 100px;
+  box-shadow: 0 0 4px rgb(128, 128, 128);
+  float: left;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  .icon-item {
+    width: 80%;
+    height: 80%;
+  }
+  img {
+    width: 80%;
+    height: 80%;
+  }
+}
+.active {
+  &::after {
+    content: " ";
+    border: 2px solid blue;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
 }
 </style>

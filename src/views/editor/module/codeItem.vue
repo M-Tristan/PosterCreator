@@ -20,7 +20,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
-    let code = ref((null as unknown) as HTMLElement);
+    let code = ref(null as unknown as HTMLElement);
     onMounted(() => {
       QRCode.toCanvas("二维码编辑", props.options, (err: any, canvas: any) => {
         code.value.append(canvas);
@@ -33,6 +33,8 @@ export default defineComponent({
         colorDark: props.options.color.dark,
         colorLight: props.options.color.light,
         backImage: props.options.backImage,
+        pointType: "normal",
+        eyeType: "N-A",
       });
       let position = EditPositionUtil.getShowEditCenterPosition();
       codeInfo.top = position.top - codeInfo.height / 2;

@@ -9,6 +9,7 @@ import ShapeUtil from './ShapeUtil'
 import FilterUtil from './filterUtil'
 import BaseCache from './baseCache'
 import jsPDF from "jspdf";
+import createQrcode from './createQrcode'
 let fontMap = {}
 fontList.forEach(item => {
   fontMap[item.fontFamily] = item
@@ -455,22 +456,20 @@ class DesignToCanvas {
     }
     if (!codeBase64) {
       await new Promise<void>((res, rej) => {
-        QRCode.toCanvas(
-          module.text,
-          {
-            margin: 1,
+        let canvas = createQrcode
+          .create(module.text, {
             width: 1000,
             color: {
-              dark: module.colorDark,
-              light: module.colorLight,
+              dark: "#ffffff00",
+              light: "#ffffff",
             },
-          },
-          (err: any, canvas: any) => {
-            if (err) throw err;
-            codeBase64 = canvas.toDataURL("image/png");
-            res()
-          }
-        );
+            pointType: module.pointType,
+            eyeType: module.eyeType,
+          })
+          .getCanvas();
+        codeBase64 = canvas.toDataURL("image/png");
+        res()
+
       })
 
     }
