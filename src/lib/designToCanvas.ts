@@ -153,6 +153,10 @@ class DesignToCanvas {
     let maskImage = new Image()
     image.setAttribute('crossOrigin', 'anonymous');
     maskImage.setAttribute('crossOrigin', 'anonymous');
+    let dropShadow = ''
+    if (module.shadow) {
+      dropShadow = `drop-shadow(${module.shadow.dropshadowX}px ${module.shadow.dropshadowY}px ${module.shadow.dropshadowBlur}px  ${module.shadow.dropshadowColor})`;
+    }
     let style = `
       position: absolute;
       width: ${module.width}px;
@@ -161,7 +165,7 @@ class DesignToCanvas {
       top: ${module.top}px;
       transform: rotate(${module.rotate ? module.rotate : 0}deg);
       z-index: ${module.zindex};
-      filter: blur(${module.blur}px) brightness(${module.filter.brightness}%) contrast(${module.filter.contrast}%) grayscale(${module.filter.grayscale}%) hue-rotate(${module.filter.hueRotate}deg) invert(${module.filter.invert}%) saturate(${module.filter.saturate}%)  drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px  ${module.dropshadowColor} );
+      filter: ${dropShadow}  blur(${module.blur}px) brightness(${module.filter.brightness}%) contrast(${module.filter.contrast}%) grayscale(${module.filter.grayscale}%) hue-rotate(${module.filter.hueRotate}deg) invert(${module.filter.invert}%) saturate(${module.filter.saturate}%)  ;
       opacity: ${module.opacity};
       overflow: hidden;
       border-radius: ${module.borderRadius}px;

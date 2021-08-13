@@ -20,7 +20,9 @@
         filter: `blur(${module.blur}px) brightness(${module.filter.brightness}%) 
                   contrast(${module.filter.contrast}%) grayscale(${module.filter.grayscale}%) 
                   hue-rotate(${module.filter.hueRotate}deg) invert(${module.filter.invert}%) 
-                  saturate(${module.filter.saturate}%)  drop-shadow(${module.dropshadowX}px ${module.dropshadowY}px ${module.dropshadowBlur}px  ${module.dropshadowColor} )`,
+                  saturate(${module.filter.saturate}%)
+                  ${dropShadow}
+                `,
         width: module.width + 'px',
         height: module.height + 'px',
         opacity: module.opacity,
@@ -93,6 +95,10 @@ export default defineComponent({
     Lock,
   },
   setup(props) {
+    let imageCanvas = ref(null as unknown as HTMLCanvasElement);
+    let realCanvas = document.createElement("canvas") as HTMLCanvasElement;
+    let strokeCanvas = document.createElement("canvas") as HTMLCanvasElement;
+    let areaCanvas = document.createElement("canvas") as HTMLCanvasElement;
     let showImage = computed(() => {
       return !(store.state.clipOper && editModule.value.id == module.value.id);
     });
@@ -118,7 +124,7 @@ export default defineComponent({
       nature.naturalHeight = image.naturalHeight;
       draw();
     };
-    let imageCanvas = ref((null as unknown) as HTMLCanvasElement);
+
     const draw = async () => {
       if (props.pattern == "edit") {
         return;
@@ -126,6 +132,8 @@ export default defineComponent({
       let crop = module.value.crop;
       imageCanvas.value.setAttribute("width", String(crop.width));
       imageCanvas.value.setAttribute("height", String(crop.height));
+      realCanvas.setAttribute("width", String(crop.width));
+      realCanvas.setAttribute("height", String(crop.height));
       let ctx = imageCanvas.value.getContext("2d") as CanvasRenderingContext2D;
       ctx.clearRect(0, 0, crop.width, crop.height);
       ctx.drawImage(image, -crop.left, -crop.top);
@@ -141,8 +149,10 @@ export default defineComponent({
             res("");
           };
         });
+        ctx.save();
         ctx.globalCompositeOperation = "destination-in";
         ctx.drawImage(maskImage, 0, 0, crop.width, crop.height);
+        ctx.restore();
       }
       if (module.value.filterInfo) {
         let filterInfo = module.value.filterInfo;
@@ -249,6 +259,142 @@ export default defineComponent({
       if (props.collect) {
         BaseCache.pushModule(module.value.id, imageCanvas.value.toDataURL());
       }
+      let realCtx = realCanvas.getContext("2d") as CanvasRenderingContext2D;
+      realCtx.drawImage(
+        imageCanvas.value,
+        0,
+        0,
+        imageCanvas.value.width,
+        imageCanvas.value.height
+      );
+      getImageArea();
+      drawStroke();
+    };
+    const getImageArea = () => {
+      let ctx = imageCanvas.value.getContext("2d") as CanvasRenderingContext2D;
+      areaCanvas.setAttribute("width", String(imageCanvas.value.width));
+      areaCanvas.setAttribute("height", String(imageCanvas.value.height));
+      strokeCanvas.setAttribute("width", String(imageCanvas.value.width));
+      strokeCanvas.setAttribute("height", String(imageCanvas.value.height));
+      let areaCtx = areaCanvas.getContext("2d") as CanvasRenderingContext2D;
+      let areaImageData = areaCtx.createImageData(
+        imageCanvas.value.width,
+        imageCanvas.value.height
+      );
+      let pxData = ctx.getImageData(
+        0,
+        0,
+        imageCanvas.value.width,
+        imageCanvas.value.height
+      ).data;
+      for (let index = 0; index < pxData.length; index += 4) {
+        if (
+          !(
+            pxData[index] == 0 &&
+            pxData[index + 1] == 0 &&
+            pxData[index + 2] == 0 &&
+            pxData[index + 3] == 0
+          )
+        ) {
+          areaImageData.data[index] = 0;
+          areaImageData.data[index + 1] = 0;
+          areaImageData.data[index + 2] = 0;
+          areaImageData.data[index + 3] = 255;
+        }
+      }
+      areaCtx.clearRect(0, 0, areaCanvas.width, areaCanvas.height);
+      areaCtx.putImageData(areaImageData, 0, 0);
+    };
+
+    const drawStroke = () => {
+      if (props.pattern == "edit" || !module.value.stroke) {
+        return;
+      }
+      if (module.value.stroke.strokeWidth == 0) {
+        let imageCtx = imageCanvas.value.getContext(
+          "2d"
+        ) as CanvasRenderingContext2D;
+        imageCtx.clearRect(
+          0,
+          0,
+          imageCanvas.value.width,
+          imageCanvas.value.height
+        );
+        imageCtx.drawImage(
+          realCanvas,
+          0,
+          0,
+          imageCanvas.value.width,
+          imageCanvas.value.height
+        );
+        return;
+      }
+
+      let strokeCtx = strokeCanvas.getContext("2d") as CanvasRenderingContext2D;
+      let imageCtx = imageCanvas.value.getContext(
+        "2d"
+      ) as CanvasRenderingContext2D;
+      strokeCtx.clearRect(0, 0, strokeCanvas.width, strokeCanvas.height);
+      strokeCtx.shadowBlur = module.value.stroke.strokeWidth;
+      strokeCtx.shadowColor = module.value.stroke.strokeColor;
+      strokeCtx.drawImage(
+        areaCanvas,
+        0,
+        0,
+        strokeCanvas.width,
+        strokeCanvas.height
+      );
+      let strokeImageData = strokeCtx.getImageData(
+        0,
+        0,
+        imageCanvas.value.width,
+        imageCanvas.value.height
+      );
+      let pxData = strokeImageData.data;
+      for (let index = 0; index < pxData.length; index += 4) {
+        if (
+          !(
+            pxData[index] == 0 &&
+            pxData[index + 1] == 0 &&
+            pxData[index + 2] == 0 &&
+            pxData[index + 3] == 0
+          )
+        ) {
+          pxData[index] = 0;
+          pxData[index + 1] = 0;
+          pxData[index + 2] = 0;
+          pxData[index + 3] = 255;
+        }
+      }
+      strokeCtx.putImageData(strokeImageData, 0, 0);
+      imageCtx.clearRect(0, 0, strokeCanvas.width, strokeCanvas.height);
+      imageCtx.drawImage(
+        strokeCanvas,
+        0,
+        0,
+        strokeCanvas.width,
+        strokeCanvas.height
+      );
+      imageCtx.save();
+
+      imageCtx.fillStyle = module.value.stroke.strokeColor;
+      imageCtx.globalCompositeOperation = "source-in";
+      imageCtx.fillRect(
+        0,
+        0,
+        imageCanvas.value.width,
+        imageCanvas.value.height
+      );
+      imageCtx.restore();
+      imageCtx.drawImage(
+        realCanvas,
+        0,
+        0,
+        strokeCanvas.width,
+        strokeCanvas.height
+      );
+
+      BaseCache.pushModule(module.value.id, imageCanvas.value.toDataURL());
     };
     const imageSize = computed(() => {
       let crop = module.value.crop;
@@ -306,13 +452,32 @@ export default defineComponent({
         deep: true,
       }
     );
-
     const { moduleMove } = operation();
     const selectModel = () => {
       store.commit("setEditModule", module.value.id);
     };
+    watch(
+      () => {
+        return module.value.stroke;
+      },
+      (nv, ov) => {
+        drawStroke();
+      },
+      {
+        deep: true,
+      }
+    );
+
+    const dropShadow = computed(() => {
+      if (module.value.shadow) {
+        return `drop-shadow(${module.value.shadow.dropshadowX}px ${module.value.shadow.dropshadowY}px ${module.value.shadow.dropshadowBlur}px  ${module.value.shadow.dropshadowColor}`;
+      } else {
+        return "";
+      }
+    });
 
     return {
+      dropShadow,
       module,
       moduleMove,
       editModule,

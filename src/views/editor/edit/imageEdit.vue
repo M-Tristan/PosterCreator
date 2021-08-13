@@ -55,49 +55,64 @@
     </div> -->
       </el-collapse-item>
       <el-collapse-item title="投影" name="2">
-        <div class="oper-item">
-          <div class="oper-name">投影颜色</div>
-          <div class="oper-input">
-            <div class="color-area">
-              <color-picker
-                v-model="editModule.dropshadowColor"
-                size="mini"
-                show-alpha
-                :style="{
-                  backgroundColor: editModule.dropshadowColor,
-                }"
-              >
-              </color-picker>
+        <div v-if="editModule.shadow">
+          <div class="oper-item">
+            <div class="oper-name">投影颜色</div>
+            <div class="oper-input">
+              <div class="color-area">
+                <color-picker
+                  v-model="editModule.shadow.dropshadowColor"
+                  size="mini"
+                  show-alpha
+                  :style="{
+                    backgroundColor: editModule.shadow.dropshadowColor,
+                  }"
+                >
+                </color-picker>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="oper-item">
-          <div class="oper-name">横向距离</div>
-          <div class="oper-input">
-            <input-number
-              @finishChange="pushBack"
-              v-model="editModule.dropshadowX"
-            ></input-number>
+          <div class="oper-item">
+            <div class="oper-name">横向距离</div>
+            <div class="oper-input">
+              <input-number
+                @finishChange="pushBack"
+                v-model="editModule.shadow.dropshadowX"
+              ></input-number>
+            </div>
           </div>
-        </div>
-        <div class="oper-item">
-          <div class="oper-name">纵向距离</div>
-          <div class="oper-input">
-            <input-number
-              @finishChange="pushBack"
-              v-model="editModule.dropshadowY"
-            ></input-number>
+          <div class="oper-item">
+            <div class="oper-name">纵向距离</div>
+            <div class="oper-input">
+              <input-number
+                @finishChange="pushBack"
+                v-model="editModule.shadow.dropshadowY"
+              ></input-number>
+            </div>
           </div>
-        </div>
-        <div class="oper-item">
-          <div class="oper-name">模糊</div>
-          <div class="oper-input">
-            <input-number
-              @finishChange="pushBack"
-              v-model="editModule.dropshadowBlur"
-            ></input-number>
+          <div class="oper-item">
+            <div class="oper-name">模糊</div>
+            <div class="oper-input">
+              <input-number
+                @finishChange="pushBack"
+                v-model="editModule.shadow.dropshadowBlur"
+              ></input-number>
+            </div>
           </div>
+          <el-button
+            round
+            style="width: 100%; margin-top: 20px"
+            @click="removeShadow"
+            >去除阴影</el-button
+          >
         </div>
+        <el-button
+          v-else
+          round
+          style="width: 100%; margin-top: 20px"
+          @click="addShadow"
+          >添加阴影</el-button
+        >
       </el-collapse-item>
       <el-collapse-item title="调整" name="3">
         <div class="oper-item">
@@ -192,6 +207,50 @@
           :key="index"
           :src="item"
         ></maskDemo>
+      </el-collapse-item>
+      <el-collapse-item title="描边" name="8">
+        <div v-if="editModule.stroke">
+          <div class="oper-item">
+            <div class="oper-name">颜色</div>
+            <div class="oper-input">
+              <div class="color-area">
+                <color-picker
+                  v-model="editModule.stroke.strokeColor"
+                  size="mini"
+                  show-alpha
+                  :style="{
+                    backgroundColor: editModule.stroke.strokeColor,
+                  }"
+                >
+                </color-picker>
+              </div>
+            </div>
+          </div>
+          <div class="oper-item">
+            <div class="oper-name">距离</div>
+            <div class="oper-input">
+              <input-number
+                :min="0"
+                v-model="editModule.stroke.strokeWidth"
+              ></input-number>
+            </div>
+          </div>
+
+          <el-button
+            round
+            style="width: 100%; margin-top: 20px"
+            @click="removeStroke"
+            >去除描边</el-button
+          >
+        </div>
+
+        <el-button
+          v-else
+          round
+          style="width: 100%; margin-top: 20px"
+          @click="addStroke"
+          >添加描边</el-button
+        >
       </el-collapse-item>
       <el-collapse-item title="滤镜" name="7">
         <div class="filter-list">
@@ -356,7 +415,30 @@ export default defineComponent({
     const removeFilter = () => {
       store.commit("removeFilter");
     };
+    const addShadow = () => {
+      editModule.value.shadow = {
+        dropshadowX: 1,
+        dropshadowY: 1,
+        dropshadowBlur: 0,
+        dropshadowColor: "rgba(0,0,0,1)",
+      };
+    };
+    const removeStroke = () => {
+      editModule.value.stroke = undefined;
+    };
+    const addStroke = () => {
+      editModule.value.stroke = {
+        strokeWidth: 10,
+        strokeColor: "rgba(0,0,0,1)",
+      };
+    };
+    const removeShadow = () => {
+      editModule.value.shadow = undefined;
+    };
     return {
+      addStroke,
+      removeStroke,
+      removeShadow,
       activeNames,
       value,
       color,
@@ -367,6 +449,7 @@ export default defineComponent({
       pushBack,
       deleteMask,
       removeFilter,
+      addShadow,
     };
   },
 });

@@ -5,7 +5,7 @@
       <!-- @mouseup="dragEnd" -->
       <el-image
         @mousedown="dragImage(url)"
-        style="width: 80px; height: 80px"
+        style="width: 120px; height: 120px"
         :src="url"
         fit="contain"
         draggable="false"
@@ -114,8 +114,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .image-item {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   margin: 5px;
   float: left;
   box-shadow: 0 0 8px rgba(161, 161, 161, 0.664);

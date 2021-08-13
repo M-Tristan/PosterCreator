@@ -38,10 +38,12 @@ class ModuleUtil {
           borderRadius: 0,
           rotateY: false,
           rotateX: false,
-          dropshadowX: 0,
-          dropshadowY: 0,
-          dropshadowBlur: 0,
-          dropshadowColor: 'rgba(0,0,0,0)',
+          // shadow: {
+          //   dropshadowX: 0,
+          //   dropshadowY: 0,
+          //   dropshadowBlur: 0,
+          //   dropshadowColor: 'rgba(0,0,0,0)',
+          // },
           crop: {
             width: image.naturalWidth,
             height: image.naturalHeight,

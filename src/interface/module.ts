@@ -30,16 +30,20 @@ export interface option {
 interface filterInfo {
   type: string
 }
+interface shadow {
+  dropshadowX: number,
+  dropshadowY: number,
+  dropshadowBlur: number,
+  dropshadowColor: string,
+}
 export interface image extends operItem {
   src: string,
   blur: number,
   borderRadius: number,
   rotateY: boolean,
   rotateX: boolean,
-  dropshadowX: number,
-  dropshadowY: number,
-  dropshadowBlur: number,
-  dropshadowColor: string,
+  shadow?: shadow,
+
   crop: {
     height: number,
     left: number,
@@ -53,6 +57,10 @@ export interface image extends operItem {
     hueRotate: number,
     invert: number,
     saturate: number
+  },
+  stroke?: {
+    strokeWidth: number,
+    strokeColor: string,
   },
   filterInfo?: filterInfo,
   mask?: {
