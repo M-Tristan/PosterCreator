@@ -104,6 +104,46 @@
         >
           <img src="@/assets/star.jpg" />
         </div>
+        <div
+          class="image-item"
+          @click="editModule.pointType = 'horizontalBar'"
+          :class="[
+            'image-item',
+            { active: editModule.pointType === 'horizontalBar' },
+          ]"
+        >
+          <img src="@/assets/horizontalbar.jpg" />
+        </div>
+        <div
+          class="image-item"
+          @click="editModule.pointType = 'verticalBar'"
+          :class="[
+            'image-item',
+            { active: editModule.pointType === 'verticalBar' },
+          ]"
+        >
+          <img src="@/assets/verticalBar.jpg" />
+        </div>
+        <div
+          class="image-item"
+          @click="editModule.pointType = 'crossBar'"
+          :class="[
+            'image-item',
+            { active: editModule.pointType === 'crossBar' },
+          ]"
+        >
+          <img src="@/assets/crossBar.jpg" />
+        </div>
+        <div
+          class="image-item"
+          @click="editModule.pointType = 'complementary'"
+          :class="[
+            'image-item',
+            { active: editModule.pointType === 'complementary' },
+          ]"
+        >
+          <img src="@/assets/complementaryBar.jpg" />
+        </div>
       </el-collapse-item>
       <el-collapse-item title="码眼" name="3">
         <div

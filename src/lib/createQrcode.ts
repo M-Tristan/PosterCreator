@@ -99,11 +99,54 @@ const createQrcode = {
             case 'circle':
               this.drawcircle(width, col * width, row * width)
               break;
+            case 'horizontalBar':
+              this.drawcircle(width * 0.8, (col + 0.1) * width, (row + 0.1) * width)
+              if (points[pointIndex] === 1 && col < size - 1) {
+                this.drawConnect(width, width * 0.8, (col + 0.6) * width, (row + 0.1) * width)
+              }
+              break;
+            case 'verticalBar':
+              this.drawcircle(width * 0.8, (col + 0.1) * width, (row + 0.1) * width)
+              if (points[pointIndex + size - 1] === 1) {
+                this.drawConnect(width * 0.8, width, (col + 0.1) * width, (row + 0.6) * width)
+              }
+              break;
+            case 'crossBar':
+              this.drawcircle(width * 0.8, (col + 0.1) * width, (row + 0.1) * width)
+              if (points[pointIndex] === 1 && col < size - 1) {
+                this.drawConnect(width, width * 0.8, (col + 0.6) * width, (row + 0.1) * width)
+              }
+              if (points[pointIndex + size - 1] === 1) {
+                this.drawConnect(width * 0.8, width, (col + 0.1) * width, (row + 0.6) * width)
+              }
+              break;
+            case 'complementary':
+              this.drawcircle(width * 0.8, (col + 0.1) * width, (row + 0.1) * width)
+              if (points[pointIndex] === 1 && col < size - 1) {
+                this.drawConnect(width, width * 0.8, (col + 0.6) * width, (row + 0.1) * width)
+              } else {
+                if (points[pointIndex - 2] === 0 && points[pointIndex - size - 1] === 1 && points[pointIndex - size] === 0 && points[pointIndex - size - 2] === 0) {
+                  this.drawConnect(width * 0.8, width, (col + 0.1) * width, (row - 0.4) * width)
+                }
+              }
+
+              break;
+
           }
         }
       }
     }
 
+  },
+  drawConnect(width, height, left, top) {
+    let ctx = this.ctx
+    let color = "black"
+    ctx.save()
+    ctx.translate(left, top)
+    ctx.rect(0, 0, width, height)
+    ctx.fillStyle = color
+    ctx.fill()
+    ctx.restore()
   },
   drawstar(width, left, top) {
     let ctx = this.ctx
