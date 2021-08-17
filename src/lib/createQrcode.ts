@@ -131,10 +131,61 @@ const createQrcode = {
               }
 
               break;
+            case 'liquid':
+              this.drawcircle(width, col * width, row * width)
+              if (points[pointIndex] === 1 && col < size - 1) {
+                this.drawConnect(width, width, (col + 0.6) * width, row * width)
+              }
+              if (points[pointIndex + size - 1] === 1) {
+                this.drawConnect(width, width, col * width, (row + 0.6) * width)
+              }
 
+              if (points[pointIndex + size] === 1 && col < size - 1) {
+                this.drawliquid((col + 0.5) * width, (row + 0.5) * width, width, 'right')
+              }
+              if (points[pointIndex + size - 2] === 1 && col > 0) {
+                this.drawliquid((col - 0.5) * width, (row + 0.5) * width, width, 'left')
+              }
+              break;
           }
         }
       }
+    }
+
+  },
+  drawliquid(left, top, width, direction) {
+    let ctx = this.ctx
+    let color = "black"
+    if (direction === 'right') {
+      ctx.save()
+      ctx.translate(left, top)
+      ctx.beginPath()
+      ctx.moveTo(0, 0)
+      ctx.lineTo(width / 2, 0)
+      ctx.arc(width, 0, width / 2, Math.PI, Math.PI / 2, true)
+      ctx.lineTo(width, width)
+      ctx.lineTo(width / 2, width)
+      ctx.arc(0, width, width / 2, 0, -Math.PI / 2, true)
+      ctx.lineTo(0, 0)
+      ctx.fillStyle = color
+      ctx.fill()
+      ctx.restore()
+    }
+
+    if (direction === 'left') {
+      ctx.save()
+      ctx.translate(left, top)
+      ctx.beginPath()
+      ctx.moveTo(width, 0)
+      ctx.lineTo(width / 2, 0)
+      ctx.arc(0, 0, width / 2, 0, Math.PI / 2, false)
+      ctx.lineTo(0, width)
+      // ctx.lineTo(0, width / 2)
+      ctx.arc(width, width, width / 2, Math.PI, Math.PI * 3 / 2, false)
+      ctx.lineTo(width, 0)
+      ctx.fillStyle = color
+      ctx.fill()
+      ctx.restore()
     }
 
   },

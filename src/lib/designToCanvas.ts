@@ -828,7 +828,7 @@ class DesignToCanvas {
 
       }
       doc.deletePage(1)
-      doc.save('a4.pdf')
+      doc.save(`${new Date().getTime()}.pdf`)
 
     } else {
       while (index < length) {

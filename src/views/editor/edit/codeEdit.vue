@@ -144,6 +144,14 @@
         >
           <img src="@/assets/complementaryBar.jpg" />
         </div>
+
+        <div
+          class="image-item"
+          @click="editModule.pointType = 'liquid'"
+          :class="['image-item', { active: editModule.pointType === 'liquid' }]"
+        >
+          <img src="@/assets/liquid.jpg" />
+        </div>
       </el-collapse-item>
       <el-collapse-item title="码眼" name="3">
         <div
