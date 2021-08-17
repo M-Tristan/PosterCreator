@@ -197,7 +197,17 @@
           <img src="@/assets/N-G.jpg" />
         </div>
       </el-collapse-item>
-      <el-collapse-item title="位置" name="4">
+      <el-collapse-item title="logo" name="4">
+        <div
+          @click="editModule.logo = item"
+          :class="['image-item', { active: editModule.logo === item }]"
+          v-for="(item, index) in logoList"
+          :key="index"
+        >
+          <img :src="item" />
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="位置" name="5">
         <div class="oper-item">
           <div class="oper-name">旋转角度</div>
           <div class="oper-input">
@@ -267,10 +277,11 @@
 
 <script lang="ts">
 import { useStore } from "vuex";
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import operation from "../operation/common/operation";
 import lockMask from "./lockMask.vue";
 import ColorPicker from "@/components/color-picker/index";
+import { getImageList } from "@/api/api";
 export default defineComponent({
   components: { lockMask, ColorPicker },
   setup() {
@@ -291,8 +302,19 @@ export default defineComponent({
       dialogVisible.value = false;
       pushBack();
     };
+    const logoList = ref([]);
+    onMounted(async () => {
+      let res = await getImageList({ type: "logo" });
+      logoList.value = res.map((item) =>
+        item.image_url.replace(
+          "https://lp-canvas-1304910572.cos.ap-guangzhou.myqcloud.com",
+          "https://lp-canvas-1304910572.file.myqcloud.com/"
+        )
+      );
+    });
 
     return {
+      logoList,
       editModule,
       dialogVisible,
       editCodeContent,

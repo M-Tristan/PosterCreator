@@ -23,6 +23,7 @@
       class="code"
       draggable="false"
     ></div>
+
     <lock
       :module="module"
       v-if="editModule.id == module.id && pattern == 'edit'"
@@ -44,7 +45,6 @@ import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import regulator from "./regulator.vue";
 import rotate from "./rotate.vue";
 import operation from "./common/operation";
-import * as QRCode from "qrcode";
 import Lock from "./lock.vue";
 import BaseCache from "@/lib/baseCache";
 import _ from "lodash";
@@ -72,9 +72,34 @@ export default defineComponent({
 
   setup(props) {
     const store = useStore();
+    const logoCanvas = document.createElement("canvas") as HTMLCanvasElement;
+    logoCanvas.width = 200;
+    logoCanvas.height = 200;
+    const logoCtx = logoCanvas.getContext("2d") as CanvasRenderingContext2D;
+
     let code = ref(null as unknown as HTMLElement);
     onMounted(() => {
-      draw();
+      if (module.value.logo) {
+        let image = new Image();
+        image.setAttribute("crossOrigin", "anonymous");
+        image.src = module.value.logo;
+        image.onload = () => {
+          logoCtx.clearRect(0, 0, 200, 200);
+          logoCtx.save();
+          logoCtx.beginPath();
+          logoCtx.arc(100, 100, 100, 0, Math.PI * 2);
+          logoCtx.fillStyle = "white";
+          logoCtx.fill();
+          logoCtx.beginPath();
+          logoCtx.arc(100, 100, 90, 0, Math.PI * 2);
+          logoCtx.clip();
+          logoCtx.drawImage(image, 5, 5, 190, 190);
+          logoCtx.restore();
+          draw();
+        };
+      } else {
+        draw();
+      }
     });
     let useCanvas: HTMLCanvasElement;
     let codeUrl = "";
@@ -87,6 +112,7 @@ export default defineComponent({
         return;
       }
       let ctx = useCanvas.getContext("2d") as CanvasRenderingContext2D;
+      ctx.save();
       ctx.clearRect(0, 0, 1000, 1000);
       ctx.drawImage(codeImage, 0, 0, 1000, 1000);
       ctx.globalCompositeOperation = "source-in";
@@ -95,6 +121,8 @@ export default defineComponent({
       ctx.globalCompositeOperation = "destination-over";
       ctx.fillStyle = props.code.colorDark;
       ctx.fillRect(0, 0, 1000, 1000);
+      ctx.restore();
+      ctx.drawImage(logoCanvas, 400, 400, 200, 200);
       if (props.collect) {
         debouncePushModule();
       }
@@ -154,9 +182,34 @@ export default defineComponent({
     watch([text, pointType, eyeType], () => {
       draw();
     });
+
     watch([colorDark, colorLight], () => {
       resetCode();
     });
+    watch(
+      () => {
+        return module.value.logo;
+      },
+      (nv, ov) => {
+        let image = new Image();
+        image.setAttribute("crossOrigin", "anonymous");
+        image.src = nv;
+        image.onload = () => {
+          logoCtx.clearRect(0, 0, 200, 200);
+          logoCtx.save();
+          logoCtx.beginPath();
+          logoCtx.arc(100, 100, 100, 0, Math.PI * 2);
+          logoCtx.fillStyle = "white";
+          logoCtx.fill();
+          logoCtx.beginPath();
+          logoCtx.arc(100, 100, 90, 0, Math.PI * 2);
+          logoCtx.clip();
+          logoCtx.drawImage(image, 5, 5, 190, 190);
+          logoCtx.restore();
+          resetCode();
+        };
+      }
+    );
     watch(
       () => {
         return module.value.width;
