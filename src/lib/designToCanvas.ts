@@ -349,7 +349,7 @@ class DesignToCanvas {
     z-index: ${module.zindex};
     text-align: ${module.textAlign};`
     let StrokecontentStyle = `word-break: break-word;
-    white-space: normal;
+    white-space: pre-wrap;
     position: absolute;
     z-index: -1;
     left: 0;
@@ -398,8 +398,10 @@ class DesignToCanvas {
       -webkit-text-fill-color:transparent;
       -webkit-background-clip: text;`
     }
+    let dom = document.createElement("div")
+    dom.innerHTML = module.html
     let contentStyle = backImageStyle + `word-break: break-word;
-    white-space: normal;
+    white-space: pre-wrap;
     position: relative;
     left: 0;
     transform-origin: 0px 0px;
@@ -419,11 +421,12 @@ class DesignToCanvas {
     font-family: ${module.fontFamily}`
     let StrokeDom = ''
     if (module.strokeWidth !== 0) {
-      StrokeDom = `<div style="${StrokecontentStyle}">${module.text}</div>`
+
+      StrokeDom = `<div style="${StrokecontentStyle}">${new XMLSerializer().serializeToString(dom)}</div>`
     }
     let textDom = `<div style="${style}">
       ${StrokeDom}
-      <div style="${contentStyle}">${module.text}</div>
+      <div style="${contentStyle}">${new XMLSerializer().serializeToString(dom)}</div>
     </div>`
 
     return textDom

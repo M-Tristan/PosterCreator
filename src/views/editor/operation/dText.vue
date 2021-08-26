@@ -14,6 +14,7 @@
   >
     <div
       class="Strokecontent"
+      v-if="module.strokeWidth != 0"
       :style="{
         ...commonStyle,
         ...{
@@ -23,23 +24,30 @@
         },
         ...backImageStyle,
       }"
-    >
-      {{ module.text }}
-    </div>
-    <div
-      class="content"
-      :contenteditable="contenteditable"
-      @input="contentChange"
-      @dblclick="dbClickEvent"
+      v-html="module.html"
+    ></div>
+    <content-input
+      v-if="contenteditable === true"
       @blur="contenteditable = false"
-      ref="contentInput"
+      @contentChange="contentChange"
       :style="{
         ...commonStyle,
         ...backImageStyle,
       }"
-    >
-      {{ module.text }}
-    </div>
+      :module="module"
+    ></content-input>
+
+    <div
+      v-show="contenteditable === false"
+      class="content"
+      @dblclick="dbClickEvent"
+      ref="contentShow"
+      :style="{
+        ...commonStyle,
+        ...backImageStyle,
+      }"
+      v-html="module.html"
+    ></div>
     <lock
       :module="module"
       v-if="editModule.id == module.id && pattern == 'edit'"
@@ -68,6 +76,7 @@ import {
 } from "vue";
 import regulator from "./regulator.vue";
 import rotate from "./rotate.vue";
+import contentInput from "./contentInput.vue";
 import operation from "./common/operation";
 import { textShadow } from "@/interface/module";
 import Lock from "./lock.vue";
@@ -86,6 +95,7 @@ export default defineComponent({
     regulator,
     rotate,
     Lock,
+    contentInput,
   },
   setup(props, ctx) {
     const store = useStore();
@@ -103,12 +113,17 @@ export default defineComponent({
     const selectModel = () => {
       store.commit("setEditModule", module.value.id);
     };
-    const contentInput = ref((null as unknown) as HTMLElement);
+
+    const contentShow = ref(null as unknown as HTMLElement);
     const changeHeight = () => {
       if (props.pattern != "edit") {
         return;
       }
-      module.value.height = contentInput.value.clientHeight;
+
+      if (contentShow.value) {
+        module.value.height = contentShow.value.clientHeight;
+      }
+
       if (store.state.group) {
         resetGroupItem(store.state.group);
       }
@@ -178,21 +193,23 @@ export default defineComponent({
       });
       return result;
     });
-    const contentChange = () => {
-      module.value.html = contentInput.value.innerHTML;
-      module.value.text = contentInput.value.innerText;
-      changeHeight();
+    const contentChange = (params) => {
+      console.log(params);
+      module.value.html = params.html;
+      module.value.text = params.text;
+      module.value.height = params.height;
+
       if (store.state.group) {
+        resetGroupItem(store.state.group);
         store.commit("initGroupSize");
       }
+      // changeHeight();
+      // if (store.state.group) {
+
+      // }
     };
     const dbClickEvent = () => {
       contenteditable.value = true;
-      contentInput.value.focus();
-      nextTick(() => {
-        contentInput.value.focus();
-        document.execCommand("selectAll");
-      });
     };
     const moveEvent = () => {
       if (contenteditable.value) {
@@ -240,6 +257,7 @@ export default defineComponent({
       moveEvent,
       backImageStyle,
       commonStyle,
+      contentShow,
     };
   },
 });
@@ -251,7 +269,7 @@ export default defineComponent({
 }
 .content {
   word-break: break-word;
-  white-space: normal;
+  white-space: pre-wrap;
   position: relative;
   left: 0;
   transform-origin: 0px 0px;
@@ -261,7 +279,7 @@ export default defineComponent({
 }
 .Strokecontent {
   word-break: break-word;
-  white-space: normal;
+  white-space: pre-wrap;
   position: absolute;
   z-index: -1;
   left: 0;
